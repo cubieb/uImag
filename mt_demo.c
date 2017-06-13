@@ -3,10 +3,10 @@
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <unistd.h> /* for close */
-#include <Linux/wireless.h>
+#include <linux/wireless.h>
 
 
-//#if WIRELESS_EXT <= 11
+#if WIRELESS_EXT <= 11
 #ifndef SIOCDEVPRIVATE
 #define SIOCDEVPRIVATE 0x8BE0
 #endif
@@ -662,6 +662,9 @@ int main( int argc, char ** argv )
 		printf("\nrtuser::error::set SSID\n\n");
 		goto rtuser_exit;
 	}
+
+#endif 
+
 rtuser_exit:
 	if (socket_id >= 0)
 		close(socket_id);
@@ -669,8 +672,6 @@ rtuser_exit:
 		return ret;
 	else
 		return 0;
-#endif 
 
-	return 0;
 }
 
