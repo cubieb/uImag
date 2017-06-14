@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<title>无标题文档</title>
+</head>
+
+<body>
+<div id="scroll" style="width:85%;height: 10px;overflow-y:auto;overflow-x:auto;">
+    <div id="top">固定不动</div>
+
+    <div>
+
+        比较长的内容
+    </div>
+</div>
+
+</body>
+<script>
+    $().ready(function() {
+
+        $("#accountBtn").click(function(){
+            $("#accountForm").submit();  //accountForm是button的id，我是通过点击button来实现submit然后触发validate。
+        });
+
+        $("#accountForm").validate({   //accountForm是form的id
+
+            rules: {
+                glAccountCode : "required"
+
+            },
+            messages: {
+                glAccountCode: "必填"
+            },
+            errorElement:"em",
+
+            submitHandler: function() { location.href ="mylist.jsp";}    //跳转到mylist.jsp页面，注意路径哦~我这里有位都放在一个路径下这么写的。
+        });
+    });
+</script>
+</html>
+<pre></pre>
+<br>
+<br>
+<p></p>  </html>

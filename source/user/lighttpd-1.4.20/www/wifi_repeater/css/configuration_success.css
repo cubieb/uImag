@@ -1,0 +1,46 @@
+html {
+  width: 100%;
+}
+html > body {
+  width: 100%;
+  height: 100%;
+  font-size: 0.62222222rem;
+  line-height: 0.97777778rem;
+  color: #333;
+  font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif;
+  background-color: #fafafa;
+}
+html > body > #success {
+  text-align: center;
+  line-height: 1.55555556rem;
+}
+html > body > #success > img {
+  margin-top: 6.22222222rem;
+  width: 5.33333333rem;
+  height: 5.33333333rem;
+}
+html > body > #success > p:first-of-type {
+  margin-top: 0.44444444rem;
+  font-size: 0.71111111rem;
+}
+html > body > #success > p:last-of-type {
+  font-size: 0.53333333rem;
+  color: #999;
+}
+html > body > #footer {
+  width: 100%;
+}
+html > body > #footer > .setting {
+  width: 100%;
+}
+html > body > #footer > .setting > a {
+  display: block;
+  text-align: center;
+  width: 12.44444444rem;
+  height: 2rem;
+  line-height: 2rem;
+  font-size: 0.71111111rem;
+  border-radius: 4.44444444rem;
+  margin: 8.88888889rem auto 0 auto;
+  border: 1px solid #e6e6e6;
+}

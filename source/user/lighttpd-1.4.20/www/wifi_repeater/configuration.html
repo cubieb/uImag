@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>配置页-配置中</title>
+    <link rel="stylesheet" href="css/common.min.css">
+    <link rel="stylesheet" href="css/configuration.min.css">
+    <link rel="stylesheet" href="css/loaders.min.css">
+    <script>
+        var pixclPatio = 1 / window.devicePixelRatio;
+        document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
+        console.log(pixclPatio);
+
+        var html = document.getElementsByTagName('html')[0];
+        var pageWidth = html.getBoundingClientRect().width;
+        html.style.fontSize = pageWidth / 16 + 'px';
+
+//        console.log(html.style.fontSize);
+//        console.log($(window).width() + "---" + window.screen.width);
+    </script>
+</head>
+<body>
+<!--头部，配置-->
+<header>
+    <div class="nav-back">
+        <img src="images/nav_back.png" alt="">
+    </div>
+    <p>配置中</p>
+</header>
+<!--配置信息提醒-->
+<section class="config-infor">
+    <div class="connect clearfix">
+        <img src="images/03_icon01.png" alt="">
+        <div class="loader-inner ball-beat">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <img src="images/03_icon02.png" alt="">
+    </div>
+    <p>放大器正在配置中, 请稍候...</p>
+</section>
+<!--指示灯含义-->
+<section class="lamp-meaning">
+    <p>指示灯常见含义</p>
+    <div class="details">
+        <div class="red-constant clearfix">
+            <div class="one">
+                <img src="images/03_icon03.png" alt="">
+            </div>
+            <div class="two">红色常亮</div>
+            <div class="three">
+             <div class="line-next">
+                 已配置，但未搜索到原配置Wi-Fi信号
+             </div>
+              <!--<p>已配置</p>-->
+            </div>
+        </div>
+        <div class="yellow-constant clearfix">
+            <div class="one">
+                <img src="images/03_icon04.png" alt="">
+            </div>
+            <div class="two">黄色常亮</div>
+            <div class="three">位置过远，信号较差</div>
+        </div>
+        <div class="green-constant clearfix">
+            <div class="one">
+                <img src="images/03_icon05.png" alt="">
+            </div>
+            <div class="two">绿色常亮</div>
+            <div class="three">
+                <div class="line-next">位置较好，但无可连接设备</div>
+            </div>
+        </div>
+        <div class="green-flash clearfix">
+            <div class="one">
+                <img src="images/03_icon06.png" alt="">
+            </div>
+            <div class="two">绿色闪烁</div>
+            <div class="three">
+                <div class="line-next">位置较好，且存在可连接设备</div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/myJs/configuration.min.js"></script>
+</body>
+</html>

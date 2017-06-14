@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>配置页-首页</title>
+  <link rel="stylesheet" href="css/common.min.css">
+  <link rel="stylesheet" href="css/index.min.css">
+  <script>
+    var pixclPatio = 1 / window.devicePixelRatio;
+    document.write('<meta name="viewport" content="width=device-width,initial-scale='+pixclPatio+',minimum-scale='+pixclPatio+',maximum-scale='+pixclPatio+',user-scalable=no" />');
+    console.log(pixclPatio);
+
+    var html = document.getElementsByTagName('html')[0];
+    var pageWidth = html.getBoundingClientRect().width;
+    html.style.fontSize = pageWidth / 16 + 'px';
+  </script>
+</head>
+<body>
+  <header id="header">
+    <p>欢迎使用中国移动Wi-Fi放大器</p>
+  </header>
+  <section class="amplifier-download">
+    <img src="images/01_rocket.png" alt="" class="rocket">
+  </section>
+  <footer id="footer">
+    <div class="setting">
+      <a>进入设置 </a>
+    </div>
+    <div class="wrap">
+      <div class="join-us clearfix">
+        <label class="cBox">
+          <input id="samePassword" type="checkbox" name="samePassword" checked/>
+        </label>
+        <p>加入《用户体验改进计划》</p>
+      </div>
+    </div>
+  </footer>
+ <div class="one"></div>
+  <!--<script src="//lib.baomitu.com/jquery/1.12.4/jquery.min.js"></script>-->
+  <script src="js/lib/jquery.min.js"></script>
+  <script src="js/myJs/index.min.js"></script>
+</body>
+</html>
