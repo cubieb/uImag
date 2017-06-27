@@ -42,6 +42,7 @@
 #define MAX_LEN_OF_MAC_TABLE 64
 
 
+#if 0
 typedef struct _COUNTERS
 {
 	unsigned long TxSuccessTotal;;
@@ -119,6 +120,7 @@ typedef struct _RT_SIGNAL_STRUC {
 //---------------------------------------------------------
 COUNTERS counter;
 SITE_SURVEY SiteSurvey[100];
+#endif
 
 //user spaces buffer data;
 char data[4096];
