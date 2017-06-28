@@ -1,8 +1,6 @@
 #ifndef WIFI_SETTING_H_
 #define WIFI_SETTING_H_
 
-
-//#include <assert.h>
 #include "utils.h"
 
 /*

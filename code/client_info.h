@@ -70,7 +70,8 @@ typedef struct black_list_table
 #endif 
 
 //记录连接过该路由的设备列表的信息
-#define CLIENT_LSIT "/etc_ro/lighttpd/APClient.list"
+//#define CLIENT_LSIT "/etc_ro/lighttpd/APClient.list"
+#define CLIENT_LSIT "/var/APClient.list"
 
 //获取设备列表的信息保存到指定的打开的文件流
 int getdevicelist(FILE *stream);

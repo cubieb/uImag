@@ -7,8 +7,8 @@
 //#include <assert.h>
 
 #include "nvram.h"
-#include "linux_conf.h"
-#include "user_conf.h"
+//#include "linux_conf.h"
+//#include "user_conf.h"
 
 #include <dirent.h>
 #include <sys/stat.h>

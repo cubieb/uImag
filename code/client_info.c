@@ -127,22 +127,12 @@ int getdevicelist(FILE *stream)
 // open file mode is r+
 
 
+// is ok
 int change_hostname(char *hostname, char *macaddr, FILE *stream)
 {
 	if(hostname == NULL || macaddr == NULL || stream == NULL)
 		return -1;
 
-	//获取nvram里面的client_stainfo数据
-	char client_info[MAX_MSG_SIZ];
-	strcpy(client_info, nvram_bufget(RT2860_NVRAM, "client_info"));
-
-	//判断是否为空
-	if(strcmp(client_info, "") == 0)
-	{
-	//为空 -->添加数据
-		nvram_bufset(RT2860_NVRAM, "client_info", hostname:mac);
-	}
-	//不为空 --> 寻找数据是否已记录，否-->添加  是-->修改hostname
 
 	char buff[2048]; //获取单个设备的信息到buff中
 

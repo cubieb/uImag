@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "nvram.h"
 
 #include <string.h>
 
@@ -42,6 +43,14 @@ int main(int argc, char *argv[])
 	{
 		printf("update");
 		//还没有做,在考虑如何升级固件
+	}
+
+	temp = web_get("isconfig", input, 0);
+	if(strcmp("config", temp) == 0)
+	{
+		int ap_enable;
+		ap_enable = atoi(nvram_bufget(RT2860_NVRAM, "ApCliEnable"));
+		printf("%d", ap_enable);
 	}
 
 }
