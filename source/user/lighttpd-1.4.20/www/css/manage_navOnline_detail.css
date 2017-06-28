@@ -1,0 +1,181 @@
+html {
+  width: 100%;
+}
+html > body {
+  width: 100%;
+  height: 100%;
+  font-size: 0.71111111rem;
+  line-height: 0.97777778rem;
+  font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif;
+  background-color: #fafafa;
+}
+html > body > header {
+  width: 100%;
+  height: 1.95555556rem;
+  line-height: 1.95555556rem;
+  background-color: #438cff;
+  text-align: center;
+  color: #fff;
+  font-size: 0.8rem;
+  position: relative;
+}
+html > body > header > .nav-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.95555556rem;
+  width: 1.95555556rem;
+  background-color: #438cff;
+  padding-top: 0.62222222rem;
+}
+html > body > header > .nav-back > img {
+  width: 0.44444444rem;
+  height: 0.75555556rem;
+}
+html > body > header > h1 {
+  text-align: center;
+  background-color: #438cff;
+  font-size: 0.8rem;
+}
+html > body > #main > .online-info {
+  width: 100%;
+  padding-left: 0.66666667rem;
+  background-color: #fff;
+}
+html > body > #main > .online-info > .online-title {
+  width: 100%;
+}
+html > body > #main > .online-info > .online-title > .wrap {
+  border-bottom: 2px solid #F0F0F0;
+}
+html > body > #main > .online-info > .online-title > .wrap > .fl {
+  height: 3.11111111rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+html > body > #main > .online-info > .online-title > .wrap > .fl > .tv {
+  float: left;
+  width: 1.6rem;
+  height: 1.6rem;
+  background-color: #438cff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+html > body > #main > .online-info > .online-title > .wrap > .fl > .tv > img {
+  width: 0.8rem;
+  height: 0.88888889rem;
+}
+html > body > #main > .online-info > .online-title > .wrap > .fl > form > input[type="text"] {
+  float: left;
+  margin-left: 0.62222222rem;
+  font-size: 0.71111111rem;
+  color: #333;
+}
+html > body > #main > .online-info > .online-title > .wrap > .fl > form > label {
+  position: absolute;
+  right: 0.88888889rem;
+}
+html > body > #main > .online-info > .online-title > .wrap > .fl > form > label > img {
+  width: 0.8rem;
+  height: 0.75555556rem;
+}
+html > body > #main > .online-info > .online-signal {
+  height: 2.66666667rem;
+  width: 100%;
+  background-color: #fff;
+}
+html > body > #main > .online-info > .online-signal > .title {
+  width: 100%;
+}
+html > body > #main > .online-info > .online-signal > .title > .wrap {
+  border-bottom: 2px solid #F0F0F0;
+}
+html > body > #main > .online-info > .online-signal > .title > .wrap > .fl {
+  float: left;
+  height: 2.66666667rem;
+  line-height: 2.66666667rem;
+}
+html > body > #main > .online-info > .online-signal > .title > .wrap > .fl > .tv-info > h3 {
+  font-size: 0.71111111rem;
+  color: #333;
+}
+html > body > #main > .online-info > .online-signal > .title > .wrap > .fr {
+  color: #999;
+  float: right;
+  height: 2.66666667rem;
+  line-height: 2.66666667rem;
+  margin-right: 0.88888889rem;
+}
+html > body > #main > .online-info1,
+html > body > #main .online-info2,
+html > body > #main .online-info3 {
+  width: 100%;
+  padding-left: 0.66666667rem;
+  background-color: #fff;
+}
+html > body > #main > .online-info1 > .online-signal,
+html > body > #main .online-info2 > .online-signal,
+html > body > #main .online-info3 > .online-signal {
+  width: 100%;
+  background-color: #fff;
+}
+html > body > #main > .online-info1 > .online-signal > .title,
+html > body > #main .online-info2 > .online-signal > .title,
+html > body > #main .online-info3 > .online-signal > .title {
+  width: 100%;
+}
+html > body > #main > .online-info1 > .online-signal > .title > .wrap,
+html > body > #main .online-info2 > .online-signal > .title > .wrap,
+html > body > #main .online-info3 > .online-signal > .title > .wrap {
+  border-bottom: 2px solid #F0F0F0;
+}
+html > body > #main > .online-info1 > .online-signal > .title > .wrap > .fl,
+html > body > #main .online-info2 > .online-signal > .title > .wrap > .fl,
+html > body > #main .online-info3 > .online-signal > .title > .wrap > .fl {
+  float: left;
+  height: 2.66666667rem;
+  line-height: 2.66666667rem;
+}
+html > body > #main > .online-info1 > .online-signal > .title > .wrap > .fl > .tv-info > h3,
+html > body > #main .online-info2 > .online-signal > .title > .wrap > .fl > .tv-info > h3,
+html > body > #main .online-info3 > .online-signal > .title > .wrap > .fl > .tv-info > h3 {
+  font-size: 0.71111111rem;
+  color: #333;
+}
+html > body > #main > .online-info1 > .online-signal > .title > .wrap > .fr,
+html > body > #main .online-info2 > .online-signal > .title > .wrap > .fr,
+html > body > #main .online-info3 > .online-signal > .title > .wrap > .fr {
+  color: #999;
+  float: right;
+  height: 2.66666667rem;
+  line-height: 2.66666667rem;
+  margin-right: 0.88888889rem;
+}
+html > body > #main > .online-info3 .online-signal > .title > .wrap {
+  border: none;
+}
+html > body > #main > button[type="submit"] {
+  width: 12.44444444rem;
+  height: 2rem;
+  border-radius: 200px;
+  border: solid 2px #e6e6e6;
+  background-color: #438cff;
+  position: absolute;
+  left: 50%;
+  margin-top: 10.93333333rem;
+  transform: translate(-50%, 0);
+}
+html > body > #main > button[type="submit"] a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 2rem;
+  color: #fff;
+  font-size: 0.71111111rem;
+}

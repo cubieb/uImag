@@ -1,0 +1,15 @@
+$(function () {
+    //关闭掉当前页
+    $("#footer>.setting").on("click",function () {
+        var userAgent = navigator.userAgent;
+        if (userAgent.indexOf("Firefox") != -1 || userAgent.indexOf("Chrome") !=-1) {
+            window.location.href="about:blank";
+        }else if(userAgent.indexOf('Android') > -1 || userAgent.indexOf('Linux') > -1){
+            window.opener=null;window.open('about:blank','_self','').close();
+        }else {
+            window.opener = null;
+            window.open("about:blank", "_self");
+            window.close();
+        }
+    });
+});

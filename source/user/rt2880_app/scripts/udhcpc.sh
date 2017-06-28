@@ -19,6 +19,10 @@ case "$1" in
     renew|bound)
         /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
 
+	/* add by tanxjian for dynamic domain name */
+	echo "ip $ip" > /proc/router_domain/dm_ip
+	/* end by tanxjian */
+
 	/* remove all binding entries after getting new IP */
 	HWNAT=`nvram_get 2860 hwnatEnabled`
 	if [ "$HWNAT" = "1" ]; then

@@ -33,6 +33,7 @@ dir_  =
 dir_post_inst_y =
 
 dir_$(CONFIG_USER_CMIOT_LED)                += led
+dir_$(CONFIG_USER_CMIOT_DM_DHCP)                += dm_dhcp
 dir_$(CONFIG_USER_802_1X)		    += 802.1x
 dir_$(CONFIG_SIGMA_DUT)		    	+= sigma_dut_v9.0.0
 #dir_$(CONFIG_SIGMA_DUT)		    	+= sigma_dut

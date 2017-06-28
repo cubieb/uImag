@@ -1,0 +1,257 @@
+@rem: 45rem;
+
+html {
+  width: 100%;
+  > body {
+    width: 100%;
+    height: 100%;
+    font-size: 32/@rem;
+    line-height: 44/@rem;
+    font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif;
+    background-color: #fafafa;
+    //头部，配置
+    > header {
+      width: 100%;
+      height: 88/@rem;
+      line-height: 88/@rem;
+      background-color: #438cff;
+      text-align: center;
+      color: #fff;
+      font-size: 36/@rem;
+      position: relative;
+      > .nav-back {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 88/@rem;
+        width: 88/@rem;
+        background-color: #438cff;
+        padding-top: 28/@rem;
+        > img {
+          width: 20/@rem;
+          height: 34/@rem;
+        }
+      }
+      > h1 {
+        text-align: center;
+        background-color: #438cff;
+        font-size: 36/@rem;
+      }
+    }
+    > #main {
+      > form {
+        > .online-info-wifi {
+          width: 100%;
+          padding-left: 30/@rem;
+          background-color: #fff;
+          > .online-signal {
+            width: 100%;
+            //使用两边固定（绝对定位固定），中间自适应（margin两边的宽度）的解决方案
+            > .wrap {
+              border-bottom: 2px solid #f0f0f0;
+              height: 120/@rem;
+              width: 100%;
+              position: relative;
+              > label.wifips {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                line-height: 118/@rem;
+                width: 211/@rem;
+                color: #333;
+                //background-color: green;
+              }
+              > input#wifiName {
+                display: block;
+                height: 100%;
+                font-size: 32/@rem;
+                color: #333;
+                margin-left: 211/@rem;
+                margin-right: 82/@rem;
+              }
+              >.line{
+                position: absolute;
+                top: 30/@rem;
+                right: 80/@rem;
+                width: 2/@rem;
+                height: 60/@rem;
+                background-color: #f0f0f0;
+              }
+              > .wifi-btn {
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 100%;
+                width: 80/@rem;
+                //background-color: yellow;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                > img {
+                  width: 32/@rem;
+                  height: 22/@rem;
+                }
+              }
+            }
+          }
+        }
+
+        > .online-info-pwd {
+          width: 100%;
+          padding-left: 30/@rem;
+          background-color: #fff;
+          > .online-signal {
+            width: 100%;
+            //使用两边固定（绝对定位固定），中间自适应（margin两边的宽度）的解决方案
+            > .wrap {
+              //border-bottom: 2px solid #f0f0f0;
+              height: 120/@rem;
+              width: 100%;
+              position: relative;
+              > label.wifips {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                line-height: 118/@rem;
+                width: 211/@rem;
+                color: #333;
+              }
+              > input#wifiPwd {
+                display: block;
+                height: 100%;
+                width: 100%;
+                font-size: 32/@rem;
+                color: #333;
+                margin-left: 211/@rem;
+              }
+            }
+          }
+        }
+
+        > .online-info-signal{
+          width: 100%;
+          padding-left: 30/@rem;
+          background-color: #fff;
+          margin-top: 20/@rem;
+          > .online-signal {
+            width: 100%;
+            //使用两边固定（绝对定位固定），中间自适应（margin两边的宽度）的解决方案
+            > .wrap {
+              border-bottom: 2px solid #f0f0f0;
+              height: 120/@rem;
+              width: 100%;
+              position: relative;
+              > label.wifips {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                line-height: 118/@rem;
+                width: 211/@rem;
+                color: #333;
+              }
+              > input#signalStrength {
+                display: block;
+                height: 100%;
+                width: 100%;
+                font-size: 32/@rem;
+                color: #999;
+                margin-left: 211/@rem;
+              }
+            }
+          }
+        }
+
+        > .online-info-encrypt{
+          width: 100%;
+          padding-left: 30/@rem;
+          background-color: #fff;
+          > .online-signal {
+            width: 100%;
+            //使用两边固定（绝对定位固定），中间自适应（margin两边的宽度）的解决方案
+            > .wrap {
+              border-bottom: 2px solid #f0f0f0;
+              height: 120/@rem;
+              width: 100%;
+              position: relative;
+              > label.wifips {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                line-height: 118/@rem;
+                width: 211/@rem;
+                color: #333;
+              }
+              > input#encrypt {
+                display: block;
+                height: 100%;
+                width: 100%;
+                font-size: 32/@rem;
+                color: #999;
+                margin-left: 211/@rem;
+              }
+            }
+          }
+        }
+
+        > .online-info-mac{
+          width: 100%;
+          padding-left: 30/@rem;
+          background-color: #fff;
+          > .online-signal {
+            width: 100%;
+            //使用两边固定（绝对定位固定），中间自适应（margin两边的宽度）的解决方案
+            > .wrap {
+              //border-bottom: 2px solid #f0f0f0;
+              height: 120/@rem;
+              width: 100%;
+              position: relative;
+              > label.wifips {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                line-height: 118/@rem;
+                width: 211/@rem;
+                color: #333;
+              }
+              > input#mac {
+                display: block;
+                height: 100%;
+                width: 100%;
+                font-size: 32/@rem;
+                color: #999;
+                margin-left: 211/@rem;
+              }
+            }
+          }
+        }
+
+        > button[type="submit"] {
+          width: 560/@rem;
+          height: 90/@rem;
+          border-radius: 200/@rem;
+          border: solid 2px #e6e6e6;
+          background-color: #438cff;
+          position: absolute;
+          left: 50%;
+          margin-top: 372/@rem;
+          transform: translate(-50%, 0);
+          >a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            line-height: 90/@rem;
+            color: #fff;
+            font-size: 32/@rem;
+          }
+        }
+      }
+    }
+  }
+}

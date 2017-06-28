@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <style>
+        a{
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            background-color: #438cff;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://www.baidu.com/" id="aClick"></a>
+    <script>
+//        var aClick = document.getElementById("aClick");
+//        aClick.onclick = function () {
+//            console.log("hello world")
+//            return false;
+//        }
+        $("#aClick").on("click", function () {
+            console.log("hello world")
+            return false;
+        });
+    </script>
+</body>
+</html>

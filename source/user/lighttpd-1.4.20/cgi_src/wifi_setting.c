@@ -82,6 +82,7 @@ void apcli_scan(void)
 	pclose(pp);
 }
 
+#if 0
 int get_message_for_web(char *input)
 {
 	assert(input != NULL);
@@ -114,6 +115,7 @@ int get_message_for_web(char *input)
 	return length;
 }
 
+#endif 
 
 
 void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char *input)
@@ -130,23 +132,11 @@ void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char
 		strcpy(ap_msg->APSsid, web_get("ssid", input, 2));
 
 		security = web_get("security", input, 2);
-		if(strstr(security, "WPA2PSK") != NULL)
-		{
-			strcpy(ap_msg->APAuthMode, "WPA2PSK");
-		}
-		else
-		{
-			get_nth_value(0, security, '/', ap_msg->APAuthMode, strlen(security));
-		}
+		strcpy(ap_msg->security, security);
+
+		get_nth_value(0, security, '/', ap_msg->APAuthMode, strlen(security));
 
 		get_nth_value(1, security, '/', ap_msg->APEncrypType, strlen(security));
-#if 0
-		if(strcmp(ap_msg->APEncrypType, "TKIPAES") == 0)
-		{
-			memset(ap_msg->APEncrypType, 0, sizeof(ap_msg->APEncrypType));
-			strcpy(ap_msg->APEncrypType, "TKIP");
-		}
-#endif
 
 		strcpy(ap_msg->APPasswd, web_get("wifiPassword", input, 2));
 	}
@@ -187,6 +177,9 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 	//如果用户没有输入管理员密码，表示跟扩展路由密码一致
 	if(strcmp(ex_msg->ManagePasswd, "") == 0)
 		strcpy(ex_msg->ManagePasswd, ex_msg->Extend_wifiPasswd);
+
+	if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/TKIPAES") == 0)
+		nvram_bufset(nvram, "WpaMixPairCipher","WPA_TKIP_WPA2_AES");
 
 	nvram_bufset(nvram, "ApCliEnable", "1");
 	nvram_bufset(nvram, "ApCliAuthMode", ap_msg->APAuthMode);

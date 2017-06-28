@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#include <assert.h>
 
 #include "nvram.h"
 #include "linux_conf.h"
@@ -26,6 +27,8 @@
 #define MBSSID_MAX_NUM 8
 #endif
 
+#define MAX_MSG_SIZ 2048
+
 #define SYSTEM_COMMAND_LOG	"/var/system_command.log"
 #define LOGFILE	"/dev/console"
 #define MOUNT_INFO      "/proc/mounts"
@@ -33,6 +36,16 @@
 struct media_config {
 	char path[40];
 };
+
+
+//add code for cgi from qinwenwang
+/*
+ * 从网页客户端上获取信息
+ * 信息填充到input buffer上。
+ */
+int get_message_for_web(char *input);
+
+
 
 /*
  * FOR CGI

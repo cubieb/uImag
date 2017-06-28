@@ -2689,6 +2689,9 @@ irqreturn_t ralink_gpio_irq_handler(int irq, void *irqaction)
 	int i;
 	ralink_gpio_save_clear_intp();
 	now = jiffies;
+
+	ralink_gpio_led_info led;
+
 #if defined (RALINK_GPIO_HAS_2722)
 	for (i = 0; i < 22; i++) {
 		if (! (ralink_gpio_intp & (1 << i)))
@@ -2763,6 +2766,19 @@ irqreturn_t ralink_gpio_irq_handler(int irq, void *irqaction)
 					schedule_work(&gpio_event_click);
 				}
 				else {
+
+					led.gpio = 44; // pin WLED_N
+					led.on = 0;
+					led.off = 4000;
+					led.blinks = 0;
+					led.rests = 0;
+					led.times = 0;
+
+					ralink_gpio_led_set(led);
+						
+					led.gpio = 11;
+					ralink_gpio_led_set(led);
+					
 					//press for several seconds
 					printk("press for several seconds\n");
 					schedule_work(&gpio_event_hold);
@@ -2799,6 +2815,18 @@ irqreturn_t ralink_gpio_irq_handler(int irq, void *irqaction)
 					schedule_work(&gpio_event_click);
 				}
 				else {
+                                         led.gpio = 44; // pin WLED_N
+                                         led.on = 0;
+                                         led.off = 4000; 
+                                         led.blinks = 0;
+                                         led.rests = 0;
+                                         led.times = 0;
+                                         
+                                         ralink_gpio_led_set(led);
+                                                 
+                                         led.gpio = 11;
+                                         ralink_gpio_led_set(led);
+
 					schedule_work(&gpio_event_hold);
 				}
 			}
@@ -2822,6 +2850,18 @@ irqreturn_t ralink_gpio_irq_handler(int irq, void *irqaction)
 					schedule_work(&gpio_event_click);
 				}
 				else {
+                                         led.gpio = 44; // pin WLED_N
+                                         led.on = 0;
+                                         led.off = 4000; 
+                                         led.blinks = 0;
+                                         led.rests = 0;
+                                         led.times = 0;
+                                         
+                                         ralink_gpio_led_set(led);
+                                                 
+                                         led.gpio = 11;
+                                         ralink_gpio_led_set(led);
+
 					schedule_work(&gpio_event_hold);
 				}
 			}

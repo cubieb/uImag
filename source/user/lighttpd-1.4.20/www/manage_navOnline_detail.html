@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理_谁在上网_详情页</title>
+    <link rel="stylesheet" href="css/common.min.css">
+    <link rel="stylesheet" href="css/manage_navOnline_detail.min.css">
+    <link rel="stylesheet" href="css/layer.min.css">
+    <script>
+        var pixclPatio = 1 / window.devicePixelRatio;
+        document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
+        console.log(pixclPatio);
+
+        var html = document.getElementsByTagName('html')[0];
+        var pageWidth = html.getBoundingClientRect().width;
+        html.style.fontSize = pageWidth / 16 + 'px';
+
+        //        console.log(html.style.fontSize);  //等于@rem
+        //        console.log($(window).width() + "---" + window.screen.width);
+    </script>
+</head>
+<body>
+<header>
+    <div class="nav-back">
+        <img src="images/nav_back.png" alt="">
+    </div>
+    <h1>详情</h1>
+</header>
+
+<section id="main">
+    <div class="online-info">
+        <!--名称-->
+        <div class="online-title">
+            <div class="wrap clearfix">
+                <div class="fl">
+                    <div class="tv">
+                        <img src="images/manage_02_icon02.png" alt="">
+                    </div>
+                    <form id="formId">
+                        <input id="hostname" type="text" placeholder="" value="" name="hostname">
+                        <label for="hostname">
+                            <img src="images/manage_05_icon01.png" alt="点击我修改hostname">
+                        </label>
+                        <!--<br/>111-->
+                        <!--<input id="managePassword123" type="text" placeholder="" value="adfas" name="managePassword123">-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="online-info1">
+        <!--详细信息-->
+        <div class="online-signal">
+            <div class="title">
+                <div class="wrap clearfix">
+                    <div class="fl">
+                        <div class="tv-info">
+                            <h3>信号强度</h3>
+                        </div>
+                    </div>
+                    <div class="fr" id="signal"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="online-info2">
+        <!--详细信息-->
+        <div class="online-signal">
+            <div class="title">
+                <div class="wrap clearfix">
+                    <div class="fl">
+                        <div class="tv-info">
+                            <h3>上线时间</h3>
+                        </div>
+                    </div>
+                    <div class="fr" id="time">
+                        <span></span>分钟
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="online-info3">
+        <!--详细信息-->
+        <div class="online-signal">
+            <div class="title">
+                <div class="wrap clearfix">
+                    <div class="fl">
+                        <div class="tv-info">
+                            <h3>MAC地址</h3>
+                        </div>
+                    </div>
+                    <div class="fr" id="mac"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit">
+        <a href="">加入黑名单</a>
+    </button>
+</section>
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/layer.js"></script>
+<script src="js/js/manage_navOnline_detail.js"></script>
+</body>
+</html>

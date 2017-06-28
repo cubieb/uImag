@@ -13,20 +13,22 @@ tz=`nvram_get 2860 TZ`
 killall -q ntpclient
 
 if [ "$srv" = "" ]; then
-	exit 0
+#	exit 0
+	srv="202.120.2.101"
 fi
 
 
-#if [ "$sync" = "" ]; then
-#	sync=1
+if [ "$sync" = "" ]; then
+	sync=1
 #elif [ $sync -lt 300 -o $sync -le 0 ]; then
 #	sync=1
-#fi
+fi
 
 sync=`expr $sync \* 3600`
 
 if [ "$tz" = "" ]; then
-	tz="UCT_000"
+#	tz="UCT_000"
+	tz="CST_008"
 fi
 
 #debug

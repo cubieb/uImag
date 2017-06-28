@@ -2,7 +2,7 @@
 #define WIFI_SETTING_H_
 
 
-#include <assert.h>
+//#include <assert.h>
 #include "utils.h"
 
 /*
@@ -25,6 +25,7 @@ typedef struct ssid_message
 // 主路由的信息
 typedef struct ap_message_s
 {
+	char security[23];
 	char APChannel[4];
 	char APAuthMode[20];
 	char APEncrypType[10];
@@ -47,13 +48,14 @@ typedef struct extend_message_s
  */
 void apcli_scan(void);
 
-
+#if 0
 /*
  * 从网页客户端上获取信息
  * 信息填充到input buffer上。
  */
 int get_message_for_web(char *input);
 
+#endif 
 
 /*
  * 可以有选择的接收数据：主路由的信息 or 扩展路由的设置，两者都接收。

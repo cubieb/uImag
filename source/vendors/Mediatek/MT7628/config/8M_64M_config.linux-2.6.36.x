@@ -700,7 +700,20 @@ CONFIG_BLK_DEV_RAM_COUNT=16
 # CONFIG_CDROM_PKTCDVD is not set
 # CONFIG_ATA_OVER_ETH is not set
 # CONFIG_BLK_DEV_HD is not set
-# CONFIG_MISC_DEVICES is not set
+CONFIG_MISC_DEVICES=y
+# CONFIG_PHANTOM is not set
+# CONFIG_SGI_IOC4 is not set
+# CONFIG_TIFM_CORE is not set
+# CONFIG_ENCLOSURE_SERVICES is not set
+# CONFIG_HP_ILO is not set
+CONFIG_DM_IP=y
+# CONFIG_C2PORT is not set
+
+#
+# EEPROM support
+#
+# CONFIG_EEPROM_93CX6 is not set
+# CONFIG_CB710_CORE is not set
 CONFIG_HAVE_IDE=y
 # CONFIG_IDE is not set
 

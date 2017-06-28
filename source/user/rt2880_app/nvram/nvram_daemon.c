@@ -587,7 +587,10 @@ static void doWPSHandler(int signo)
 	triggerWPS(SIGXFSZ);
 	//triggerWPS(SIGWINCH);
 #endif
-#endif 
+#endif
+	system("nvram_set 2860 WpsConfiguring 1");
+
+	/* wps配置 */  
         do_system("iwpriv apcli0 set ApCliEnable=0");
 	do_system("iwpriv apcli0 set WscConfMode=1");             
 	do_system("iwpriv apcli0 set WscMode=2");                
@@ -606,6 +609,7 @@ static void loadDefaultHandler(int signo)
 	loadDefault(2880);
 #endif
 	loadDefault(7790);
+
 	system("reboot");
 }
 

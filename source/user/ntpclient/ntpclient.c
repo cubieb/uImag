@@ -365,13 +365,22 @@ void setup_transmit(int usd, char *host, short port)
 		{perror("connect");exit(1);}
 }
 
-void primary_loop(int usd, int num_probes, int interval, int goodness)
+void primary_loop(int usd, int num_probes, int interval, int goodness, char *host, short port)
 {
 	fd_set fds;
 	struct sockaddr sa_xmit;
 	int i, pack_len, sa_xmit_len, probes_sent, error;
 	struct timeval to;
 	struct ntptime udp_arrival_ntp;
+
+	/* Begin: added by zhoulin */
+	/* when network is reachable,sync immediatelly */
+	struct sockaddr_in sa_dest;
+	bzero((char *) &sa_dest, sizeof(sa_dest));
+	sa_dest.sin_family=AF_INET;
+	stuff_net_addr(&(sa_dest.sin_addr),host);
+	sa_dest.sin_port=htons(port);
+	/* End: added by zhoulin */
 
 	if (debug) printf("Listening...\n");
 
@@ -380,6 +389,13 @@ void primary_loop(int usd, int num_probes, int interval, int goodness)
 	to.tv_sec=0;
 	to.tv_usec=0;
 	for (;;) {
+		/* Begin: added by zhoulin */
+		/* when network is reachable,sync immediatelly */
+		if (connect(usd,(struct sockaddr *)&sa_dest,sizeof(sa_dest))==-1){
+			sleep(5);
+			continue;
+		}
+		/* End: added by zhoulin */
 		FD_ZERO(&fds);
 		FD_SET(usd,&fds);
 		i=select(usd+1,&fds,NULL,NULL,&to);  /* Wait on read or error */
@@ -538,9 +554,9 @@ int main(int argc, char *argv[]) {
 
 	setup_receive(usd, INADDR_ANY, udp_local_port);
 
-	setup_transmit(usd, hostname, NTP_PORT);
+	//setup_transmit(usd, hostname, NTP_PORT);
 
-	primary_loop(usd, probe_count, cycle_time, goodness);
+	primary_loop(usd, probe_count, cycle_time, goodness, hostname, NTP_PORT);
 
 	close(usd);
 	return 0;

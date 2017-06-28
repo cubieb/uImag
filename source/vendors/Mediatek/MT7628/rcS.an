@@ -3,12 +3,18 @@ mount -a
 mkdir -p /var/run
 makedevlinks.sh
 cat /etc_ro/motd > /dev/console
+
+led&
+
+#add by tanxjian for dynamic domain name
+dm_dhcp&
+#end by tanxjian
+
 nvram_daemon&
 #long_loop&
 #goahead&
-init_system start
 
-led&
+init_system start
 
 #for telnet debugging
 telnetd

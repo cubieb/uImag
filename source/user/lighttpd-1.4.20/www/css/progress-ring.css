@@ -1,0 +1,77 @@
+@charset "UTF-8";
+@-webkit-keyframes toggle {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes toggle {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+#manage_update {
+  font-size: 0.71111111rem;
+  line-height: 0.97777778rem;
+  font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif;
+}
+#manage_update > p {
+  text-align: center;
+  margin: 6.8rem 1.24444444rem 0 1.24444444rem;
+  color: #999;
+}
+.progress-ring {
+  position: relative;
+  top: 6rem;
+  left: 4.44444444rem;
+  height: 7.11111111rem;
+  width: 320 45rem;
+}
+.progress-ring div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 7.11111111rem;
+  width: 7.11111111rem;
+  /* 圆环宽高，可自定义 */
+  border: 0.22222222rem solid transparent;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.progress-ring .progress-left,
+.progress-ring .progress-right,
+.progress-ring .progress-cover {
+  clip: rect(0 3.55555556rem 7.11111111rem 0);
+  /* rect( [0 | <width/2> | <height> | 0] ) */
+}
+.progress-ring .progress-right {
+  opacity: 0;
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.progress-ring .progress-text {
+  border: none;
+  font-family: "Arial", sans-serif;
+  text-align: center;
+  font-size: 0.72222222rem;
+  color: #438cff;
+  /* 进度文字颜色 */
+  line-height: 7.11111111rem;
+  /*2222*/
+}
+.progress-ring .progress-text .progress-num {
+  font-size: 1.11111111rem;
+}
+.progress-ring .progress-percent {
+  font-size: .55em;
+  font-style: italic;
+  font-family: "Microsoft Yahei", sans-serif;
+}

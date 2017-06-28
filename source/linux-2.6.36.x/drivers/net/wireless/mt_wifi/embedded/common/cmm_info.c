@@ -5820,7 +5820,7 @@ static INT dump_mac_table(RTMP_ADAPTER *pAd, UINT32 ent_type, BOOLEAN bReptCli)
 	INT i;
 	ULONG DataRate=0;
 
-
+	nvram_set(0, "isHaveSta", "0");
 	printk("\n");
 
 #ifdef DOT11_N_SUPPORT
@@ -5864,6 +5864,7 @@ static INT dump_mac_table(RTMP_ADAPTER *pAd, UINT32 ent_type, BOOLEAN bReptCli)
 #endif /* MAC_REPEATER_SUPPORT */
 		}
 
+		nvram_set(0, "isHaveSta", "1");
 		DataRate=0;
 		getRate(pEntry->HTPhyMode, &DataRate);
 		printk("%02X:%02X:%02X:%02X:%02X:%02X  ", PRINT_MAC(pEntry->Addr));
@@ -7508,6 +7509,7 @@ INT	Show_ModuleTxpower_Proc(
  	POS_COOKIE pObj;
  	UCHAR ifIndex;
 	BOOLEAN bConnect=FALSE;
+	char macAddr[17];
 
  	pObj = (POS_COOKIE) pAd->OS_Cookie;
 
@@ -7534,6 +7536,9 @@ INT	Show_ModuleTxpower_Proc(
 					MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_OFF, ("ApCli%d Connected AP : %02X:%02X:%02X:%02X:%02X:%02X   SSID:%s\n",
 							ifIndex, PRINT_MAC(pEntry->Addr), pAd->ApCfg.ApCliTab[ifIndex].Ssid));
 					bConnect=TRUE;
+
+					sprintf(macAddr, "%02X:%02X:%02X:%02X:%02X:%02X", PRINT_MAC(pEntry->Addr));
+				        nvram_set(0, "RouterMac", macAddr);
  				}
  		}
 
@@ -7546,9 +7551,9 @@ INT	Show_ModuleTxpower_Proc(
  	}
 
 	if(TRUE == bConnect)
-		nvram_set(0, "LinkTest", "1");
+		nvram_set(0, "LinkStatus", "1");
 	else
-		nvram_set(0, "LinkTest", "0");
+		nvram_set(0, "LinkStatus", "0");
 
  	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_OFF, ("=============================================================\n"));
      	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_TRACE, ("<==RTMPIoctlConnStatus\n"));

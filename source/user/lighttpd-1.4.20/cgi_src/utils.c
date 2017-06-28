@@ -12,6 +12,41 @@ static FILE *log_fp;
 struct status media_state;
 struct list all_list[1024];
 
+// add it for cgi from qinwenwang
+int get_message_for_web(char *input)
+{
+	//assert(input != NULL);
+	if(input == NULL)
+		return -1;
+
+	int length;
+	char *method;
+
+	method = getenv("REQUEST_METHOD");
+	if(method == NULL)
+		return -1;
+	//POST方法
+	if(!strcmp(method, "POST"))
+	{
+		length = atoi(getenv("CONTENT_LENGTH"));
+		if(length != 0)
+		{
+			//从标准输入读取一定的数据
+			fgets(input, length + 1, stdin);
+		}
+	}
+	else if(!strcmp(method, "GET"))
+	{
+		input = getenv("QUERY_STRING");
+		length = strlen(input);
+	}
+
+	if(length == 0)
+		return 0;
+
+	return length;
+}
+
 
 /*
  * FOR CGI

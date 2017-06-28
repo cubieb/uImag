@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #btn{
+            width: 100px;
+            height: 100px;
+            background-color: green;
+            color: white;
+            cursor:pointer;
+        }
+    </style>
+    <script src="jquery.min.js"></script>
+</head>
+<body>
+     <div id="btn">点我点我</div>
+     <script>
+         $(function () {
+             $("#btn").on("click",function () {
+                 $.ajax({
+                     url: "/cgi-bin/test.cgi",
+                     type:"POST",
+                    data:{
+                        name:function () {
+                            return "你好，我是覃文旺，旺旺雪饼的旺"
+                        },
+                        age:18,
+                        job:"后端"
+                    }
+                 })
+             });
+         })
+     </script>
+</body>
+</html>
