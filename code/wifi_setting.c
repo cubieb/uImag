@@ -82,42 +82,6 @@ void apcli_scan(void)
 	pclose(pp);
 }
 
-#if 0
-int get_message_for_web(char *input)
-{
-	assert(input != NULL);
-
-	int length;
-	char *method;
-
-	method = getenv("REQUEST_METHOD");
-	if(method == NULL)
-		return -1;
-	//POST方法
-	if(!strcmp(method, "POST"))
-	{
-		length = atoi(getenv("CONTENT_LENGTH"));
-		if(length != 0)
-		{
-			//从标准输入读取一定的数据
-			fgets(input, length + 1, stdin);
-		}
-	}
-	else if(!strcmp(method, "GET"))
-	{
-		input = getenv("QUERY_STRING");
-		length = strlen(input);
-	}
-
-	if(length == 0)
-		return 0;
-
-	return length;
-}
-
-#endif 
-
-
 void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char *input)
 {
 
@@ -220,6 +184,20 @@ int main(int argc, char *argv[])
 	{
 		apcli_scan();
 	}
+
+	
+
+	//管理界面的主路由设置模块过来的请求
+	//客户端请求主路由信息
+	if(strcmp("station", web_get("ap_station", input, 2)) == 0)
+	{
+	}
+	//管理界面的主路由设置模块的提交
+	if(strcmp("commit", web_get("ex_station", input, 2)) == 0)
+	{
+	}
+
+
 
 	if(strcmp("commit", web_get("wifiCommit", input, 2)) == 0)
 	{

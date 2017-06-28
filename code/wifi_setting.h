@@ -46,15 +46,6 @@ typedef struct extend_message_s
  */
 void apcli_scan(void);
 
-#if 0
-/*
- * 从网页客户端上获取信息
- * 信息填充到input buffer上。
- */
-int get_message_for_web(char *input);
-
-#endif 
-
 /*
  * 可以有选择的接收数据：主路由的信息 or 扩展路由的设置，两者都接收。
  * ap_msg为NULL， extend_msg不允为NULL，或两者都不为NULL。
