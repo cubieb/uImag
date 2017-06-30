@@ -381,6 +381,7 @@ void addblacklist(char *mac)
 	do_system("iwpriv ra0 set ACLAddEntry=%s", mac);
 
 	//do_system("iwpriv ra0 set ACLShowAll=1");
+	//添加完黑名单以后，显示现在在线的设备信息返回给web端
 	getclientlist();
 }
 

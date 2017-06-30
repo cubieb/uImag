@@ -27,8 +27,11 @@ typedef struct ap_message_s
 	char APChannel[4];
 	char APAuthMode[20];
 	char APEncrypType[10];
-	char APPasswd[64];
-	char APSsid[32];
+	char APPasswd[65];
+	char APSsid[33];
+
+	char AP_Mac[18];
+	int mix_flag;   //检测主路由是否是WPA1PSKWPA2PSK/TKIPAES的情况
 
 }ap_message_t;
 
@@ -36,9 +39,9 @@ typedef struct ap_message_s
 //扩展路由的信息和管理员密码
 typedef struct extend_message_s
 {
-	char Extend_wifiName[32];
-	char Extend_wifiPasswd[64];
-	char ManagePasswd[64];
+	char Extend_wifiName[33];
+	char Extend_wifiPasswd[65];
+	char ManagePasswd[65];
 }extend_message_t;
 
 /*
@@ -59,5 +62,7 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg);
 
 
 void apcli_connect(ap_message_t *ap_msg);
+
+int is_connect_success(int nvram, ap_message_t *ap_msg);
 
 #endif 

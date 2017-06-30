@@ -1,0 +1,192 @@
+#include "utils.h"
+#include "nvram.h"
+
+//nvram里client_info_list记录着连接设备的信息
+int main()
+{
+	//扫描所有的设备信息保存到指定的文件中去
+#if 1  
+	FILE *fp;
+	fp = fopen(CLIENT_LSIT, "a+");
+	if(fp == NULL)
+		return -1;
+	getdevicelist(fp);
+	fclose(fp);
+#endif
+
+
+
+}
+
+//在线设备
+void getclientlist(int nvram)
+{
+	rt_mac_table mac_table;
+	getmactable(&mac_table);
+
+	DBG_MSG(" %d  %s", __LINE__, __FILE__);
+	DBG_MSG(" mac_table.Num = %d", mac_table.Num);
+
+	if(mac_table.Num > 0)
+	{
+		FILE *fp;
+		//打开自己保存的设备记录的文件
+		fp = fopen(CLIENT_LSIT, "r");
+		if(fp == NULL)
+			return ;
+
+		int i; 
+		DBG_MSG(" %d  %s", __LINE__, __FILE__);
+		printf("{\n");
+		printf("\t\"Client_Info\":\n");
+		printf("\t[\n");
+
+		for(i = 0; i < mac_table.Num; i++)
+		{
+			DBG_MSG(" %d  %s", __LINE__, __FILE__);
+			char buff[1024];
+			//获取设备信息
+			while(fgets(buff, 1024, fp))
+			{
+
+				char HostName[32];
+				char Mac[18];
+				char Msg_os[64];
+
+				strcpy(HostName,web_get("hostname", buff, 0));
+				strcpy(Mac,web_get("mac", buff, 0));
+				strcpy(Msg_os,web_get("msg_os", buff, 0));
+				Msg_os[strlen(Msg_os) - 1] = '\0';
+
+				//DBG_MSG("hostname= %s mac= %s  msg_os = %s", HostName, Mac, Msg_os);
+
+				//跟之前记录的mac作比较,相同则显示
+				if(strcmp(Mac, mac_table.entry[i].Mac) == 0)
+				{
+
+					printf("\t\t{\n");
+					printf("\t\t\"HostName\":\"%s\",\n", HostName);
+					printf("\t\t\"Signal\":\"%d\",\n", mac_table.entry[i].Signal);
+					printf("\t\t\"ConnectedTime\":\"%d\",\n", mac_table.entry[i].ConnectedTime);
+					printf("\t\t\"Mac\":\"%s\",\n", Mac);
+					printf("\t\t\"Msg_os\":\"%s\"\n", Msg_os);
+					printf("\t\t},\n");
+
+					DBG_MSG("\t\t{\n");
+					DBG_MSG("\t\t\"HostName\":\"%s\",\n", HostName);
+					DBG_MSG("\t\t\"Signal\":\"%d\",\n", mac_table.entry[i].Signal);
+					DBG_MSG("\t\t\"ConnectedTime\":\"%d\",\n", mac_table.entry[i].ConnectedTime);
+					DBG_MSG("\t\t\"Mac\":\"%s\",\n", Mac);
+					DBG_MSG("\t\t\"Msg_os\":\"%s\"\n", Msg_os);
+					DBG_MSG("\t\t},\n");
+
+
+					rewind(fp);
+					break;
+				}
+			}
+		}
+		printf("\t\t{\n\t\t}\n");
+
+		printf("\t]\n");
+
+		printf("}\n");
+	}
+	else
+	{
+		DBG_MSG(" %d  %s  no one in line!", __LINE__, __FILE__);
+		printf("{}");
+	}
+}
+
+
+void add_client_info(int nvram, char *hostname, char *mac)
+{
+	nvram_bufget(nvram, "client_info_list");
+}
+
+int change_hostname(char *hostname, char *macaddr)
+{
+	if(hostname == NULL || macaddr == NULL)
+		return -1; 
+
+	//获取nvram里面的client_stainfo数据
+	char client_info_list[MAX_MSG_SIZ];
+	strcpy(client_info_list, nvram_bufget(RT2860_NVRAM, "client_info_list"));
+
+	//判断是否为空
+	if(strcmp(client_info_list, "") == 0)
+	{
+		//为空 -->添加数据
+		char temp[128];
+		sprintf(temp, "%s:%s", hostname, mac);
+		DBG_MSG("hostname:mac=%s", temp);
+		nvram_bufset(RT2860_NVRAM, "client_info", temp);
+		nvram_commit(RT2860_NVRAM);
+	}
+	else
+	{
+	//不为空 --> 寻找数据是否已记录，否-->添加  是-->修改hostname
+		//获取记录了多少个设备
+		int count = get_nums(client_info_list, ";");	
+		int i;
+		//找到对应的mac地址，找到，修改hostname。找不到，添加记录
+		for(i = 0; i < count; i++)
+		{
+			char client_info[128]; //一个设备的信息
+			char ihostname[65];  
+			char imac[18];
+			get_nth_value(i, client_info_list, ";", client_info, sizeof(client_info_list));
+			get_nth_value(0, client_info, ":", ihostname, sizeof(client_info));
+			get_nth_value(1, client_info, ":", imac, sizeof(client_info));
+
+			if(strcmp(mac, imac) == 0)
+			{
+				sprintf(client_info, "%s:%s", hostname, mac);
+			}
+		}
+	}
+
+	char buff[2048]; //获取单个设备的信息到buff中
+
+	char *tmp = macaddr;
+
+	char *file_mac = NULL;
+
+	char *myip = NULL;
+	char temp[18]; //record the ip data
+	char *msg_os = NULL;
+
+	while(fgets(buff, 2048, stream) > 0)
+	{   
+		int length = strlen(buff);
+		file_mac = web_get("mac", buff, 0);
+
+		DBG_MSG("file_mac is %s", file_mac);
+
+		//find the mac the same as stream mac
+		if(strcmp(file_mac, tmp) == 0)
+		{
+			DBG_MSG(" %d %s", __LINE__, __FILE__);
+			myip = web_get("ip", buff, 2);
+			strcpy(temp, myip);
+
+			msg_os = web_get("msg_os", buff, 0);
+
+			//clear a line
+			memset(buff, 0, length);
+			//fputs(buff, stream);
+			fwrite(buff, 1, length, stream);
+			fseek(stream, -length, SEEK_CUR);
+
+			//write a line
+			snprintf(buff, length, "hostname=%s&mac=%s&ip=%s&msg_os=%s", hostname, macaddr, temp, msg_os);
+			fseek(stream, -length, SEEK_CUR);
+			fwrite(buff,1, length, stream);
+
+			return 0;
+		}
+
+	}
+
+}
