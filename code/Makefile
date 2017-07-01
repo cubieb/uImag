@@ -7,8 +7,8 @@ TARGTE := client_info.cgi
 CROSS := mipsel-linux-
 CC := $(CROSS)gcc
 
-all: test.o utils.o crc32.o flash_api.o nvram_env.o
-	$(CC) $^ -o $(TARGTE)
+#all: test.o utils.o crc32.o flash_api.o nvram_env.o
+#	$(CC) $^ -o $(TARGTE)
 
 all: client_info.o utils.o crc32.o flash_api.o nvram_env.o
 	$(CC) $^ -o $(TARGTE)
