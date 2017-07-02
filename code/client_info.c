@@ -1,8 +1,12 @@
 #include "utils.h"
 #include "client_info.h"
 
+/*
+  本模块主要实现：谁在上网(显示在线列表功能),
+  修改主机名，添加黑名单，显示黑名单，删除黑名单。
+ */
 //user spaces buffer data;
-char data[4096];
+char data[4096];  //在get_mac_table中要用到，将内核的数据保存到用户空间中。
 
 //从打开指定的文件流里找mac地址，找到返回0，找不到返回-1
 //int find_mac(char *macaddr, FILE *stream)
