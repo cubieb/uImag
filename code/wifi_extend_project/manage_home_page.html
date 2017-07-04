@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理_首页_中移Wi-Fi放大器</title>
+    <link rel="stylesheet" href="css/common.min.css">
+    <link rel="stylesheet" href="css/manage_homepage.min.css">
+    <link rel="stylesheet" href="css/layer.min.css">
+
+    <script>
+        var pixclPatio = 1 / window.devicePixelRatio;
+        document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
+        console.log(pixclPatio);
+
+        var html = document.getElementsByTagName('html')[0];
+        var pageWidth = html.getBoundingClientRect().width;
+        html.style.fontSize = pageWidth / 16 + 'px';
+
+        //        console.log(html.style.fontSize);  //等于@rem
+        //        console.log($(window).width() + "---" + window.screen.width);
+    </script>
+</head>
+<body>
+    <!--头部-->
+    <header id="header">
+        <h1>中移Wi-Fi放大器</h1>
+    </header>
+
+    <!--信号强弱信息start-->
+    <section id="main">
+        <div class="source-wifi">
+            <div class="wifi-online-time">
+                <span>已连接 :</span>
+                <span><i>3</i>分钟</span>
+            </div>
+            <div class="wifi-infor">
+                <span>信号源 :</span>
+                <span>CMCC~Smart</span>
+            </div>
+        </div>
+        <div class="signal">
+            <img src="images/manage_01_bg.png" alt="">
+            <div class="signal-strength">
+                <img src="images/manage_01_icon00.png" alt="">
+                <div class="strength-result">
+                    <span>信号强度 :</span>
+                    <i>优</i>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--信号强弱信息end-->
+
+    <!--进入栏目的入口文件start-->
+    <section id="nav" class="clearfix">
+        <a href="" class="nav-online">
+            <span>
+                <img src="images/manage_01_icon01.png" alt="">
+            </span>
+            <i>谁在上网</i>
+        </a>
+        <a href="" class="nav-route-setting">
+            <span>
+                <img src="images/manage_01_icon02.png" alt="">
+            </span>
+            <i>路由设置</i>
+        </a>
+        <a href="" class="nav-wifi-setting">
+            <span>
+                <img src="images/manage_01_icon03.png" alt="">
+            </span>
+            <i>WiFi设置</i>
+        </a>
+        <a href="" class="nav-lamp-setting">
+            <span>
+                <img src="images/manage_01_icon04.png" alt="">
+            </span>
+            <i>指示灯</i>
+        </a>
+        <a href="system_update.html" class="nav-syetem-update">
+            <span>
+                <img src="images/manage_01_icon05.png" alt="">
+            </span>
+            <i>系统升级</i>
+        </a>
+        <a href="" class="nav-syetem-reboot">
+            <span>
+                <img src="images/manage_01_icon06.png" alt="">
+            </span>
+            <i>重新启动</i>
+        </a>
+    </section>
+    <!--进入栏目的入口文件end-->
+
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/layer.js"></script>
+    <script src="js/js/manage_home_page.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+@rem: 45rem;
+
+html {
+  width: 100%;
+  > body {
+    width: 100%;
+    height: 100%;
+    font-size: 32/@rem;
+    line-height: 44/@rem;
+    font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif;
+    background-color: #fafafa;
+    //头部，配置
+    > header {
+      width: 100%;
+      height: 88/@rem;
+      line-height: 88/@rem;
+      background-color: #438cff;
+      text-align: center;
+      color: #fff;
+      font-size: 36/@rem;
+      position: relative;
+      > .nav-back {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 88/@rem;
+        width: 88/@rem;
+        background-color: #438cff;
+        padding-top: 28/@rem;
+        > img {
+          width: 20/@rem;
+          height: 34/@rem;
+        }
+      }
+      > h1 {
+        text-align: center;
+        background-color: #438cff;
+        font-size: 36/@rem;
+      }
+    }
+    > #main {
+      > .online-info {
+        width: 100%;
+        padding-left: 30/@rem;
+        background-color: #fff;
+        //不好处理的时候先在外层包裹一下，然后对外层使用浮动，再对内层使用flex布局
+        > .online-title {
+          width: 100%;
+          > .wrap {
+            border-bottom: 2px solid #F0F0F0;
+            > .fl {
+              height: 140/@rem;
+              //让子级相对于这个父级居中
+              //让包括块儿状元素归结到了一行
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-start;
+              align-items: center;
+              position: relative;
+              > .tv {
+                float: left;
+                width: 72/@rem;
+                height: 72/@rem;
+                background-color: #438cff;
+                border-radius: 50%;
+                //margin-left: 30/@rem;
+                //让图片相对于这个父级居中
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                > img {
+                  width: 36/@rem;
+                  height: 40/@rem;
+                }
+              }
+              > form{
+                > input[type="text"] {
+                  float: left;
+                  margin-left: 28/@rem;
+                  font-size: 32/@rem;
+                  color: #333;
+                }
+                > label {
+                  position: absolute;
+                  right: 40/@rem;
+                  > img {
+                    width: 36/@rem;
+                    height: 34/@rem;
+                  }
+                }
+              }
+            }
+            //> .fr {
+            //  float: right;
+            //  height: 140/@rem;
+            //  display: flex;
+            //  flex-direction: row;
+            //  justify-content: flex-start;
+            //  align-items: center;
+            //  > img.edit {
+            //    margin-right: 40/@rem;
+            //    width: 36/@rem;
+            //    height: 34/@rem;
+            //  }
+            //}
+          }
+        }
+        > .online-signal {
+          height: 120/@rem;
+          width: 100%;
+          background-color: #fff;
+          //不好处理的时候先在外层包裹一下，然后对外层使用浮动，再对内层使用flex布局
+          > .title {
+            width: 100%;
+            > .wrap {
+              border-bottom: 2px solid #F0F0F0;
+              > .fl {
+                float: left;
+                height: 120/@rem;
+                line-height: 120/@rem;
+                > .tv-info {
+                  > h3 {
+                    font-size: 32/@rem;
+                    color: #333;
+                  }
+                }
+              }
+              > .fr {
+                color: #999;
+                float: right;
+                height: 120/@rem;
+                line-height: 120/@rem;
+                margin-right: 40/@rem;
+              }
+            }
+          }
+        }
+      }
+      > .online-info1, .online-info2, .online-info3 {
+        width: 100%;
+        padding-left: 30/@rem;
+        background-color: #fff;
+        > .online-signal {
+          width: 100%;
+          background-color: #fff;
+          //不好处理的时候先在外层包裹一下，然后对外层使用浮动，再对内层使用flex布局
+          > .title {
+            width: 100%;
+            > .wrap {
+              border-bottom: 2px solid #F0F0F0;
+              > .fl {
+                float: left;
+                height: 120/@rem;
+                line-height: 120/@rem;
+                > .tv-info {
+                  > h3 {
+                    font-size: 32/@rem;
+                    color: #333;
+                  }
+                }
+              }
+              > .fr {
+                color: #999;
+                float: right;
+                height: 120/@rem;
+                line-height: 120/@rem;
+                margin-right: 40/@rem;
+              }
+            }
+          }
+        }
+      }
+      > .online-info3 {
+        .online-signal {
+          > .title {
+            > .wrap {
+              border: none;
+            }
+          }
+        }
+      }
+
+      > button[type="submit"] {
+        width: 560/@rem;
+        height: 90/@rem;
+        border-radius: 200px;
+        border: solid 2px #e6e6e6;
+        background-color: #438cff;
+        position: absolute;
+        left: 50%;
+        margin-top: 492/@rem;
+        transform: translate(-50%, 0);
+        a > {
+          display: block;
+          width: 100%;
+          height: 100%;
+          line-height: 90/@rem;
+          color: #fff;
+          font-size: 32/@rem;
+        }
+      }
+    }
+  }
+}

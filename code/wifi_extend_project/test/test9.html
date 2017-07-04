@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.js"></script>
+</head>
+<body>
+<script>
+    //    var onlineEntity =  {
+    //        "Scan": [{
+    //            "Channel": "1",
+    //            "ssid": "CMCC-2ACK",
+    //            "bssid": "e0:1c:ee:08:2a:cc",
+    //            "security": "WPA1PSKWPA2PSK/AES",
+    //            "signal": "59",
+    //            "mode": "11b/g/n",
+    //            "ext_ch": "ABOVE",
+    //            "net_type": "In",
+    //            "wps": "NO"
+    //        }]
+    //    }
+    //    var isBooleanFromInfo = $.isEmptyObject(onlineEntity);//json对象为空时返回true
+    //    console.log(isBooleanFromInfo);
+
+    var onlineEntity = {
+                "Channel": "1",
+                "ssid": "CMCC-2ACK",
+                "bssid": "e0:1c:ee:08:2a:cc",
+                "security": "WPA1PSKWPA2PSK/AES",
+                "signal": "59",
+                "mode": "11b/g/n",
+                "ext_ch": "ABOVE",
+                "net_type": "In",
+                "wps": "NO"
+    }
+
+    onlineEntity['hobby'] = 'playFootball';
+
+    console.log(onlineEntity);
+
+</script>
+</body>
+</html>

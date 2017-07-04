@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理_重启WiFi放大器_进程展示</title>
+    <link rel="stylesheet" href="css/common.min.css">
+    <link rel="stylesheet" type="text/css" href="css/progress-ring.min.css">
+    <style>
+        /*.progress-ring {*/
+        /*float: left;*/
+        /*margin: 20px;*/
+        /*}*/
+        /*button {*/
+        /*float: left;*/
+        /*}*/
+        /*#full div {*/
+        /*border-width: 65px;*/
+        /*color: #000;*/
+        /*}*/
+    </style>
+
+    <script>
+        var pixclPatio = 1 / window.devicePixelRatio;
+        document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
+        console.log(pixclPatio);
+
+        var html = document.getElementsByTagName('html')[0];
+        var pageWidth = html.getBoundingClientRect().width;
+        html.style.fontSize = pageWidth / 16 + 'px';
+
+        //        console.log(html.style.fontSize);  //等于@rem
+        //        console.log($(window).width() + "---" + window.screen.width);
+    </script>
+</head>
+<body>
+<section id="manage_update">
+    <!--<div class="progress-ring"></div>-->
+    <!--<div class="progress-ring" data-percent="20"></div>-->
+    <!--<div class="progress-ring" data-duration="2" id="full"></div>-->
+    <!--<div class="progress-ring" data-percent="65" data-color="#b3cef6,#4b86db" data-duration="4"></div>-->
+
+    <div class="progress-ring" data-percent="100" data-color="#F0F0F0,#438CFF" data-duration="50"></div>
+    <p>正在重启WiFi放大器，请不要关闭电源！</p>
+</section>
+
+<script src="js/lib/jquery.min.js"></script>
+<!--<script src="js/lib/progress-ring-1(逐步升级版本).js"></script>-->
+<script src="js/lib/progress-ring（官方匀速运动版本）.js"></script>
+<script src="js/js/system_reboot_progress.js"></script>
+</body>
+</html>

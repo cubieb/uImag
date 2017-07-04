@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="//lib.baomitu.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    var arr = ["one", "two", "three", "four"];
+    $.each(arr, function (i, value) {
+        console.log(this);//对象类型为object     String {0: "o", 1: "n", 2: "e", length: 3, [[PrimitiveValue]]: "one"}
+        console.log($(this));// (3) ["o", "n", "e"]
+        console.log(typeof this);//object而不是数组
+        console.log(Array.isArray(this));//false
+        console.log(typeof $(this));//object而不是数组
+        console.log(Array.isArray($(this)));//false
+        console.log(i);//0 1 2 3
+        console.log(value); //one two three four
+    });
+
+    var arr1 = [[1, 4, 3], [4, 6, 6], [7, 20, 9]]
+    $.each(arr1, function (i, item) {
+        //其实arr1为一个二维数组，item相当于取每一个一维数组，item[0]相对于取每一个一维数组里的第一个值
+        console.log(item[0]);//1 4 7
+        console.log(item);
+    });
+
+    var obj = {
+        one: 1,
+        two: 2,
+        three: 3,
+        four: 4
+    };
+    $.each(obj, function (key, val) {
+        console.log(obj[key]);//1 ...
+        console.log(obj);//{one: 1, two: 2, three: 3, four: 4} ...
+        console.log(val);//1 ...
+    });
+
+    //<img/><img/>jQuery 代码:
+    $("img").each(function (i) {
+        this.src = "test" + i + ".jpg";
+    });
+</script>
+</body>
+</html>

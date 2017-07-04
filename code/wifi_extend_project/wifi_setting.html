@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>配置页Wi-Fi设置页</title>
+    <link rel="stylesheet" href="css/common.min.css">
+    <link rel="stylesheet" href="css/wifi_setting.min.css">
+    <link rel="stylesheet" href="css/selectContainer.min.css">
+    <link rel="stylesheet" href="css/loaders.min.css">
+    <script>
+        var pixclPatio = 1 / window.devicePixelRatio;
+        document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
+        //        console.log(pixclPatio);
+
+        var html = document.getElementsByTagName('html')[0];
+        var pageWidth = html.getBoundingClientRect().width;
+        html.style.fontSize = pageWidth / 16 + 'px';
+
+        //        console.log(html.style.fontSize);
+        //        console.log($(window).width() + "---" + window.screen.width);
+    </script>
+</head>
+<body>
+
+<!--<div id="mask">-->
+    <!--<div class="anima-loading"></div>-->
+<!--</div>-->
+
+<!--头部，wifi设置-->
+<header>
+    <div class="nav-back">
+        <img src="images/nav_back.png" alt="">
+    </div>
+    <p>Wi-Fi设置</p>
+</header>
+<!--wifi标题-->
+<section id="title">
+    <img src="images/02_icon01.png" alt="">
+    <p>请输入您需要放大的Wi-Fi信息, 以及扩展的新Wi-Fi信息</p>
+</section>
+<!--扫描出的wifi列表-->
+<form action="" id="wifi-form">
+    <section id="wifi-list">
+        <!--wifi列表头start-->
+        <div class="wifi-title clearfix">
+            <span>可放大Wi-Fi列表</span>
+            <!--增大用户可触控范围，用户体验友好。-->
+        </div>
+        <!--wifi列表头end-->
+        <!--选择你要连接的主路由器wifi名start-->
+        <div class="wifi-name clearfix">
+            <div class="wifi-l"></div>
+            <div class="wifi-r clearfix">
+                <div class="list-btn">
+                    <img src="images/02_icon04.png" alt="">
+                </div>
+                <i></i>
+                <div class="refresh-btn">
+                    <span class="title-right">刷新</span>
+                </div>
+            </div>
+            <!--弹出的下拉列表-->
+            <!--<div class="selectContainer" id="selectCon">-->
+            <!--<ul class="selectMenu">-->
+            <!--<div class="mask"></div>-->
+            <!--<div class="loader-inner line-scale">-->
+            <!--<div style="background-color: #fff"></div>-->
+            <!--<div style="background-color: #fff"></div>-->
+            <!--<div style="background-color: #fff"></div>-->
+            <!--<div style="background-color: #fff"></div>-->
+            <!--<div style="background-color: #fff"></div>-->
+            <!--</div>-->
+            <!--<li>CMCC~Guest-->
+            <!--<img src="images/02_icon02.png" alt="">-->
+            <!--<img src="images/02_icon03.png" alt="">-->
+            <!--</li>-->
+            <!--<li>CMCC~Smart-->
+            <!--<img src="images/02_icon02.png" alt="">-->
+            <!--<img src="images/02_icon03.png" alt="">-->
+            <!--</li>-->
+            <!--<li>TP-LINK-67-F76-->
+            <!--<img src="images/02_icon02.png" alt="">-->
+            <!--<img src="images/02_icon03.png" alt="">-->
+            <!--</li>-->
+            <!--<li>其它...-->
+            <!--</li>-->
+            <!--</ul>-->
+            <!--</div>-->
+            <div class="selectContainer" id="selectCon"></div>
+        </div>
+        <!--选择你要连接的主路由器wifi名end-->
+        <!--设置选中主路由器的wifi密码start-->
+        <div class="wifi-password clearfix">
+            <label for="wifiPassword">Wi-Fi密码</label>
+            <i></i>
+            <input id="wifiPassword" type="text" placeholder="请输入CMCC~Smart-DOP-LINK1989的密码" name="wifiPassword">
+            <p></p>
+        </div>
+        <!--设置选中主路由器的wifi密码end-->
+
+        <!--分割线-->
+        <div class="dividing-line"></div>
+
+        <!--设置wifi放大器的名称start-->
+        <div class="wifi-amplifier">
+            <label for="newWifiName">新Wi-Fi名称</label>
+            <i></i>
+            <input id="newWifiName" type="text" placeholder="请输入Wi-Fi放大器的名称" value="" name="newWifiName">
+            <p></p>
+        </div>
+        <!--设置wifi放大器的名称end-->
+        <!--设置wifi放大器的密码start-->
+        <div class="amplifier-password">
+            <label for="newPassword">新Wi-Fi密码</label>
+            <i></i>
+            <input id="newPassword" type="text" placeholder="" name="newPassword">
+            <p></p>
+        </div>
+        <!--设置wifi放大器的密码end-->
+        <!--设置主路由的密码与放大器的密码相同start-->
+        <div class="same-password clearfix">
+            <label class="cBox" for="samePassword">
+                <input id="samePassword" type="checkbox" name="samePassword" checked/>
+            </label>
+            <span>将新Wi-Fi密码同时设置为放大器管理密码</span>
+        </div>
+        <!--设置主路由的密码与放大器的密码相同end-->
+        <!--管理密码start-->
+        <div class="password-management clearfix" style="display: none">
+            <label for="managePassword">管理密码</label>
+            <i></i>
+            <input id="managePassword" name="managePassword" type="text" placeholder="请输入Wi-Fi放大器的管理密码">
+            <p></p>
+        </div>
+        <!--管理密码end-->
+
+        <!--//下一步按钮-->
+        <button type="submit" id="next-bnt">
+            <a href="#">下一步</a>
+        </button>
+    </section>
+</form>
+
+
+<!--使用模板引擎传递数据-->
+<!--遮罩层出现了bug，等待修复-->
+<!--<div class="mask"></div>-->
+<script type="text/html" id="listTmp">
+    <ul class="selectMenu">
+        {{each Scan as value i}}
+        <li>{{value.ssid}}
+            <img src="images/02_icon02.png" alt="">
+            <img src="images/02_icon03.png" alt="">
+        </li>
+        {{/each}}
+        <!--<li id="other">其它...-->
+            <!--<img src="images/02_icon02.png" alt="">-->
+            <!--<img src="images/02_icon03.png" alt="">-->
+        <!--</li>-->
+    </ul>
+    <div id="other">其它...</div>
+</script>
+
+<!--<script src="//lib.baomitu.com/jquery/1.12.4/jquery.min.js"></script>-->
+
+<script src="js/lib/jquery.min.js"></script>
+<!--<script src="js/lib/jquery.validate.min.js"></script>-->
+<script src="js/lib/jquery.validate.js"></script>
+<!--<script src="js/lib/messages_zh.min.js"></script>-->
+<script src="js/lib/messages_zh.js"></script>
+<!--<script src="js/lib/additional-methods.min.js"></script>-->
+<script src="js/lib/additional-methods.js"></script>
+<!--<script src="js/lib/template.min.js"></script>-->
+<script src="js/lib/template.js"></script>
+<!--<script src="js/myJs/wifi_setting.min.js"></script>-->
+<script src="js/js/wifi_setting.js"></script>
+<!--<script src="js/myJs/selectContainer.min.js"></script>-->
+<script src="js/js/selectContainer.js"></script>
+</body>
+</html>
