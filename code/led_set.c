@@ -25,11 +25,11 @@ int main(int argc, char *argv[])
 	if(strcmp("on", temp) == 0)
 	{
 		//led on
-		nvram_bufset(RT2860_NVRAM, "led_status", "on");
+		nvram_bufset(RT2860_NVRAM, "led_off", 0);
 
 		//开始时间和截止时间都为空
-		nvram_bufset(RT2860_NVRAM, "led_start", "");
-		nvram_bufset(RT2860_NVRAM, "led_end", "");
+		//nvram_bufset(RT2860_NVRAM, "led_begin", "");
+		//nvram_bufset(RT2860_NVRAM, "led_end", "");
 		nvram_commit(RT2860_NVRAM);
 	}
 
@@ -37,10 +37,10 @@ int main(int argc, char *argv[])
 	if(strcmp("off", temp) == 0)
 	{
 		//led off
-		nvram_bufset(RT2860_NVRAM, "led_status", "off");
+		nvram_bufset(RT2860_NVRAM, "led_off", 1);
 
-		nvram_bufset(RT2860_NVRAM, "led_start", "");
-		nvram_bufset(RT2860_NVRAM, "led_end", "");
+		//nvram_bufset(RT2860_NVRAM, "led_begin", "");
+		//nvram_bufset(RT2860_NVRAM, "led_end", "");
 		nvram_commit(RT2860_NVRAM);
 	}
 
@@ -58,8 +58,8 @@ int main(int argc, char *argv[])
 
 		DBG_MSG("start time is %s, enditime is %s", begintime, enditime);
 
-		nvram_bufset(RT2860_NVRAM, "led_status", "off");
-		nvram_bufset(RT2860_NVRAM, "led_start", begintime);
+		nvram_bufset(RT2860_NVRAM, "led_off", 0);
+		nvram_bufset(RT2860_NVRAM, "led_begin", begintime);
 		nvram_bufset(RT2860_NVRAM, "led_end", enditime);
 
 		nvram_commit(RT2860_NVRAM);

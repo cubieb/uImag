@@ -78,12 +78,12 @@ int find_index_mac_in_nvram(int nvram,int count, char *client_info_list, char *m
   允许为NULL。
  */
 int get_os_host_from_file(char *mac, char *hostname,  char *msg_os);
-i/*
+/*
    找出mac是否在nvram的client_info_list中，是返回１，否返回其他。
    若果找到，并且参数hostname不为NULL, 则将信息保存到相应的地址
    允许为NULL。
  */
-nt get_hostname_in_nvram(int nvram, char *mac, char *hostname);
+int get_hostname_in_nvram(int nvram, char *mac, char *hostname);
 //添加曾经在线的设备信息到nvram
 void add_clientinfo_to_nvram(int nvram);
 

@@ -236,6 +236,9 @@ int main(int argc, char *argv[])
 	//for cgi, define the message type.
 	web_debug_header();
 
+	/* 
+	   设置界面模块
+	*/
 	//发送路由周围的ssid给web客户端
 	if(strcmp("Scan", web_get("wifiScan", input, 2)) == 0)
 	{
@@ -256,19 +259,6 @@ int main(int argc, char *argv[])
 		DBG_MSG("wificommit message is %s\n", input);
 		//从web端获取数据，回填到结构体参数地址空间中
 		get_value_from_web(&ap_msg, &ex_msg, input);
-
-#if 0
-		DBG_MSG("APChannel is %s\n", ap_msg.APChannel);
-		DBG_MSG("APAuthMode is %s\n", ap_msg.APAuthMode);
-		DBG_MSG("APEncrypType is %s\n", ap_msg.APEncrypType);
-		DBG_MSG("APSsid is %s\n", ap_msg.APSsid);
-		DBG_MSG("APPasswd is %s\n", ap_msg.APPasswd);
-
-		DBG_MSG("extend wifi name is %s\n", ex_msg.Extend_wifiName);
-		DBG_MSG("extend wifi pwd is %s\n", ex_msg.Extend_wifiPasswd);
-		DBG_MSG("managepwd is %s\n", ex_msg.ManagePasswd);
-
-#endif 
 		if(is_connect_success(RT2860_NVRAM, &ap_msg) == 1)
 		{
 			//设置相应的参数到开发板的ram
@@ -280,9 +270,9 @@ int main(int argc, char *argv[])
 		else 
 		{
 			printf("false");
-			DBG_MSG("I send a false string.");
 		}
 	}
+	//
 	if(strcmp("success", web_get("if_success", input, 2)) == 0)
 	{
 		sleep(5);
@@ -296,6 +286,21 @@ int main(int argc, char *argv[])
 		}
 	}
 
+
+	/*
+	   管理界面模块
+	 */
+	//web端进入管理界面时请求后台：主路由是否链接成功，以便显示
+	if(strcmp("manage_request", web_get("connect", input, 2)) == 0)
+	{
+		int status = atoi(nvram_bufget(RT2860_NVRAM, "LinkTest"));
+		if( status == 1)
+			printf("success");
+		else
+		{
+			printf("false");
+		}
+	}
 #if 0
 	//检查用户输入主路由密码是否正确
 	if(strcmp("ckpwd", web_get("mainpasswd", input, 0)) == 0)
@@ -333,7 +338,6 @@ int main(int argc, char *argv[])
 	}
 #endif 
 
-#if 0
 	//管理界面的主路由设置模块过来的请求
 	//客户端请求主路由信息
 	if(strcmp("station", web_get("ap_station", input, 2)) == 0)
@@ -356,26 +360,40 @@ int main(int argc, char *argv[])
 		//extend_message_t ex_msg;
 
 		DBG_MSG("station commit  is %s\n", input);
-
 		//从web端获取数据，回填到结构体参数地址空间中
-		get_value_from_web(&ap_msg, NULL, input);
-
-		DBG_MSG("APChannel is %s\n", ap_msg.APChannel);
-		DBG_MSG("APAuthMode is %s\n", ap_msg.APAuthMode);
-		DBG_MSG("APEncrypType is %s\n", ap_msg.APEncrypType);
-		DBG_MSG("APSsid is %s\n", ap_msg.APSsid);
-		DBG_MSG("APPasswd is %s\n", ap_msg.APPasswd);
+		//get_value_from_web(&ap_msg, NULL, input);
+		strcpy(ap_msg.APPasswd, web_get("routePwd", input, 2));
+		strcpy(ap_msg.APSsid, web_get("ssid", input, 2));
+		strcpy(ap_msg.APChannel, web_get("Channel", input, 2));
+		strcpy(ap_msg.security, web_get("security", input, 2));
+		strcpy(ap_msg.AP_Mac, web_get("bssid", input, 2));
 
 		set_nvram_buf(RT2860_NVRAM, &ap_msg, NULL);
-
 		printf("routeSuccess");
 	}
-
-	//管理界面的主路由设置模块的提交
-	if(strcmp("commit", web_get("ex_station", input, 2)) == 0)
+	//管理界面的扩展路由设置模块的提交
+	if(strcmp("station", web_get("ex_station", input, 2)) == 0)
 	{
-	}
+		DBG_MSG("ex_station commit is %s", input);
+#if 0
+		extend_message_t ex_msg;
+		
+		//wifi_name wifi_passwd managePasswd mode_elect 
+		strcpy(ex_msg.Extend_wifiName, web_get("", input, 2));
+		strcpy(ex_msg.Extend_wifiPasswd, web_get("", input, 2));
+		char manage_pwd[65];
+		strcpy(manage_pwd, web_get("", input, 2));
+		if(strcmp(manage_pwd, "") == 0)
+			strcpy(ex_msg.managePasswd, ex_msg.Extend_wifiPasswd);
+		set_nvram_buf(RT2860_NVRAM, NULL, &ex_msg);
 
+		int txpower;
+		txpower = strtol(web_get("", input, 2));
+	
+		nvram_bufset(RT2860_NVRAM, "TxPower", txpower);
+		do_system("init_system restart");
 #endif 
+		printf("wifiSuccess");
+	}
 	return 0;
 }
