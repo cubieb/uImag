@@ -90,45 +90,28 @@ void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char
 	{
 		strcpy(ap_msg->APChannel, web_get("Channel", input, 0));
 		strcpy(ap_msg->APSsid, web_get("ssid", input, 0));
-
-		//record the ap mac addr
-		//strcpy(ap_msg->AP_Mac, web_get("bssid", input, 0));
-
 		security = web_get("security", input, 0);
 		strcpy(ap_msg->security, security);
 
-
-#if 0
-		if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/TKIPAES") == 0 || strcmp(ap_msg->security, "WPA1PSKWPA2PSK/AES") == 0)
-		{
-			strcpy(ap_msg->APAuthMode, "WPAPSKWPA2PSK");
-			strcpy(ap_msg->APEncrypType, "TKIPAES");
-			ap_msg->mix_flag = 1;
-		}
-#endif 
 		if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/TKIPAES") == 0)
 		{
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
 			strcpy(ap_msg->APEncrypType, "AES");
-	//		ap_msg->mix_flag = 0;
 		}
 		else if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/AES") == 0)
 		{
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
 			strcpy(ap_msg->APEncrypType, "AES");
-	//		ap_msg->mix_flag = 0;
 		}
 		else if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/TKIP") == 0)
 		{
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
 			strcpy(ap_msg->APEncrypType, "TKIP");
-	//		ap_msg->mix_flag = 0;
 		}
 		else
 		{
 			get_nth_value(0, security, '/', ap_msg->APAuthMode, strlen(security));
 			get_nth_value(1, security, '/', ap_msg->APEncrypType, strlen(security));
-	//		ap_msg->mix_flag = 0;
 		}
 
 		strcpy(ap_msg->APPasswd, web_get("wifiPassword", input, 0));
@@ -146,9 +129,6 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 {
 	if(ap_msg != NULL)
 	{
-		//if(ap_msg->mix_flag == 1)
-		//	nvram_bufset(nvram, "WpaMixPairCipher", "WPA_TKIP_WPA2_AES");
-
 		//使能主路由
 		nvram_bufset(nvram, "ApCliEnable", "1");
 
@@ -166,10 +146,6 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 		//扩展路由的加密方式，频道和类型跟主路由一致
 		nvram_bufset(nvram, "AuthMode", ap_msg->APAuthMode);
 		nvram_bufset(nvram, "EncrypType", ap_msg->APEncrypType);
-
-		//主路由的bssid，即mac地址
-		//nvram_bufset(nvram, "ApMac", ap_msg->AP_Mac);
-
 	}
 	if(ex_msg != NULL)
 	{
@@ -181,9 +157,7 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 		nvram_bufset(nvram, "SSID1", ex_msg->Extend_wifiName);
 		nvram_bufset(nvram, "WPAPSK1", ex_msg->Extend_wifiPasswd);
 		nvram_bufset(nvram, "ManagePasswd", ex_msg->ManagePasswd);
-
 	}
-
 	nvram_commit(nvram);
 	return 0;
 }
@@ -194,22 +168,6 @@ int is_connect_success(int nvram, ap_message_t *ap_msg)
 {
 	if(ap_msg == NULL)
 		return -1;
-#if 0
-	do_system("ifconfig apcli0 down");
-	do_system("ifconfig apcli0 up");
-	do_system("brctl addif br0 ra0");
-	do_system("brctl addif br0 apcli0");
-	do_system("iwpriv ra0 set Channel=%s", ap_msg->APChannel);
-	do_system("iwpriv apcli0 set ApCliEnabel=0");
-	do_system("iwpriv apcli0 set ApCliAuthMode=%s", ap_msg->APAuthMode);
-	do_system("iwpriv apcli0 set ApCliEncrypType=%s", ap_msg->APEncrypType);
-	do_system("iwpriv apcli0 set ApCliSsid=%s", ap_msg->APSsid);
-	do_system("iwpriv apcli0 set ApCliWPAPSK=%s", ap_msg->APPasswd);
-	do_system("iwpriv apcli0 set ApCliSsid=%s", ap_msg->APSsid);
-	do_system("iwpriv apcli0 set ApCliEnabel=1");
-
-#endif 
-
 	do_system("isconnect.sh %d %s %s %s %s", atoi(ap_msg->APChannel), 
 			ap_msg->APAuthMode, ap_msg->APEncrypType, ap_msg->APSsid, ap_msg->APPasswd);
 	sleep(4);
@@ -262,16 +220,13 @@ int main(int argc, char *argv[])
 		{
 			//设置相应的参数到开发板的ram
 			set_nvram_buf(RT2860_NVRAM, &ap_msg, &ex_msg);
-			//do_system("init_system restart");
-			//do_system("apclient_con.sh");
-			//do_system("internet.sh");
 		}
 		else 
 		{
 			printf("false");
 		}
 	}
-	//
+
 	if(strcmp("success", web_get("if_success", input, 2)) == 0)
 	{
 		sleep(5);

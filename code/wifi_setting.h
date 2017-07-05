@@ -29,9 +29,6 @@ typedef struct ap_message_s
 	char APEncrypType[10];
 	char APPasswd[65];
 	char APSsid[33];
-
-	//int mix_flag;   //检测主路由是否是WPA1PSKWPA2PSK/TKIPAES的情况
-
 }ap_message_t;
 
 
