@@ -61,11 +61,16 @@ int main()
 			//connneted
 			if(dhcpc_status == 0)
 			{
+#if 1
 				//获取系统的当前时间
 				gettimeofday(&tv,NULL);
 				//连接主路由时计时
-				nvram_set(RT2860_NVRAM, "LinkTime", tv.tv_sec);
+
+				long int conn_time;
+				sprintf(&conn_time,"%d", (long int)tv.tv_sec);
+				nvram_bufset(RT2860_NVRAM, "LinkTime",(char *)(&conn_time));
 				nvram_commit(RT2860_NVRAM);
+#endif 
 
 
 				system("killall udhcpc");
@@ -78,8 +83,10 @@ int main()
 			}
 		} else if(dhcpd_status == 0){
 			//nconneted
-			nvram_set(RT2860_NVRAM, "LinkTime", "");
+#if 1
+			nvram_bufset(RT2860_NVRAM, "LinkTime", "");
 			nvram_commit(RT2860_NVRAM);
+#endif 
 
 			system("start_dhcpd.sh");
 			system("udhcpd /etc/udhcpd.conf");

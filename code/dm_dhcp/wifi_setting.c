@@ -92,7 +92,7 @@ void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char
 		strcpy(ap_msg->APSsid, web_get("ssid", input, 0));
 
 		//record the ap mac addr
-		//strcpy(ap_msg->AP_Mac, web_get("bssid", input, 0));
+		strcpy(ap_msg->AP_Mac, web_get("bssid", input, 0));
 
 		security = web_get("security", input, 0);
 		strcpy(ap_msg->security, security);
@@ -110,25 +110,25 @@ void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char
 		{
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
 			strcpy(ap_msg->APEncrypType, "AES");
-	//		ap_msg->mix_flag = 0;
+			ap_msg->mix_flag = 0;
 		}
 		else if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/AES") == 0)
 		{
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
 			strcpy(ap_msg->APEncrypType, "AES");
-	//		ap_msg->mix_flag = 0;
+			ap_msg->mix_flag = 0;
 		}
 		else if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/TKIP") == 0)
 		{
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
 			strcpy(ap_msg->APEncrypType, "TKIP");
-	//		ap_msg->mix_flag = 0;
+			ap_msg->mix_flag = 0;
 		}
 		else
 		{
 			get_nth_value(0, security, '/', ap_msg->APAuthMode, strlen(security));
 			get_nth_value(1, security, '/', ap_msg->APEncrypType, strlen(security));
-	//		ap_msg->mix_flag = 0;
+			ap_msg->mix_flag = 0;
 		}
 
 		strcpy(ap_msg->APPasswd, web_get("wifiPassword", input, 0));
@@ -146,8 +146,8 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 {
 	if(ap_msg != NULL)
 	{
-		//if(ap_msg->mix_flag == 1)
-		//	nvram_bufset(nvram, "WpaMixPairCipher", "WPA_TKIP_WPA2_AES");
+		if(ap_msg->mix_flag == 1)
+			nvram_bufset(nvram, "WpaMixPairCipher", "WPA_TKIP_WPA2_AES");
 
 		//使能主路由
 		nvram_bufset(nvram, "ApCliEnable", "1");
@@ -168,7 +168,7 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 		nvram_bufset(nvram, "EncrypType", ap_msg->APEncrypType);
 
 		//主路由的bssid，即mac地址
-		//nvram_bufset(nvram, "ApMac", ap_msg->AP_Mac);
+		nvram_bufset(nvram, "ApMac", ap_msg->AP_Mac);
 
 	}
 	if(ex_msg != NULL)
@@ -226,6 +226,7 @@ int main(int argc, char *argv[])
 
 	length = get_message_for_web(input);
 	DBG_MSG("get the message form web is %s", input);
+
 	if(length <= 0)
 	{
 		DBG_MSG("get the message form web is empty!");
@@ -275,7 +276,7 @@ int main(int argc, char *argv[])
 	if(strcmp("success", web_get("if_success", input, 2)) == 0)
 	{
 		sleep(5);
-		int status = atoi(nvram_bufget(RT2860_NVRAM, "LinkStatus"));
+		int status = atoi(nvram_bufget(RT2860_NVRAM, "LinkTest"));
 		if( status == 1)
 			do_system("init_system restart");
 		else
@@ -292,7 +293,7 @@ int main(int argc, char *argv[])
 	//web端进入管理界面时请求后台：主路由是否链接成功，以便显示
 	if(strcmp("manage_request", web_get("connect", input, 2)) == 0)
 	{
-		int status = atoi(nvram_bufget(RT2860_NVRAM, "LinkStatus"));
+		int status = atoi(nvram_bufget(RT2860_NVRAM, "LinkTest"));
 		if( status == 1)
 			printf("success");
 		else
@@ -339,7 +340,6 @@ int main(int argc, char *argv[])
 
 	//管理界面的主路由设置模块过来的请求
 	//客户端请求主路由信息
-#if 0
 	if(strcmp("station", web_get("ap_station", input, 2)) == 0)
 	{
 		char mac[18];
@@ -352,7 +352,6 @@ int main(int argc, char *argv[])
 		printf("}");
 
 	}
-#endif 
 	//路由设置：web客户端提交的信息
 	if(strcmp("commit", web_get("station_commit", input, 2)) == 0)
 	{
@@ -367,77 +366,33 @@ int main(int argc, char *argv[])
 		strcpy(ap_msg.APSsid, web_get("ssid", input, 2));
 		strcpy(ap_msg.APChannel, web_get("Channel", input, 2));
 		strcpy(ap_msg.security, web_get("security", input, 2));
-
-		if(strcmp(ap_msg.security, "WPA1PSKWPA2PSK/TKIPAES") == 0)
-		{
-			strcpy(ap_msg.APAuthMode, "WPA2PSK");
-			strcpy(ap_msg.APEncrypType, "AES");
-		}
-		else if(strcmp(ap_msg.security, "WPA1PSKWPA2PSK/AES") == 0)
-		{
-			strcpy(ap_msg.APAuthMode, "WPA2PSK");
-			strcpy(ap_msg.APEncrypType, "AES");
-		}
-		else if(strcmp(ap_msg.security, "WPA1PSKWPA2PSK/TKIP") == 0)
-		{
-			strcpy(ap_msg.APAuthMode, "WPA2PSK");
-			strcpy(ap_msg.APEncrypType, "TKIP");
-		}
-		else
-		{
-			get_nth_value(0, ap_msg.security, '/', ap_msg.APAuthMode, strlen(ap_msg.security));
-			get_nth_value(1, ap_msg.security, '/', ap_msg.APEncrypType, strlen(ap_msg.security));
-
-			ap_msg.APAuthMode[strlen(ap_msg.APAuthMode) + 1] = '\0';
-			ap_msg.APEncrypType[strlen(ap_msg.APEncrypType) + 1] = '\0';
-		}
+		strcpy(ap_msg.AP_Mac, web_get("bssid", input, 2));
 
 		set_nvram_buf(RT2860_NVRAM, &ap_msg, NULL);
-
-		//返回给web客户端，这是客户端要求要返回的数据
 		printf("routeSuccess");
 	}
 	//管理界面的扩展路由设置模块的提交
 	if(strcmp("station", web_get("ex_station", input, 2)) == 0)
 	{
 		DBG_MSG("ex_station commit is %s", input);
-#if 1
+#if 0
 		extend_message_t ex_msg;
 		
 		//wifi_name wifi_passwd managePasswd mode_elect 
-		strcpy(ex_msg.Extend_wifiName, web_get("newWifiName", input, 2));
-		strcpy(ex_msg.Extend_wifiPasswd, web_get("newPassword", input, 2));
-
+		strcpy(ex_msg.Extend_wifiName, web_get("", input, 2));
+		strcpy(ex_msg.Extend_wifiPasswd, web_get("", input, 2));
 		char manage_pwd[65];
-		strcpy(manage_pwd, web_get("managePassword", input, 2));
+		strcpy(manage_pwd, web_get("", input, 2));
 		if(strcmp(manage_pwd, "") == 0)
-			strcpy(ex_msg.ManagePasswd, ex_msg.Extend_wifiPasswd);
+			strcpy(ex_msg.managePasswd, ex_msg.Extend_wifiPasswd);
 		set_nvram_buf(RT2860_NVRAM, NULL, &ex_msg);
 
-		/*
-		  模式选择:穿墙模式(throughWall) --> 100
-		  		   标准模式(standard) --> 95
-				   孕妇模式(pregnant) --> 85
-		 */
-		char *select_mode;
-		select_mode = web_get("throughWall", input, 2);
-		if(strcmp(select_mode, "true") == 0)
-		{
-			nvram_bufset(RT2860_NVRAM, "TxPower", "100");
-		}	
-		select_mode = web_get("satandard", input, 2);
-		if(strcmp(select_mode, "true") == 0)
-		{
-			nvram_bufset(RT2860_NVRAM, "TxPower", "95");
-		}
-		select_mode = web_get("pregnant", input, 2);
-		if(strcmp(select_mode, "true") == 0)
-		{
-			nvram_bufset(RT2860_NVRAM, "TxPower", "85");
-		}
-		nvram_commit(RT2860_NVRAM);
+		int txpower;
+		txpower = strtol(web_get("", input, 2));
+	
+		nvram_bufset(RT2860_NVRAM, "TxPower", txpower);
+		do_system("init_system restart");
 #endif 
-		//返回给web客户端，这是客户端要求要返回的数据
 		printf("wifiSuccess");
 	}
 	return 0;

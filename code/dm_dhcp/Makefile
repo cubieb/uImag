@@ -1,21 +1,20 @@
 EXE = dm_dhcp
-OBJS = dm_dhcp.o
+CROSS := mipsel-linux-
+CC := $(CROSS)gcc
 
-CFLAGS +=-O0
+#all: client_info.o utils.o crc32.o flash_api.o nvram_env.o
+#	$(CC) $^ -o $(TARGTE)
 
-CFLAGS += -I$(ROOTDIR)/$(LINUXDIR)/include -I$(ROOTDIR)/lib/libnvram
-LDFLAGS += -L$(ROOTDIR)/lib/libnvram -L.
-LDNVRAMLIB += -lnvram 
+#all: sys_setting.o utils.o crc32.o flash_api.o nvram_env.o
+#	$(CC) $^ -o $(TARGTE)
 
-all: $(OBJS) 
-	$(CC) -o $(EXE) $(OBJS) $(LDFLAGS) $(LDNVRAMLIB)
+#dall: wifi_setting.o utils.o crc32.o flash_api.o nvram_env.o 
+#	$(CC) $^ -o $(TARGTE)
 
-.c.o:
-	$(CC) $(CFLAGS) -c $<
+#all: sta.o utils.o crc32.o flash_api.o nvram_env.o 
+#	$(CC) $^ -o $(TARGTE)
+#clean: 
+#	rm client_info.o sys_setting.o utils.o wifi_setting.o $(TARGTE)
 
-romfs:
-	$(ROMFSINST) /bin/$(EXE)
-
-clean:
-	@rm -rf $(EXE) *.o
-
+all: dm_dhcp.o  crc32.o flash_api.o nvram_env.o 
+	$(CC) $^ -o $(EXE)
