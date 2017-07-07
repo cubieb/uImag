@@ -1,15 +1,6 @@
 #include "utils.h"
 #include "client_info.h"
 
-/******************************************
-*  本模块主要实现：
-*  			1.谁在上网(显示在线列表功能),
-* 			2.修改主机名
-*			3.添加黑名单
-*			4.显示黑名单
-*			5.删除黑名单。
-* *******************************************/
-
 //user spaces buffer data;
 char data[4096];  //在get_mac_table中要用到，将内核的数据保存到用户空间中。
 
@@ -178,27 +169,6 @@ int no_clientinfo_in_nvram(int nvram)
 	else
 		return -1;
 }
-
-#if 0
-//是否已记录在册1是， 0否
-int ifmac_in_nvram(int count, char *mac, char *client_info_list)
-{	
-	char flash_mac[18];
-	int i;
-	//从已存在的设备信息中的flash_mac与要添加的mac对比
-	//不相等（说明没有添加该信息，则添加。否则，不添加）
-	for(i = 0; i < count; i ++)
-	{
-		char client_info[128];
-		get_nth_value(i, client_info_list, ';', client_info, strlen(client_info_list) + 1);
-		get_nth_value(1, client_info, '&', flash_mac, strlen(client_info) + 1);
-		if(strcmp(mac, flash_mac) == 0)
-			return 1;
-	}
-	return 0;
-}
-#endif 
-
 void add_info_to_nvram(int nvram, char *hostname, char *mac)
 {
 	if(hostname == NULL || mac == NULL)
@@ -554,15 +524,30 @@ int main(int argc, char *argv[])
 	if(fp == NULL)
 		return -1;
 	get_device_list(fp);
+	sleep(4);
 	fclose(fp);
 
+	rt_mac_table mac_table;
+	get_mac_table(&mac_table);
+	int i;
+	if(mac_table.Num > 0)
+	{
+		for(i = 0; i < mac_table.Num; i++)
+		{
+				printf("\t\t\"Signal\":\"%d\",\n", mac_table.entry[i].Signal);
+				printf("\t\t\"ConnectedTime\":\"%d\",\n", mac_table.entry[i].ConnectedTime);
+				printf("\t\t\"Mac\":\"%s\",\n", mac_table.entry[i].Mac);
+		}
+
+	}
+	
+#if 0
 	add_clientinfo_to_nvram(RT2860_NVRAM);
 #if 1
 	char input[MAX_MSG_SIZ];  //buffer for get message from web
 	int length;
 
 	length = get_message_for_web(input);
-	DBG_MSG("from web message is %s", input);
 
 	//return the message type for web client
 	web_debug_header();
@@ -603,5 +588,7 @@ int main(int argc, char *argv[])
 	}
 	return 0;
 #endif 
+#endif 
+	return 0;
 }
 

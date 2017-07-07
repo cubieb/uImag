@@ -93,6 +93,8 @@ void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char
 		security = web_get("security", input, 0);
 		strcpy(ap_msg->security, security);
 
+#if 1
+
 		if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/TKIPAES") == 0)
 		{
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
@@ -108,11 +110,31 @@ void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
 			strcpy(ap_msg->APEncrypType, "TKIP");
 		}
+		else if((strcmp(ap_msg->security, "WPA1PSK/TKIPAES") == 0) || (strcmp(ap_msg->security, "WPA2PSK/TKIPAES") == 0))
+		{
+			//strcpy(ap_msg->APAuthMode, "WPA2PSK");
+			get_nth_value(0, security, '/', ap_msg->APAuthMode, strlen(security));
+			strcpy(ap_msg->APEncrypType, "TKIP");
+		}
 		else
 		{
 			get_nth_value(0, security, '/', ap_msg->APAuthMode, strlen(security));
 			get_nth_value(1, security, '/', ap_msg->APEncrypType, strlen(security));
 		}
+
+#endif 
+#if 0
+		get_nth_value(0, security, '/', ap_msg->APAuthMode, strlen(security));
+		if(strstr(ap_msg->APAuthMode, "WPA2PSK") != NULL)
+		{
+			strcpy(ap_msg->APAuthMode, "WPA2PSK");
+		}
+		get_nth_value(1, security, '/', ap_msg->APEncrypType, strlen(security));
+		if(strstr(ap_msg->APEncrypType, "AES") != NULL)
+		{
+			strcpy(ap_msg->APEncrypType, "AES");
+		}
+#endif 
 
 		strcpy(ap_msg->APPasswd, web_get("wifiPassword", input, 0));
 	}
@@ -130,7 +152,7 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 	if(ap_msg != NULL)
 	{
 		//使能主路由
-		nvram_bufset(nvram, "ApCliEnable", "1");
+		//nvram_bufset(nvram, "ApCliEnable", "1");
 
 		//主路由频道
 		nvram_bufset(nvram, "Channel", ap_msg->APChannel);
@@ -170,12 +192,16 @@ int is_connect_success(int nvram, ap_message_t *ap_msg)
 		return -1;
 	do_system("isconnect.sh %d %s %s %s %s", atoi(ap_msg->APChannel), 
 			ap_msg->APAuthMode, ap_msg->APEncrypType, ap_msg->APSsid, ap_msg->APPasswd);
-	sleep(4);
+	sleep(8);
 	do_system("iwpriv apcli0 show connStatus");
+	//sleep(4);
+	DBG_MSG("LinkStatus=%s", nvram_bufget(nvram, "LinkStatus"));
 
 	return atoi(nvram_bufget(nvram, "LinkStatus"));
 }
 
+
+int init_system = 0;
 
 int main(int argc, char *argv[])
 {
@@ -207,8 +233,8 @@ int main(int argc, char *argv[])
 	{
 
 		//web端要求立马返回一个数据
-		//printf("wifiSettingSuc");
-		//DBG_MSG("I send a string wifiSettingSuc\n");
+		printf("wifiSettingSuccess");
+		DBG_MSG("I send a string wifiSettingSuccess\n");
 
 		ap_message_t ap_msg;
 		extend_message_t ex_msg;
@@ -216,30 +242,43 @@ int main(int argc, char *argv[])
 		DBG_MSG("wificommit message is %s\n", input);
 		//从web端获取数据，回填到结构体参数地址空间中
 		get_value_from_web(&ap_msg, &ex_msg, input);
+
+		//设置相应的参数到开发板的ram
+		set_nvram_buf(RT2860_NVRAM, &ap_msg, &ex_msg);
+	}
+
+#if 1
+	//进入配置界面,web端请求，后台进行主路由密码检验。不成功返回false，成功，立即重启
+	if(strcmp("success", web_get("if_success", input, 2)) == 0)
+	{
+		ap_message_t ap_msg;
+		strcpy(ap_msg.APChannel, nvram_bufget(RT2860_NVRAM, "Channel"));
+		strcpy(ap_msg.APAuthMode, nvram_bufget(RT2860_NVRAM, "ApCliAuthMode"));
+		strcpy(ap_msg.APEncrypType, nvram_bufget(RT2860_NVRAM, "ApCliEncrypType"));
+		strcpy(ap_msg.APSsid, nvram_bufget(RT2860_NVRAM, "ApCliSsid"));
+		strcpy(ap_msg.APPasswd, nvram_bufget(RT2860_NVRAM, "ApCliWPAPSK"));
 		if(is_connect_success(RT2860_NVRAM, &ap_msg) == 1)
 		{
-			//设置相应的参数到开发板的ram
-			set_nvram_buf(RT2860_NVRAM, &ap_msg, &ex_msg);
+			printf("conntrue");
+			DBG_MSG("I send a conntrue string to web client.");
+			init_system = 1;
 		}
 		else 
 		{
-			printf("false");
+			printf("connfalse");
+			DBG_MSG("I send a connfalse string to web client.");
 		}
+
 	}
 
-	if(strcmp("success", web_get("if_success", input, 2)) == 0)
+	if(init_system == 1)
 	{
-		sleep(5);
-		int status = atoi(nvram_bufget(RT2860_NVRAM, "LinkStatus"));
-		if( status == 1)
-			do_system("init_system restart");
-		else
-		{
-			printf("false");
-			DBG_MSG("I seed a false string.");
-		}
+		nvram_bufset(RT2860_NVRAM, "ApCliEnable", "1");
+		nvram_commit(RT2860_NVRAM);
+		do_system("reboot");
 	}
 
+#endif
 
 	/*
 	   管理界面模块
@@ -255,59 +294,8 @@ int main(int argc, char *argv[])
 			printf("false");
 		}
 	}
-#if 0
-	//检查用户输入主路由密码是否正确
-	if(strcmp("ckpwd", web_get("mainpasswd", input, 0)) == 0)
-	{
-		ap_message_t ap_msg;
 
-		DBG_MSG("check ap passwd  message is %s\n", input);
-		get_value_from_web(&ap_msg, NULL, input);
 
-		if(is_connect_success(RT2860_NVRAM, &ap_msg) == 1)
-		{
-			printf("true");
-			DBG_MSG("I send a string true\n");
-			DBG_MSG("I get the msg from web is %s\n", input);
-
-			DBG_MSG("APChannel is %s\n", ap_msg.APChannel);
-			DBG_MSG("APAuthMode is %s\n", ap_msg.APAuthMode);
-			DBG_MSG("APEncrypType is %s\n", ap_msg.APEncrypType);
-			DBG_MSG("APSsid is %s\n", ap_msg.APSsid);
-			DBG_MSG("APPasswd is %s\n", ap_msg.APPasswd);
-		}
-		else
-		{
-			printf("false");
-			DBG_MSG("I send a string false\n");
-			DBG_MSG("I get the msg from web is %s\n", input);
-
-			DBG_MSG("APChannel is %s\n", ap_msg.APChannel);
-			DBG_MSG("APAuthMode is %s\n", ap_msg.APAuthMode);
-			DBG_MSG("APEncrypType is %s\n", ap_msg.APEncrypType);
-			DBG_MSG("APSsid is %s\n", ap_msg.APSsid);
-			DBG_MSG("APPasswd is %s\n", ap_msg.APPasswd);
-		}
-
-	}
-#endif 
-
-	//管理界面的主路由设置模块过来的请求
-	//客户端请求主路由信息
-#if 0
-	if(strcmp("station", web_get("ap_station", input, 2)) == 0)
-	{
-		char mac[18];
-		char passwd[65];
-		strcpy(mac, nvram_bufget(RT2860_NVRAM, "ApMac"));
-		strcpy(passwd, nvram_bufget(RT2860_NVRAM, "ApCliWPAPSK"));
-		printf("{");
-		printf("\"mac\":\"%s\",", mac);
-		printf("\"wifiPwd\":\"%s\"", passwd);
-		printf("}");
-
-	}
-#endif 
 	//路由设置：web客户端提交的信息
 	if(strcmp("commit", web_get("station_commit", input, 2)) == 0)
 	{
@@ -337,6 +325,11 @@ int main(int argc, char *argv[])
 		{
 			strcpy(ap_msg.APAuthMode, "WPA2PSK");
 			strcpy(ap_msg.APEncrypType, "TKIP");
+		}
+		else if((strcmp(ap_msg.security, "WPA1PSK/TKIPAES") == 0) || (strcmp(ap_msg.security, "WPA2PSK/TKIPAES") == 0))
+		{
+			get_nth_value(0, ap_msg.security, '/', ap_msg.APAuthMode, strlen(ap_msg.security));
+			strcpy(ap_msg.APEncrypType, "AES");
 		}
 		else
 		{
