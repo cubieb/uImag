@@ -1,14 +1,3 @@
-/*
- * lCalendar日期控件
- * 
- * 作者：黄磊
- * 
- * 邮箱：xfhxbb@yeah.net
- * 
- * Copyright 2016
- * 
- * 创建于：2016-01-08
- */
 window.lCalendar = (function () {
     var MobileCalendar = function () {
         this.gearDate;
@@ -400,7 +389,12 @@ window.lCalendar = (function () {
                     var i = "";
                     var hhVal = parseInt(time_hh.getAttribute("val"));
                     for (var g = 0; g <= 23; g++) {
-                        i += "<div class='tooth'>" + g + "</div>";
+                        // i += "<div class='tooth'>" + g + "</div>";
+                        if (g < 10) {
+                            i += "<div class='tooth'>" + "0" + g + ":00" + "</div>";
+                        } else {
+                            i += "<div class='tooth'>" + g + ":00" + "</div>";
+                        }
                     }
                     time_hh.innerHTML = i;
                     time_hh.style["-webkit-transform"] = 'translate3d(0,' + (8 - hhVal * 2) + 'em,0)';
@@ -413,8 +407,13 @@ window.lCalendar = (function () {
                     var i = "";
                     var mmVal = parseInt(time_mm.getAttribute("val"));
                     //范围由59改为23
-                    for (var g = 0; g <= 59; g++) {
-                        i += "<div class='tooth'>" + g + "</div>";
+                    for (var g = 0; g <= 23; g++) {
+                        // i += "<div class='tooth'>"  + g  + "</div>";
+                        if (g < 10) {
+                            i += "<div class='tooth'>" + "0" + g + ":00" + "</div>";
+                        } else {
+                            i += "<div class='tooth'>" + g + ":00" + "</div>";
+                        }
                     }
                     time_mm.innerHTML = i;
                     time_mm.style["-webkit-transform"] = 'translate3d(0,' + (8 - mmVal * 2) + 'em,0)';
@@ -633,8 +632,8 @@ window.lCalendar = (function () {
                             }
                             break;
                         case "time_mm":
-                            if (pos < -110) {
-                                pos = -110;
+                            if (pos < -38) {
+                                pos = -38;
                                 stopGear = true;
                             }
                             if (stopGear) {
@@ -713,9 +712,9 @@ window.lCalendar = (function () {
             //时间确认
             function finishMobileTime(e) {
                 var time_hh = parseInt(Math.round(_self.gearDate.querySelector(".time_hh").getAttribute("val")));
-                time_hh = time_hh > 9 ? time_hh : '0' + time_hh;
+                time_hh = time_hh > 9 ? time_hh + "：00" : '0' + time_hh + "：00";
                 var time_mm = parseInt(Math.round(_self.gearDate.querySelector(".time_mm").getAttribute("val")));
-                time_mm = time_mm > 9 ? time_mm : '0' + time_mm;
+                time_mm = time_mm > 9 ? time_mm + "：00" : '0' + time_mm + "：00";
 
                 // var time_ss = parseInt(Math.round(_self.gearDate.querySelector(".time_ss").getAttribute("val")));
                 // time_ss = time_ss > 9 ? time_ss : '0' + time_ss;

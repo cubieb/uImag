@@ -4621,8 +4621,8 @@ INT32 CmdLoadDPDDataFromFlash(RTMP_ADAPTER *pAd, UINT8 channel, UINT16 doReload)
 		goto error;
 	}
 	
-	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_ERROR, 
-	("%s: Channel = %d, DoReload = %d\n", __FUNCTION__, channel, doReload));
+	//MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_ERROR, 
+	//("%s: Channel = %d, DoReload = %d\n", __FUNCTION__, channel, doReload));
 
 	msg = AndesAllocCmdMsg(pAd, sizeof(CmdLoadDPD));
 

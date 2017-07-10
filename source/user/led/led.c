@@ -4,12 +4,13 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <linux/wireless.h>
+#include <time.h>
 
-#define SLEEP_TIME            1
+#define SLEEP_TIME            2
 #define BUFF_COUNTER       18
 #define RTPRIV_IOCTL_GSITESURVEY					(SIOCIWFIRSTPRIV + 0x0D)
 
-/* repeater 当前状态 */
+/* repeater current status */
 #define NO_CONFIG                                          0
 #define CONFIG_NOLINK                                   1
 #define CONFIG_LINK_NOSIGNAL                      2
@@ -17,59 +18,70 @@
 #define CONFIG_LINK_SIGNAL_STA                  4
 
 #define WPS_CONFIGURING                             5
+#define LED_OFF                                 		    6
+
 /*****************************************
-*** GPIO44 连接红色LED
-*** GPIO11 连接绿色LED
+*** GPIO11 connect RED LED
+*** GPIO44 connect GREEN LED
 *******************************************/
-//红色闪烁
+//red blink
 #define RED_BLINKING                                \
 {                                                                 \
 	system("echo \"0 4 1 7\" >  /proc/sys/kernel/printk"); \
 	system("gpio l 11 0 4000 0 0 0");              \
 	system("gpio l 44 0 4000 0 0 0");               \
-	system("gpio l 44 10 10 4000 0 4000");              \
+	system("gpio l 11 10 10 4000 0 4000");              \
 	system("echo \"7 4 1 7\" >  /proc/sys/kernel/printk");   \
 }			                                               \
 
-//绿色快速闪烁
+//green blink rapidly
 #define GREEN_BLINKING_FAST                     \
 {                                                                 \
 	system("echo \"0 4 1 7\" >  /proc/sys/kernel/printk"); \
 	system("gpio l 11 0 4000 0 0 0");              \
 	system("gpio l 44 0 4000 0 0 0");               \
-	system("gpio l 11 1 1 4000 0 4000");             \
+	system("gpio l 44 1 1 4000 0 4000");             \
 	system("echo \"7 4 1 7\" >  /proc/sys/kernel/printk");   \
 }			                                               \
 
-//绿色常亮
+//green light
 #define GREEN_LIGHT                                    \
-{                                                                 \
-	system("echo \"0 4 1 7\" >  /proc/sys/kernel/printk"); \
-	system("gpio l 11 0 4000 0 0 0");              \
-	system("gpio l 44 0 4000 0 0 0");              \
-	system("gpio l 11 4000 0 0 0 0");              \
-	system("echo \"7 4 1 7\" >  /proc/sys/kernel/printk");   \
-}			                                               \
-
-//红色常亮
-#define RED_LIGHT                                         \
 {                                                                 \
 	system("echo \"0 4 1 7\" >  /proc/sys/kernel/printk"); \
 	system("gpio l 11 0 4000 0 0 0");              \
 	system("gpio l 44 0 4000 0 0 0");              \
 	system("gpio l 44 4000 0 0 0 0");              \
 	system("echo \"7 4 1 7\" >  /proc/sys/kernel/printk");   \
+}			                                               \
+
+//red light
+#define RED_LIGHT                                         \
+{                                                                 \
+	system("echo \"0 4 1 7\" >  /proc/sys/kernel/printk"); \
+	system("gpio l 11 0 4000 0 0 0");              \
+	system("gpio l 44 0 4000 0 0 0");              \
+	system("gpio l 11 4000 0 0 0 0");              \
+	system("echo \"7 4 1 7\" >  /proc/sys/kernel/printk");   \
 }	                                                             \
 
-//绿色闪烁
+//green blink
 #define GREEN_BLINKING                             \
 {                                                                 \
 	system("echo \"0 4 1 7\" >  /proc/sys/kernel/printk"); \
 	system("gpio l 11 0 4000 0 0 0");              \
 	system("gpio l 44 0 4000 0 0 0");              \
-	system("gpio l 11 10 10 4000 0 4000");        \
+	system("gpio l 44 10 10 4000 0 4000");        \
 	system("echo \"7 4 1 7\" >  /proc/sys/kernel/printk");   \
 }                                                                     \	
+
+//LED off
+#define RED_GREEN_OFF                                         \
+{                                                                 \
+	system("echo \"0 4 1 7\" >  /proc/sys/kernel/printk"); \
+	system("gpio l 11 0 4000 0 0 0");              \
+	system("gpio l 44 0 4000 0 0 0");              \
+	system("echo \"7 4 1 7\" >  /proc/sys/kernel/printk");   \
+}
 
 int link_status(void)
 {
@@ -104,7 +116,34 @@ int link_status(void)
 	return 0;
 }
 
-int isReapeterConfigued(void)
+int is_set_ledoff(void)
+{
+
+	char long_buf[BUFF_COUNTER];
+	FILE *fp;
+
+	memset(long_buf, 0, BUFF_COUNTER);
+
+	if(!(fp = popen("nvram_get 2860 led_off", "r")))
+	{		
+		return 0;
+	}
+
+	if(0 == fread(long_buf, 1, BUFF_COUNTER, fp))
+	{
+		printf("is_set_ledoff: fread read none.\n");
+		pclose(fp);
+             return 0;
+	}
+	pclose(fp);
+
+	if(atoi(long_buf) == 1)
+		return 1;	
+
+	return 0;
+}
+
+int is_reapeter_configued(void)
 {
 
 	char long_buf[BUFF_COUNTER];
@@ -119,7 +158,7 @@ int isReapeterConfigued(void)
 
 	if(0 == fread(long_buf, 1, BUFF_COUNTER, fp))
 	{
-		printf("isReapeterConfigued: fread read none.\n");
+		printf("is_reapeter_configued: fread read none.\n");
 		pclose(fp);
              return 0;
 	}
@@ -132,7 +171,7 @@ int isReapeterConfigued(void)
 	return 0;
 }
 
-int isWpsConfiguring(void)
+int is_wps_configuring(void)
 {
 
 	char long_buf[BUFF_COUNTER];
@@ -147,7 +186,7 @@ int isWpsConfiguring(void)
 
 	if(0 == fread(long_buf, 1, BUFF_COUNTER, fp))
 	{
-		printf("isWpsConfiguring: fread read none.\n");
+		printf("is_wps_configuring: fread read none.\n");
 		pclose(fp);
              return 0;
 	}
@@ -160,7 +199,7 @@ int isWpsConfiguring(void)
 	return 0;
 }
 
-/* 返回repeater上联路由器的mac 地址*/
+/* return mac_address of router that repeater connected */
 char * router_mac_address(void* buff)
 {
 
@@ -199,8 +238,52 @@ char * router_mac_address(void* buff)
 		return NULL;
 }
 
-/* repeater是否存在连接设备 */
-int isHaveSta(void)
+
+int get_limited_time(int iType, int* iTime)
+{
+
+	char long_buf[BUFF_COUNTER];
+	FILE *fp;
+
+	memset(long_buf, 0, BUFF_COUNTER);
+
+	if(0 == iType)
+	{
+		if(!(fp = popen("nvram_get 2860 led_begin", "r")))
+		{		
+			return 0;
+		}
+	}
+	else
+	{
+		if(!(fp = popen("nvram_get 2860 led_end", "r")))
+		{		
+			return 0;
+		}
+	}
+
+	if(0 == fread(long_buf, 1, BUFF_COUNTER, fp))
+	{
+		printf("get_limited_time: fread read none.\n");
+		pclose(fp);
+             return 0;
+	}
+
+	if(NULL == long_buf)
+	{
+		return 0;
+	}
+
+	*iTime = atoi(long_buf);
+	
+	pclose(fp);
+
+	return 1;
+
+}
+
+/* whether STA connect repeater */
+int is_have_sta(void)
 {
 
 	char long_buf[BUFF_COUNTER];
@@ -221,7 +304,7 @@ int isHaveSta(void)
 
 	if(0 == fread(long_buf, 1, BUFF_COUNTER, fp))
 	{
-		printf("link_status: fread read none.\n");
+		printf("is_have_sta: fread read none.\n");
 		pclose(fp);
              return 0;
 	}
@@ -235,7 +318,7 @@ int isHaveSta(void)
 }
 
 /*******************************************************
-*** 返回repeater当前连接主路由的信号强度
+*** return signal of router that repeater connected
 **********************************************************/
 int router_signal(unsigned int *routerSignal)
 {
@@ -261,10 +344,10 @@ int router_signal(unsigned int *routerSignal)
 		memset(cmd, 0, sizeof(cmd));
 
 		/* ***************************************************************************************
-		**** 读取
+		**** read lines below:
 		**** ra0       get_site_survey:
 		**** Ch  SSID                             BSSID               Security               Signal(%)W-Mode  ExtCH  NT WPS DPID 
-		**** 这两行
+		**** 
 		******************************************************************************************/
 		fgets(cmd, sizeof(cmd), fp);
 		fgets(cmd, sizeof(cmd), fp);
@@ -296,6 +379,16 @@ int router_signal(unsigned int *routerSignal)
 	 return 0;
 }
 
+int current_time(void)
+{
+	struct tm *t;
+      time_t tt;
+      time(&tt);
+      t = localtime(&tt);
+
+	return t->tm_hour;
+}
+
 int main()
 {
 	FILE *fp;
@@ -303,40 +396,82 @@ int main()
 	int signal = 0;
 	int curStatus= NO_CONFIG;
 	int lastStatus = -1;
+	int beginTime = 0;
+	int endTime = 0;
+	int curTime = 0;
 
 	/* 閰嶇疆WLED_N绠¤剼涓烘櫘閫欸PIO绠¤剼 */	
 	system("reg set 0xb0000064");
 	system("reg w 0 0x1");   
-	//在rcS执行
+	//execute in rcS
 
 	while(1)
 	{
-		router_signal(&signal);
+		/* press wps button */
+		if(1 == is_wps_configuring())
+		{
+			curStatus= WPS_CONFIGURING;
+			system("nvram_set 2860 WpsConfiguring 0");
+			goto state_machine;
+		}
+				
+		/* set LED off */
+		if(1 == is_set_ledoff())
+		{
+			curStatus= LED_OFF;
+			goto state_machine;
+		}
+		/* set LED OFF in some times */
+		else if((1 == get_limited_time(0, &beginTime)) && (1 == get_limited_time(1, &endTime)))
+		{
+			curTime = current_time();
 
-		if(1 == isReapeterConfigued())
+			printf("beginTime = %d\n", beginTime);
+			printf("endTime = %d\n", endTime);
+			printf("curTime = %d\n", curTime);
+			
+			/* 设置时间段跨天 */
+			if(beginTime > endTime)
+			{
+				if((curTime >= beginTime) || (curTime <= endTime))
+				{
+					curStatus= LED_OFF;
+					goto state_machine;
+				}
+			}
+			else
+			{
+				if((curTime >= beginTime) && (curTime <= endTime))
+				{
+					curStatus= LED_OFF;
+					goto state_machine;
+				}
+			}
+		}
+
+		if(1 == is_reapeter_configued())
 		{		
 			//娌℃湁鏌ユ壘鍒板瓧绗︿覆
 			if(1 == link_status())
 			{
-				/* 信号较好 */
+				router_signal(&signal);
+
+				/* good signal */
 				if(signal > 60)
 				{
-					/* repeater存在连接STA */
-					if(1 == isHaveSta())
+					/* some STA connect repeater */
+					if(1 == is_have_sta())
 					{
 						curStatus= CONFIG_LINK_SIGNAL_STA;
-						//GREEN_BLINKING;
 					}
 					else
 					{
 						curStatus= CONFIG_LINK_SIGNAL_NOSTA;
-						//GREEN_LIGHT;
 					}
 				}
 				else
 				{
 					curStatus= CONFIG_LINK_NOSIGNAL;
-					//RED_LIGHT;
 				}
 			
 			}
@@ -352,16 +487,7 @@ int main()
 			curStatus= NO_CONFIG;
 		}
 
-		if(1 == isWpsConfiguring())
-		{
-			//curStatus= WPS_CONFIGURING;
-			//什么时候状态变更
-			GREEN_BLINKING_FAST;
-			system("nvram_set 2860 WpsConfiguring 0");
-			sleep(5);
-			continue;
-		}
-
+state_machine:
 		if(curStatus == lastStatus)
 		{
 			sleep(SLEEP_TIME);
@@ -391,9 +517,14 @@ int main()
 				GREEN_BLINKING;
 				break;
 
-			//case WPS_CONFIGURING:
-				//GREEN_BLINKING_FAST;
-				//break;
+			case WPS_CONFIGURING:
+				GREEN_BLINKING_FAST;
+				sleep(4);
+				break;
+
+			case LED_OFF:
+				RED_GREEN_OFF;
+				break;
 
 			default:
 				RED_BLINKING;

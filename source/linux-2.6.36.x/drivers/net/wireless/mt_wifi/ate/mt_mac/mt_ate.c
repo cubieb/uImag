@@ -499,7 +499,7 @@ static INT32 MT_ATEStartTx(RTMP_ADAPTER *pAd)
 #ifdef RTMP_FLASH_SUPPORT
 	rtmp_ee_flash_read(pAd, 0x9F, &doCal1);	
 	doReload = (doCal1 & (0x1 << 7)) >> 7;
-	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_ERROR, ("reload DPD from flash , 0x9F = [%04x] doReload bit7[%x]\n", doCal1, doReload));
+	//MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_ERROR, ("reload DPD from flash , 0x9F = [%04x] doReload bit7[%x]\n", doCal1, doReload));
 	/* reload DPD cal data from flash  , follow primary channel -by CSD */
 	CmdLoadDPDDataFromFlash(pAd, ATECtrl->ControlChl, doReload);  
 #endif /* RTMP_FLASH_SUPPORT */
@@ -906,7 +906,7 @@ static INT32 MT_ATESetChannel(RTMP_ADAPTER *pAd, INT16 Value)
 #ifdef RTMP_FLASH_SUPPORT
 	rtmp_ee_flash_read(pAd, 0x9F, &doCal1);	
 	doReload = (doCal1 & (0x1 << 7)) >> 7;
-	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_ERROR, ("reload DPD from flash , 0x9F = [%04x] doReload bit7[%x]\n", doCal1, doReload));
+	//MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_ERROR, ("reload DPD from flash , 0x9F = [%04x] doReload bit7[%x]\n", doCal1, doReload));
 	/* reload DPD cal data from flash  , follow primary channel -by CSD */
 	CmdLoadDPDDataFromFlash(pAd, ATECtrl->ControlChl, doReload);  
 #endif /* RTMP_FLASH_SUPPORT */

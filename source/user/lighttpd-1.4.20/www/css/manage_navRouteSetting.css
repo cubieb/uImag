@@ -1,5 +1,7 @@
 html {
   width: 100%;
+  overflow: hidden;
+  overflow-y: auto;
 }
 html > body {
   width: 100%;
@@ -8,6 +10,8 @@ html > body {
   line-height: 0.97777778rem;
   font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif;
   background-color: #fafafa;
+  overflow: hidden;
+  overflow-y: auto;
 }
 html > body > header {
   width: 100%;
@@ -41,6 +45,7 @@ html > body > #main > form > .online-info-wifi {
   width: 100%;
   padding-left: 0.66666667rem;
   background-color: #fff;
+  margin-top: 0.44444444rem;
 }
 html > body > #main > form > .online-info-wifi > .online-signal {
   width: 100%;
@@ -66,12 +71,12 @@ html > body > #main > form > .online-info-wifi > .online-signal > .wrap > input#
   font-size: 0.71111111rem;
   color: #333;
   margin-left: 4.68888889rem;
-  margin-right: 1.82222222rem;
+  margin-right: 4.48888889rem;
 }
-html > body > #main > form > .online-info-wifi > .online-signal > .wrap > .line {
+html > body > #main > form > .online-info-wifi > .online-signal > .wrap > .line1 {
   position: absolute;
   top: 0.66666667rem;
-  right: 1.77777778rem;
+  right: 4.44444444rem;
   width: 0.04444444rem;
   height: 1.33333333rem;
   background-color: #f0f0f0;
@@ -79,7 +84,7 @@ html > body > #main > form > .online-info-wifi > .online-signal > .wrap > .line 
 html > body > #main > form > .online-info-wifi > .online-signal > .wrap > .wifi-btn {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 2.66666667rem;
   height: 100%;
   width: 1.77777778rem;
   display: flex;
@@ -90,6 +95,79 @@ html > body > #main > form > .online-info-wifi > .online-signal > .wrap > .wifi-
 html > body > #main > form > .online-info-wifi > .online-signal > .wrap > .wifi-btn > img {
   width: 0.71111111rem;
   height: 0.48888889rem;
+}
+html > body > #main > form > .online-info-wifi > .online-signal > .wrap > .line2 {
+  position: absolute;
+  top: 0.66666667rem;
+  right: 2.62222222rem;
+  width: 0.04444444rem;
+  height: 1.33333333rem;
+  background-color: #f0f0f0;
+}
+html > body > #main > form > .online-info-wifi > .online-signal > .wrap > .refresh {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #438cff;
+  height: 100%;
+  line-height: 2.62222222rem;
+  width: 2.62222222rem;
+  text-align: center;
+}
+html > body > #main > form > .online-info-wifi > .wifi-name {
+  float: left;
+  width: 100%;
+  height: 2.66666667rem;
+  line-height: 2.66666667rem;
+  color: #333;
+  border-bottom: 2px solid #f0f0f0;
+}
+html > body > #main > form > .online-info-wifi > .wifi-name > .wifi-title {
+  float: left;
+  width: 4.68888889rem;
+}
+html > body > #main > form > .online-info-wifi > .wifi-name > .wifi-l {
+  float: left;
+}
+html > body > #main > form > .online-info-wifi > .wifi-name > .wifi-r {
+  position: relative;
+}
+html > body > #main > form > .online-info-wifi > .wifi-name > .wifi-r > .list-btn {
+  height: 2.66666667rem;
+  width: 2.66666667rem;
+  position: absolute;
+  top: 0;
+  right: 2.71111111rem;
+}
+html > body > #main > form > .online-info-wifi > .wifi-name > .wifi-r > .list-btn > img {
+  width: 0.71111111rem;
+  height: 0.48888889rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+html > body > #main > form > .online-info-wifi > .wifi-name > .wifi-r > i {
+  width: 2px;
+  height: 1.33333333rem;
+  background-color: #ddd;
+  position: absolute;
+  top: 50%;
+  right: 2.66666667rem;
+  transform: translateY(-50%);
+}
+html > body > #main > form > .online-info-wifi > .wifi-name > .wifi-r > .refresh-btn {
+  height: 2.66666667rem;
+  width: 2.66666667rem;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+html > body > #main > form > .online-info-wifi > .wifi-name > .wifi-r > .refresh-btn > span {
+  text-align: center;
+  color: #438cff;
+  line-height: 1.06666667rem;
 }
 html > body > #main > form > .online-info-pwd {
   width: 100%;

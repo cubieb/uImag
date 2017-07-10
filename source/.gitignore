@@ -41,7 +41,7 @@ user/iperf-2.0.5/.sgbuilt_user
 user/pciutils-3.0.0/lib/libpci.pc
 user/rt2880_app/ated_ext/ated
 
-images/
+/images
 lib/extra/config/conf
 lib/include/asm
 lib/include/asm-generic

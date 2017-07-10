@@ -6,9 +6,10 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 
+#include <time.h>
 #include "nvram.h"
 
-#define BUFF_COUNTER 2
+//#define BUFF_COUNTER 2
 
 //LinkStatus
 #define NCONNECTED   0
@@ -20,14 +21,16 @@
 
 #define SLEEP_TIME   1
 
+
+int getuptime(int nvram);
+void clear_time(int nvram);
+
 int main()
 {
 
-	char long_buf[BUFF_COUNTER];
-	FILE *fp;
-	char *str;
-
-	struct timeval tv;
+//	char long_buf[BUFF_COUNTER];
+//	FILE *fp;
+//	char *str;
 
 	//0:need start dhcpc server; 1:dhcpc server have been started,need being kill;
 	int dhcpc_status = 0;
@@ -39,6 +42,7 @@ int main()
 
 	while(1)
 	{
+#if 0
 		memset(long_buf, 0, BUFF_COUNTER);
 
         //get LinkStatus
@@ -56,38 +60,36 @@ int main()
 		}
 		pclose(fp);
 
-		if(atoi(long_buf) == CONNECTED)
+#endif 
+		//if(atoi(long_buf) == CONNECTED)
+		if(atoi(nvram_bufget(RT2860_NVRAM, "ApCliEnable")) == CONNECTED 
+				&& atoi(nvram_bufget(RT2860_NVRAM, "LinkStatus")) == CONNECTED)
 		{
 			//connneted
 			if(dhcpc_status == 0)
 			{
-				//获取系统的当前时间
-				gettimeofday(&tv,NULL);
-				//连接主路由时计时
-				printf("get current time is = %d", tv.tv_sec);
-				nvram_set(RT2860_NVRAM, "LinkTime", tv.tv_sec);
-				nvram_commit(RT2860_NVRAM);
-
-
+				system("ifconfig ra0 down");
+				getuptime(RT2860_NVRAM);
 				system("killall udhcpc");
-				usleep(25000);
+				usleep(500000);
 				system("killall udhcpd");
-				usleep(25000);
+				usleep(500000);
 				system("udhcpc -i br0 -s /sbin/udhcpc.sh -p /var/run/udhcpc.p");
+				usleep(500000);
+				system("ifconfig ra0 up");
 				dhcpc_status = 1;
 				dhcpd_status = 0;
 			}
 		} else if(dhcpd_status == 0){
 			//nconneted
-			nvram_set(RT2860_NVRAM, "LinkTime", "");
-			nvram_commit(RT2860_NVRAM);
-
+			clear_time(RT2860_NVRAM);
 			system("start_dhcpd.sh");
 			system("udhcpd /etc/udhcpd.conf");
 			dhcpd_status = 1;
 			dhcpc_status = 0;
 		}
 
+#if 0
 		memset(long_buf, 0, BUFF_COUNTER);
         //get ApCliEnable
 		if(!(fp = popen("nvram_get 2860 ApCliEnable", "r")))
@@ -105,6 +107,8 @@ int main()
 		pclose(fp);
 		ApCliEnable = atoi(long_buf);
 
+#endif 
+		ApCliEnable = atoi(nvram_bufget(RT2860_NVRAM, "ApCliEnable"));
 		if(ApCliEnable == APCLIENABLE)
 		{
 			//ApcliEnable
@@ -119,4 +123,64 @@ int main()
 	}
 
 	return 0;
+}
+
+static int get_nth_value(int index, char *value, char delimit, char *result, int len)
+{
+	int i=0, result_len=0;
+	char *begin, *end;
+
+	if(!value || !result || !len)
+		return -1;
+
+	begin = value;
+	end = strchr(begin, delimit);
+
+	while(i<index && end){
+		begin = end+1;
+		end = strchr(begin, delimit);
+		i++;
+	}
+
+	//no delimit
+	if(!end){
+		if(i == index){
+			end = begin + strlen(begin);
+			result_len = (len-1) < (end-begin) ? (len-1) : (end-begin);
+		}else
+			return -1;
+	} else {
+		result_len = (len-1) < (end-begin)? (len-1) : (end-begin);
+	}
+
+	memcpy(result, begin, result_len );
+	*(result+ result_len ) = '\0';
+
+	return 0;
+}
+
+int getuptime(int nvram)
+{
+	FILE *fp;
+	fp = fopen("/proc/uptime", "r");
+	if(fp == NULL)
+		return -1;
+
+	char sec[32];
+	if(fgets(sec, sizeof(sec), fp) != NULL)
+	{
+		char begin_time[16];
+		get_nth_value(0, sec, ' ', begin_time, sizeof(begin_time));
+		nvram_bufset(nvram, "connTime", begin_time);
+		nvram_commit(nvram);
+		fclose(fp);
+		return 0;
+	}
+
+}
+
+void clear_time(int nvram)
+{
+	nvram_bufset(nvram, "connTime", "");
+	nvram_commit(nvram);
 }

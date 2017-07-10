@@ -1,4 +1,9 @@
 $(function () {
+    //返回按钮
+    $("header>.nav-back").on("click", function () {
+        window.history.go(-1);
+    });
+
 
     // $("body>.nobody-online").css("display","block");
     // $("body>.nobody-online").css("background-color","red");
@@ -133,18 +138,13 @@ $(function () {
         })
     }
 
-    //返回按钮
-    $("header>.nav-back").on("click", function () {
-        window.history.go(-1);
-    });
-
     //进入黑名单
     $("header>.blacklist").on("click", function () {
         // window.location.href = "manage_blacklist.html";
 
         $.ajax({
             type: "POST",
-            url: "/cgi-bin/Client_Info.cgi",//需要服务端的请求的地址
+            url: "/cgi-bin/client_info.cgi",//需要服务端的请求的地址
             data: "showblacklist=show",
             error: function (response) {
                 console.log("请求黑名单数据失败");

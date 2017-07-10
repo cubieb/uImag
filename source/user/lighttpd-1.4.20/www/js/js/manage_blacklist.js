@@ -1,4 +1,9 @@
 $(function () {
+    //返回按钮
+    $("header>.nav-back").on("click", function () {
+        window.history.go(-1);
+    });
+
     // $("body>.blacklist-info").css("display", "block");
 
     //解析通过url传过来的参数boolean
@@ -36,7 +41,7 @@ $(function () {
             var $parent = $(this).parent();
             $.ajax({
                 type: "POST",
-                url: "/cgi-bin/Client_Info.cgi",//需要服务端的请求的地址
+                url: "/cgi-bin/client_info.cgi",//需要服务端的请求的地址
                 data: "delblacklist=delete" + "&" + "mac=" + mac,
                 error: function (response) {
                     console.log("删除黑名单数据失败");
@@ -63,9 +68,4 @@ $(function () {
         var html = template("blacklistTmp", blackonlineEntity);
         $('#main').html(html);
     }
-
-    //返回按钮
-    $("header>.nav-back").on("click", function () {
-        window.history.go(-1);
-    });
 })

@@ -20,7 +20,7 @@ $(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "/cgi-bin/Sys_Setting.cgi",//请求的接口数据，拿到上网的人的信息
+                    url: "/cgi-bin/sys_setting.cgi",//请求的接口数据，拿到上网的人的信息
                     data: "reboot_sys=reboot",
                     error: function () {
                         console.log("开始重启系统......失败！");
@@ -28,7 +28,7 @@ $(function () {
                     success: function (response) {
                         console.log("开始重启系统......成功！");
                         console.log(response);
-                        if(response == "reboot"){
+                        if (response == "reboot") {
                             window.location.href = "syetem_reboot_progress.html";
                         }
                     }
@@ -47,8 +47,8 @@ $(function () {
                 //显示弹窗以后，增加一个元素到弹窗中
                 $(".layui-m-layersection>.layui-m-layerchild").append("<div class='popup-close'></div>");
 
-                $(".layui-m-layersection>.layui-m-layerchild>.popup-close").on("click",function () {
-                    $(elem).css({"display":"none"});
+                $(".layui-m-layersection>.layui-m-layerchild>.popup-close").on("click", function () {
+                    $(elem).css({"display": "none"});
                 });
             }
         });
@@ -60,10 +60,10 @@ $(function () {
     // $("body>.nobody-online").css("background-color","red");
 
     //谁在上网
-    $("#nav>a:nth-child(1)").on("click",function () {
+    $("#nav>a:nth-child(1)").on("click", function () {
         $.ajax({
             type: "POST",
-            url: "/cgi-bin/Client_Info.cgi",//请求的接口数据，拿到上网的人的信息
+            url: "/cgi-bin/client_info.cgi",//请求的接口数据，拿到上网的人的信息
             data: "Client_Info=wholine",
             error: function () {
                 console.log("请求谁在上网信息失败");
@@ -98,6 +98,20 @@ $(function () {
         // localStorage.setItem('onlinePep', responseText);
         // window.location.href = "manage_nav_online.html";
 
+        return false;
+    })
+
+    //路由设置
+    $("#nav>a:nth-child(2)").on("click", function () {
+
+        window.location.href = "manage_navRoute_setting.html";
+
+        return false;
+    })
+
+    //wifi设置
+    $("#nav>a:nth-child(3)").on("click", function () {
+        window.location.href = "manage_navWiFi_setting.html";
         return false;
     })
 });

@@ -31,7 +31,7 @@ var wifiObj;
             $el.on("click", function () {
                 console.log("li被点击了");
                 var $this_ = $(this);
-                $("#wifi-list>.wifi-name>.wifi-l").text($this_.text());
+                $("#wifiName>.wifi-l").text($this_.text());
 
                 var globalIndex = $this_.index();//点击以后外面访问不到这里的index
                 console.log(globalIndex);

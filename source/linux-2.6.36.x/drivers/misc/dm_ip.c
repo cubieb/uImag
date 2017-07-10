@@ -17,18 +17,21 @@
 
 #define DM_IP_ROOT_NAME     "router_domain"
 #define DM_IP_ROOT_ENTRY    "dm_ip"
+#define INTERCEPT_ENTRY     "intercept"
 #define DEFAULT_DM_BUFFER   "luyou.cmcc.cn"
-#define DEFAULT_IP_BUFFER   "192.168.0.10"
-#define DEFAULT_IP          0x0a00a8c0
+#define DEFAULT_IP_BUFFER   "10.10.10.254"
+#define DEFAULT_IP          0xfe0a0a0a
 
 
 struct dm_ip_data
 {
     struct proc_dir_entry *root;
-    struct proc_dir_entry *entry;
+    struct proc_dir_entry *dm_ip_entry;
+    struct proc_dir_entry *intercept_entry;
     char *dm_buffer;
     char *ip_buffer;
     uint32_t ip;
+    bool intercept_flag;
 };
 
 
@@ -113,6 +116,68 @@ int dm_ip_write(struct file *file, const char __user *buffer,unsigned long count
     return ret;
 }
 
+
+/**
+ * [dm_ip_read description]
+ * @param  page  [description]
+ * @param  start [description]
+ * @param  off   [description]
+ * @param  count [description]
+ * @param  eof   [description]
+ * @param  data  [description]
+ * @return       [description]
+ */
+int intercept_read(char *page, char **start, off_t off,int count, int *eof, void *data)
+{
+    if(NULL == dm_ip)
+    {
+        printk("Error: dm_ip is NULL\n");
+        return 0;
+    }
+    else if(dm_ip->intercept_flag)
+    {
+        strcpy(page,"1\n");
+        return strlen(page);
+    }
+    else
+    {
+        strcpy(page,"0\n");
+        return strlen(page);
+    }
+}
+
+/**
+ * [dm_ip_write description]
+ * @param  file   [description]
+ * @param  buffer [description]
+ * @param  count  [description]
+ * @param  data   [description]
+ * @return        [description]
+ */
+int intercept_write(struct file *file, const char __user *buffer,unsigned long count, void *data)
+{
+    int ret = 0;
+    if(!strncmp(buffer,"1",1))
+    {
+        dm_ip->intercept_flag = true;
+        ret = count;
+    }
+    else if(!strncmp(buffer,"0",1))
+    {
+        dm_ip->intercept_flag = false;
+        ret = count;
+    }
+    else
+    {
+        printk("Your input format is invalid\n");
+        printk("the echo number must be 0 or 1\n");
+        ret = -1;
+    }
+
+    return ret;
+}
+
+
 /**
  * [create_dm_ip_moudle description]
  * @return  [description]
@@ -132,6 +197,7 @@ static int create_dm_ip_moudle(void)
     dm_ip->dm_buffer = DEFAULT_DM_BUFFER;
     dm_ip->ip_buffer = DEFAULT_IP_BUFFER;
     dm_ip->ip = DEFAULT_IP;
+    dm_ip->intercept_flag = true;
 
 
 
@@ -142,16 +208,27 @@ static int create_dm_ip_moudle(void)
         return -1;
     }
 
-    dm_ip->entry = create_proc_entry(DM_IP_ROOT_ENTRY, 0444, dm_ip->root);
-    if(dm_ip->entry==NULL)
+    dm_ip->dm_ip_entry = create_proc_entry(DM_IP_ROOT_ENTRY, 0444, dm_ip->root);
+    if(dm_ip->dm_ip_entry == NULL)
     {
-        printk("fortune :couldn't create proc entry\n");
+        printk("fortune :couldn't create dm_ip entry\n");
         ret = -2;
 
         return ret;
     }
-    dm_ip->entry->read_proc = dm_ip_read;
-    dm_ip->entry->write_proc = dm_ip_write;
+    dm_ip->dm_ip_entry->read_proc = dm_ip_read;
+    dm_ip->dm_ip_entry->write_proc = dm_ip_write;
+
+    dm_ip->intercept_entry = create_proc_entry(INTERCEPT_ENTRY, 0444, dm_ip->root);
+    if(dm_ip->intercept_entry == NULL)
+    {
+        printk("fortune :couldn't create intercept entry\n");
+        ret = -2;
+
+        return ret;
+    }
+    dm_ip->intercept_entry->read_proc = intercept_read;
+    dm_ip->intercept_entry->write_proc = intercept_write;
 
 
     return ret;
@@ -162,7 +239,8 @@ static int create_dm_ip_moudle(void)
  */
 static void destory_dm_ip_moudle(void)
 {
-    remove_proc_entry(DM_IP_ROOT_ENTRY, dm_ip->root);  
+    remove_proc_entry(DM_IP_ROOT_ENTRY, dm_ip->root);
+    remove_proc_entry(INTERCEPT_ENTRY,dm_ip->root);
     remove_proc_entry(DM_IP_ROOT_NAME, NULL);
     kfree(dm_ip);
 }
@@ -348,7 +426,7 @@ static unsigned int domain_hook(unsigned int hooknum,struct sk_buff * skb, const
     
     p = (uint8_t*)udp + 21;
 
-    if(domain_prase(p)>0)
+    if(dm_ip->intercept_flag || domain_prase(p) > 0)
     {
         adddata(skb);
         udp_checksum(skb);

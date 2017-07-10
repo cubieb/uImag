@@ -73,7 +73,7 @@ static void mt7628_switch_channel(RTMP_ADAPTER *pAd, UCHAR channel, BOOLEAN scan
 	doReload = (doCal1 & (0x1 << 7)) >> 7;
 	if (scan == FALSE)
 	{
-		MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_ERROR, ("reload DPD from flash , 0x9F = [%04x] doReload bit7[%x]\n", doCal1, doReload));
+		//MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_ERROR, ("reload DPD from flash , 0x9F = [%04x] doReload bit7[%x]\n", doCal1, doReload));
 		/* reload DPD cal data from flash  , follow primary channel -by CSD */
 		CmdLoadDPDDataFromFlash(pAd, pAd->CommonCfg.Channel, doReload);  
 	}

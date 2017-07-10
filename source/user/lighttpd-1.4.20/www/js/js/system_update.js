@@ -17,7 +17,7 @@ $(function () {
 
                 $.ajax({
                     type: "POST",
-                    url: "/cgi-bin/Sys_Setting.cgi",//请求的接口数据，拿到上网的人的信息
+                    url: "/cgi-bin/sys_setting.cgi",//请求的接口数据，拿到上网的人的信息
                     data: "recover_sys=recover",
                     error: function () {
                         console.log("开始恢复出厂设置......失败！");

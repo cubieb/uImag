@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!--(原来的manage_welcome_login.html界面)-->
-    <title>管理_首页_中移Wi-Fi放大器</title>
+    <title>配置页-首页</title>
     <link rel="stylesheet" href="css/common.min.css">
-    <link rel="stylesheet" href="css/manage_welcomeLogin.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <!--<script src="//lib.baomitu.com/jquery/1.12.4/jquery.min.js"></script>-->
+    <script src="js/lib/jquery.min.js"></script>
     <script>
         var pixclPatio = 1 / window.devicePixelRatio;
         document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
@@ -15,25 +16,48 @@
         var pageWidth = html.getBoundingClientRect().width;
         html.style.fontSize = pageWidth / 16 + 'px';
 
-        //        console.log(html.style.fontSize);  //等于@rem
-        //        console.log($(window).width()  + "---" + window.screen.width);
+        $.ajax({
+            url: "/cgi-bin/sys_setting.cgi",
+            type: "POST",
+            data: "isconfig=config",
+            async: false,//false代表只有在等待ajax执行完毕后才执行window.location.href = "wifi_setting.html";语句
+            success: function (response) {
+                console.log("拿到服务端是否进行过配置信息成功");
+                console.log(typeof response);
+                console.log(response);
+                if (response == "1") {
+                    window.location.href = "manage_welcome_login.html";
+                }
+            },
+            error: function (response) {
+                console.log("拿到服务端是否进行过配置信息失败");
+            },
+        });
     </script>
 </head>
 <body>
-<header>
-    <h1>欢迎使用中国移动WiFi放大器</h1>
+<header id="header">
+    <p>欢迎使用中国移动Wi-Fi放大器</p>
 </header>
-<form id="main">
-    <section class="manage">
-        <label for="managePassword">管理密码</label>
-        <input id="managePassword" type="text" placeholder="请输入管理密码" value="" name="managePassword">
-        <p>默认情况下，WiFi扩展器的管理密码就是您的WiFi密码，忘记密码请按一下RESET键复位，重新配置</p>
-        <button id="btn">
-            <a href="#">确定</a>
-        </button>
-    </section>
-</form>
-<script src="js/lib/jquery.min.js"></script>
-<script src="js/js/manage_welcome_login.js"></script>
+<section class="amplifier-download">
+    <img src="images/01_rocket.png" alt="" class="rocket">
+</section>
+<footer id="footer">
+    <div class="setting">
+        <a>进入设置 </a>
+    </div>
+    <div class="wrap">
+        <div class="join-us clearfix">
+            <label class="cBox">
+                <input id="samePassword" type="checkbox" name="samePassword" checked/>
+            </label>
+            <p>加入《用户体验改进计划》</p>
+        </div>
+    </div>
+</footer>
+<div class="one"></div>
+<!--<script src="//lib.baomitu.com/jquery/1.12.4/jquery.min.js"></script><-->
+<!--<script src="js/myJs/index.min.js"></script>-->
+<script src="js/js/index.js"></script>
 </body>
 </html>

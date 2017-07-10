@@ -2,6 +2,7 @@
 
 html {
   width: 100%;
+  overflow:hidden;overflow-y:auto;
   > body {
     width: 100%;
     height: 100%;
@@ -9,6 +10,7 @@ html {
     line-height: 44/@rem;
     font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif;
     background-color: #fafafa;
+    overflow:hidden;overflow-y:auto;
     //头部，配置
     > header {
       width: 100%;
@@ -62,7 +64,7 @@ html {
                 width: 211/@rem;
                 color: #333;
               }
-              > input#wifiName {
+              > input#newWifiName {
                 display: block;
                 height: 100%;
                 width: 100%;
@@ -94,7 +96,7 @@ html {
                 width: 211/@rem;
                 color: #333;
               }
-              > input#wifiPwd {
+              > input#newPassword {
                 display: block;
                 height: 100%;
                 width: 100%;
@@ -127,7 +129,7 @@ html {
                 //width: 211/@rem;
                 color: #333;
               }
-              > label.samePwd {
+              > label.wifips {
                 float: right;
                 display: inline-block;
                 padding-top: 35/@rem;
@@ -171,7 +173,7 @@ html {
                 //width: 211/@rem;
                 color: #333;
               }
-              > label.manageSamePwd {
+              > label.wifips {
                 float: right;
                 display: inline-block;
                 padding-top: 35/@rem;
@@ -189,6 +191,38 @@ html {
                   background: url("../images/manage_09_switch01.png") no-repeat;
                   background-size: 90/@rem 50/@rem;
                 }
+              }
+            }
+          }
+        }
+        > .online-info-managesamePWD {
+          width: 100%;
+          padding-left: 30/@rem;
+          background-color: #fff;
+          > .online-signal {
+            width: 100%;
+            //使用两边固定（绝对定位固定），中间自适应（margin两边的宽度）的解决方案
+            > .wrap {
+              border-bottom: 2px solid #f0f0f0;
+              height: 120/@rem;
+              width: 100%;
+              position: relative;
+              > label.wifips {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                line-height: 118/@rem;
+                width: 211/@rem;
+                color: #333;
+              }
+              > input#managePassword {
+                display: block;
+                height: 100%;
+                width: 100%;
+                font-size: 32/@rem;
+                color: #333;
+                margin-left: 211/@rem;
               }
             }
           }

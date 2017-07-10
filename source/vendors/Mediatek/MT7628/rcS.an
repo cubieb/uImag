@@ -4,6 +4,9 @@ mkdir -p /var/run
 makedevlinks.sh
 cat /etc_ro/motd > /dev/console
 
+#parse config_info 
+confinfo.sh confinfo
+
 led&
 
 #add by tanxjian for dynamic domain name

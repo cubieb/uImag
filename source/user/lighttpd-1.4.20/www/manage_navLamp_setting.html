@@ -28,11 +28,11 @@
 </header>
 
 <section id="main">
-    <div class="online-info clearfix">
+    <div class="online-info clearfix" >
         <div class="fl">
             <div class="tv-info">
-                <h3>关闭时间</h3>
-                <input type="text" readonly="" name="input_date" placeholder="00:00 - 00:00" id="demo3" style="font-size: 28px"/>
+                <h3>关闭时间段</h3>
+                <input type="text" readonly="" id="demo3" name="input_date" placeholder="00:00 - 00:00" style="font-size: 28px"/>
             </div>
         </div>
         <div class="fr">
@@ -45,7 +45,7 @@
     <div class="online-info clearfix">
         <div class="fl">
             <div class="tv-info">
-                <h3>指示灯长关</h3>
+                <h3>指示灯关闭</h3>
                 <!--<p>22：00 - 06：00</p>-->
             </div>
         </div>
@@ -59,7 +59,7 @@
     <div class="online-info clearfix">
         <div class="fl">
             <div class="tv-info">
-                <h3>指示灯长开</h3>
+                <h3>指示灯默认</h3>
                 <!--<p>22：00 - 06：00</p>-->
             </div>
         </div>
@@ -72,13 +72,13 @@
 </section>
 <script src="js/lib/jquery.min.js"></script>
 <script src="js/lib/lCalendar.js"></script>
+<script src="js/js/manage_navLamp_setting.js"></script>
 <script>
     var calendartime = new lCalendar();
     calendartime.init({
         'trigger': '#demo3',
         'type': 'time'
     });
-
 </script>
 </body>
 </html>

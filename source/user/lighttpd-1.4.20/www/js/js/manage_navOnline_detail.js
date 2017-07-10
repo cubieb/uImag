@@ -1,4 +1,8 @@
 $(function () {
+    //返回按钮
+    $("header>.nav-back").on("click", function () {
+        window.history.go(-1);
+    });
 
     //传参数，接收参数，获取url，解决中文乱码问题的最佳方案。
     //获取url
@@ -81,7 +85,7 @@ $(function () {
     // $("#formId").submit(function () {
     //     $.ajax({
     //         type: "POST",
-    //         url: "/cgi-bin/Client_Info.cgi",//请求的接口数据，拿到上网的人的信息
+    //         url: "/cgi-bin/client_info.cgi",//请求的接口数据，拿到上网的人的信息
     //         data: "changename=changehost" + $("#formId").serialize() + mac,
     //         error: function () {
     //             console.log("修改hostname失败");
@@ -100,7 +104,7 @@ $(function () {
             // 处理相关逻辑
             $.ajax({
                 type: "POST",
-                url: "/cgi-bin/Client_Info.cgi",//请求的接口数据，拿到上网的人的信息
+                url: "/cgi-bin/client_info.cgi",//请求的接口数据，拿到上网的人的信息
                 data: "changename=changehost" + "&" + $("#formId").serialize() + "&" + "mac=" + mac,
                 error: function () {
                     console.log("修改hostname失败");
@@ -130,7 +134,7 @@ $(function () {
             , yes: function (index) { //点击确定按钮
                 $.ajax({
                     type: "POST",
-                    url: "/cgi-bin/Client_Info.cgi",//需要服务端的请求的地址
+                    url: "/cgi-bin/client_info.cgi",//需要服务端的请求的地址
                     data: "blacklist=black" + "&" + "mac=" + mac,
                     error: function (response) {
                         console.log("当前设备加入黑名单失败");
@@ -181,9 +185,4 @@ $(function () {
         });
         return false;
     })
-
-    //返回按钮
-    $("header>.nav-back").on("click", function () {
-        window.history.go(-1);
-    });
 })

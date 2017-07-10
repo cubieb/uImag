@@ -45,6 +45,7 @@ ifeq	($(CONFIG_DEFSETTING_2M8M),y)
 else
 	ln -sf rcS.an rcS
 endif
+	$(ROMFSINST) /etc_ro/confinfo
 	$(ROMFSINST) /etc_ro/rcS
 	$(ROMFSINST) /etc_ro/inittab
 	$(ROMFSINST) /etc_ro/motd

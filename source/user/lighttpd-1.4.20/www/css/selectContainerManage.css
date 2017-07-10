@@ -1,0 +1,94 @@
+/* ---- 自定义的Select ----*/
+.selectContainer {
+  position: relative;
+  width: 6.4rem;
+  background-color: #438cff;
+  z-index: 1000;
+  background: #FFF;
+  margin-top: 0.13333333rem;
+}
+.selectContainer .selectOption {
+  display: none;
+}
+.selectContainer .shows {
+  width: 0.44444444rem;
+  height: 0.44444444rem;
+  position: absolute;
+  right: 0.04444444rem;
+  top: 0.04444444rem;
+}
+#selectCon {
+  position: relative;
+}
+.selectMenu .loader-inner {
+  position: absolute;
+  z-index: 10000;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.selectMenu .loader-inner div {
+  width: 0.04444444rem;
+  height: 0.71111111rem;
+  background-color: #438cff;
+  border-radius: 0.04444444rem;
+}
+.selectContainer ul {
+  overflow: auto;
+  width: 12.66666667rem;
+  height: 10.66666667rem;
+  display: none;
+  border: 1px solid #CCC;
+  border-bottom: none;
+  box-sizing: border-box;
+  margin-left: -1px;
+}
+.selectContainer ul li {
+  font-size: 0.71111111rem;
+  font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif !important;
+  position: relative;
+  padding-left: 0.22222222rem;
+  border-bottom: 1px solid #CCC;
+  width: 12.66666667rem;
+  height: 2.66666667rem;
+  line-height: 2.66666667rem;
+  background: #FFF;
+  box-sizing: border-box;
+}
+.selectContainer ul li:hover {
+  background: #F5F5F5;
+}
+.selectContainer ul li img:nth-child(1) {
+  position: absolute;
+  width: 0.66666667rem;
+  height: 0.75555556rem;
+  top: 50%;
+  right: 1.66666667rem;
+  transform: translateY(-50%);
+}
+.selectContainer ul li img:nth-child(2) {
+  position: absolute;
+  width: 0.8rem;
+  height: 0.75555556rem;
+  top: 50%;
+  right: 0.55555556rem;
+  transform: translateY(-50%);
+}
+.selectContainer #other {
+  display: none;
+  width: 12.66666667rem;
+  height: 2.66666667rem;
+  line-height: 2.66666667rem;
+  box-sizing: border-box;
+  border: 1px solid #CCC;
+  border-top: none;
+  margin-left: -1px;
+  padding-left: 0.22222222rem;
+  font-size: 0.71111111rem;
+}
+.dis {
+  display: block !important;
+}
+.zIndex {
+  z-index: 10000 !important;
+}

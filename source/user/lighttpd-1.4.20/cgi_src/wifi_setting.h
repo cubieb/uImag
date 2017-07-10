@@ -1,8 +1,6 @@
 #ifndef WIFI_SETTING_H_
 #define WIFI_SETTING_H_
 
-
-//#include <assert.h>
 #include "utils.h"
 
 /*
@@ -29,33 +27,23 @@ typedef struct ap_message_s
 	char APChannel[4];
 	char APAuthMode[20];
 	char APEncrypType[10];
-	char APPasswd[64];
-	char APSsid[32];
-
+	char APPasswd[65];
+	char APSsid[33];
 }ap_message_t;
 
 
 //扩展路由的信息和管理员密码
 typedef struct extend_message_s
 {
-	char Extend_wifiName[32];
-	char Extend_wifiPasswd[64];
-	char ManagePasswd[64];
+	char Extend_wifiName[33];
+	char Extend_wifiPasswd[65];
+	char ManagePasswd[65];
 }extend_message_t;
 
 /*
  * 扫描wifiF_repeater周围的wifi热点
  */
 void apcli_scan(void);
-
-#if 0
-/*
- * 从网页客户端上获取信息
- * 信息填充到input buffer上。
- */
-int get_message_for_web(char *input);
-
-#endif 
 
 /*
  * 可以有选择的接收数据：主路由的信息 or 扩展路由的设置，两者都接收。
@@ -70,5 +58,7 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg);
 
 
 void apcli_connect(ap_message_t *ap_msg);
+
+int is_connect_success(int nvram, ap_message_t *ap_msg);
 
 #endif 
