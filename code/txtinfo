@@ -4,3 +4,9 @@ ex_station=station&samePasswordChecked=true&managePwd=true&standard=truenewWifiN
 
 ex_station=station&samePasswordChecked=false&managePwd=true&throughWall=true&newWifiName=CMCC~Smart-Plus&newPassword=CMCC~Smart-Plus&managePassword=CMCC~Smartn
 
+
+ralink_init clear 2860
+ralink_init renew 2860 etc_ro/Wireless/RT2860AP/RT2860_default_vlan
+reboot
+init_system restart
+mount -o nolock 10.10.10.101:/home/winboy/mynfs /mnt/

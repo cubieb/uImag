@@ -8,9 +8,15 @@
  * 重启，恢复出厂设置，固件升级三个功能
  */
 
+#define VERSION 	"/etc_ro/conf/verson"
+
+#define CANUPDATE 	1
+#define NOUPDATE 	0
+
 
 void recover_factory_setting(void);
-void update_firmeware(void);
+int update_firmeware(int nvram);
+int get_update_status(int nvram);
 
 int main(int argc, char *argv[])
 {
@@ -24,25 +30,59 @@ int main(int argc, char *argv[])
 	web_debug_header();
 
 	char *temp;
+	temp = web_get("get_version", input, 0);
+	if(strcmp("version", temp) == 0)
+	{
+		FILE *fp;
+		char version[16];
+		fp = fopen(VERSION, "r");
+		if(fp == NULL)
+		{
+			DBG_MSG("Failed to fopen!");
+			return -1;
+		}
+
+		size_t length = fread(version, 1, sizeof(version), fp);
+		if(length < 0)
+		{
+			DBG_MSG("read the version file failed!");
+			return -1;
+		}
+		version[length + 1] = '\0';
+		fclose(fp);
+
+		int update_status = get_update_status(RT2860_NVRAM);
+
+		printf("{\n");
+		printf("\"version\":\"%s\",", version);
+		printf("\"update\":\"%d\"", update_status);
+		printf("}\n");
+	}
+
 	temp = web_get("reboot_sys", input, 0);
 	if(strcmp("reboot", temp) == 0)
 	{
-		printf("reboot");
+		printf("reboot\n");
 		do_system("reboot");
 	}
 
 	temp = web_get("recover_sys", input, 0);
 	if(strcmp("recover", temp) == 0)
 	{
-		printf("recover");
+		printf("recover\n");
 		recover_factory_setting();
 	}
 
 	temp = web_get("update_sys", input, 0);
 	if(strcmp("update", temp) == 0)
 	{
-		printf("update");
+		printf("update\n");
 		//还没有做,在考虑如何升级固件
+		if(update_firmeware(RT2860_NVRAM) == 1)
+		{
+			printf("updata_success");
+			fflush(NULL);
+		}
 	}
 
 	temp = web_get("isconfig", input, 0);
@@ -64,6 +104,14 @@ void recover_factory_setting(void)
 	do_system("reboot");
 }
 
-void update_firmeware(void)
+int  update_firmeware(int nvram)
 {
+	do_system("update 183.230.102.49 1003 wifi_repeater 1");
+	return atoi(nvram_bufget(nvram, "updatesuccess"));
+}
+
+int get_update_status(int nvram)
+{
+	do_system("update 183.230.102.49 1003 wifi_repeater 0");
+	return atoi(nvram_bufget(nvram, "myupdate"));
 }

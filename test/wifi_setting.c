@@ -196,14 +196,12 @@ int is_connect_success(int nvram, ap_message_t *ap_msg)
 			ap_msg->APAuthMode, ap_msg->APEncrypType, ap_msg->APSsid, ap_msg->APPasswd);
 	sleep(8);
 	do_system("iwpriv apcli0 show connStatus");
-	//sleep(4);
+	sleep(5);
 	DBG_MSG("LinkStatus=%s", nvram_bufget(nvram, "LinkStatus"));
 
 	return atoi(nvram_bufget(nvram, "LinkStatus"));
 }
 
-
-int init_system = 0;
 
 int main(int argc, char *argv[])
 {
@@ -249,6 +247,31 @@ int main(int argc, char *argv[])
 			set_nvram_buf(RT2860_NVRAM, &ap_msg, &ex_msg);
 	}
 
+	//选中的wifi：选中连接的主路由信息
+	if(strcmp("data", web_get("data_commit", input, 2)) == 0)
+	{
+		DBG_MSG("get message from web %s", input);
+		char buffer[1024];
+		char mac[65];
+		char wifiname[65];
+		char wifipwd[65];
+		char newwifiname[65];
+		char newwifipwd[65];
+		char managepwd[65];
+
+		strcpy(mac, web_get("mac", input, 2));
+		strcpy(wifiname, web_get("wifiName", input, 2));
+		strcpy(wifipwd, web_get("wifiPwd", input, 2));
+		strcpy(newwifiname, web_get("newWifiName", input, 2));
+		strcpy(newwifipwd, web_get("newPassword", input, 2));
+		strcpy(managepwd, web_get("managePassword", input, 2));
+		if(strcmp(managepwd, "") == 0)
+			strcpy(managepwd, newwifipwd);
+		sprintf(buffer, "%s;%s;%s;%s;%s;%s", mac, wifiname, wifipwd, newwifiname, newwifipwd, managepwd);
+		nvram_bufset(RT2860_NVRAM, "select_info", buffer);
+		nvram_commit(RT2860_NVRAM);
+	}
+
 #if 1
 	//进入配置界面,web端请求，后台进行主路由密码检验。不成功返回false，成功，立即重启
 	if(strcmp("success", web_get("if_success", input, 2)) == 0)
@@ -265,7 +288,6 @@ int main(int argc, char *argv[])
 			printf("conntrue");
 			fflush(NULL);
 			DBG_MSG("I send a conntrue string to web client.");
-			init_system = 1;
 		}
 		else 
 		{
@@ -276,13 +298,13 @@ int main(int argc, char *argv[])
 #endif 
 	}
 
-	if(init_system == 1)
+	//web端进入配置成功界面，请求启动配置参数
+	if(strcmp("restart", web_get("init_restart", input, 2)) == 0)
 	{
-		sleep(2);
+		DBG_MSG("reboot.");
 		nvram_bufset(RT2860_NVRAM, "ApCliEnable", "1");
 		nvram_commit(RT2860_NVRAM);
 		do_system("init_system restart");
-		//do_system("reboot");
 	}
 
 
@@ -291,6 +313,44 @@ int main(int argc, char *argv[])
 	/*
 	   管理界面模块
 	 */
+	//web端进入管理界面，请求数据
+	if(strcmp("data", web_get("get_data", input, 2)) == 0)
+	{
+		char buffer[1024];
+		strcpy(buffer, nvram_bufget(RT2860_NVRAM, "select_info"));
+		DBG_MSG("select_info: %s", buffer);
+
+		int n, i;
+		n = get_nums(buffer, ';');
+
+		char mac[65];
+		char wifiname[65];
+		char wifipwd[65];
+		char newwifiname[65];
+		char newwifipwd[65];
+		char managepwd[65];
+
+		get_nth_value(0, buffer, ';', mac, sizeof(mac));
+		get_nth_value(1, buffer, ';', wifiname, sizeof(wifiname));
+		get_nth_value(2, buffer, ';', wifipwd, sizeof(wifipwd));
+		get_nth_value(3, buffer, ';', newwifiname, sizeof(newwifiname));
+		get_nth_value(4, buffer, ';', newwifipwd, sizeof(newwifipwd));
+		get_nth_value(5, buffer, ';', managepwd, sizeof(managepwd));
+
+		if(n <= 0)
+		{
+			printf("{}\n");
+		}
+		printf("{\n");
+		printf("\"mac\":\"%s\",", mac);
+		printf("\"wifiName\":\"%s\",", wifiname);
+		printf("\"wifiPwd\":\"%s\",", wifipwd);
+		printf("\"newWifiName\":\"%s\",", newwifiname);
+		printf("\"newPassword\":\"%s\",", newwifipwd);
+		printf("\"managePassword\":\"%s\"", managepwd);
+		printf("}\n");
+	}
+
 	//web端进入管理界面时请求后台：主路由是否链接成功，以便显示
 	if(strcmp("manage_request", web_get("connect", input, 2)) == 0)
 	{

@@ -379,7 +379,7 @@ void get_client_list(int nvram)
 	{
 		printf("{}");
 	}
-
+	printf("\n");
 }
 
 /*修改主机名，信息保存到nvram的client_info_list变量里　
@@ -493,6 +493,7 @@ void show_blacklist(int nvram)
 		printf("\t]\n");
 		printf("}\n");
 	}
+	printf("\n");
 }
 
 /*count 为maclist 的个数，
