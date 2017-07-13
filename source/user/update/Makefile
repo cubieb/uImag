@@ -1,6 +1,6 @@
 EXEC = update
 
-OBJS = update.o cJSON.o
+OBJS = update.o cJSON.o crc32.o
 
 CFLAGS +=-O0
 LDFLAGS += -lm

@@ -71,7 +71,6 @@ $(function () {
 
     var patternId = "throughWall";
     var patternChecked = "true";
-
     //监听几种模式中的哪一种
     $("#pattern>.online-info-pattern").find("label").on("click", function () {
         patternChecked = $(this).find("input[type='radio']").prop("checked") ;
@@ -137,7 +136,6 @@ $(function () {
             //         console.log(response);
             //     }
             // })
-
 
             $.ajax({
                 type: "POST",

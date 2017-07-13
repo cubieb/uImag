@@ -39,6 +39,18 @@ html > body > header > p {
 html > body > section#main {
   width: 16rem;
   text-align: center;
+  position: relative;
+}
+html > body > section#main > .loader > .loader-inner {
+  width: 0.66666667rem;
+  height: 0.66666667rem;
+  position: absolute;
+  top: 1.33333333rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+html > body > section#main > .loader > .loader-inner div {
+  background-color: #438cff;
 }
 html > body > section#main > img {
   margin-top: 4.04444444rem;
@@ -49,6 +61,10 @@ html > body > section#main > p {
   margin-top: 0.8rem;
   margin-bottom: 1.68888889rem;
 }
+html > body > section#main > p > span:nth-child(3) {
+  color: #ff7779;
+  display: none;
+}
 html > body > section#main > .online-btn {
   width: 5.33333333rem;
   height: 1.55555556rem;
@@ -57,6 +73,11 @@ html > body > section#main > .online-btn {
   border-radius: 1.33333333rem;
   color: #fff;
   margin: 0 auto;
+}
+html > body > section#main .disabledBtn {
+  pointer-events: none;
+  cursor: default;
+  background-color: #d8d8d8;
 }
 html > body > footer#footer > .factory-reset {
   position: absolute;

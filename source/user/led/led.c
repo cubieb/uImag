@@ -96,7 +96,7 @@ int link_status(void)
 
 	memset(long_buf, 0, BUFF_COUNTER);
 
-	if(!(fp = popen("nvram_get 2860 LinkStatus", "r")))
+	if(!(fp = popen("nvram_get 2860 CMCC_LinkStatus", "r")))
 	{		
 		return 0;
 	}
@@ -124,7 +124,7 @@ int is_set_ledoff(void)
 
 	memset(long_buf, 0, BUFF_COUNTER);
 
-	if(!(fp = popen("nvram_get 2860 led_off", "r")))
+	if(!(fp = popen("nvram_get 2860 CMCC_LedOff", "r")))
 	{		
 		return 0;
 	}
@@ -143,7 +143,7 @@ int is_set_ledoff(void)
 	return 0;
 }
 
-int is_reapeter_configued(void)
+int is_repeater_configued(void)
 {
 
 	char long_buf[BUFF_COUNTER];
@@ -151,14 +151,14 @@ int is_reapeter_configued(void)
 
 	memset(long_buf, 0, BUFF_COUNTER);
 
-	if(!(fp = popen("nvram_get 2860 ApCliEnable", "r")))
+	if(!(fp = popen("nvram_get 2860 CMCC_ApCliEnable", "r")))
 	{		
 		return 0;
 	}
 
 	if(0 == fread(long_buf, 1, BUFF_COUNTER, fp))
 	{
-		printf("is_reapeter_configued: fread read none.\n");
+		printf("is_repeater_configued: fread read none.\n");
 		pclose(fp);
              return 0;
 	}
@@ -179,7 +179,7 @@ int is_wps_configuring(void)
 
 	memset(long_buf, 0, BUFF_COUNTER);
 
-	if(!(fp = popen("nvram_get 2860 WpsConfiguring", "r")))
+	if(!(fp = popen("nvram_get 2860 CMCC_WpsConfiguring", "r")))
 	{		
 		return 0;
 	}
@@ -216,7 +216,7 @@ char * router_mac_address(void* buff)
 
 		memset(long_buf, 0, BUFF_COUNTER);
 
-		if(!(fp = popen("nvram_get 2860 RouterMac", "r")))
+		if(!(fp = popen("nvram_get 2860 CMCC_RouterMac", "r")))
 		{		
 			return NULL;
 		}
@@ -249,14 +249,14 @@ int get_limited_time(int iType, int* iTime)
 
 	if(0 == iType)
 	{
-		if(!(fp = popen("nvram_get 2860 led_begin", "r")))
+		if(!(fp = popen("nvram_get 2860 CMCC_LedBegin", "r")))
 		{		
 			return 0;
 		}
 	}
 	else
 	{
-		if(!(fp = popen("nvram_get 2860 led_end", "r")))
+		if(!(fp = popen("nvram_get 2860 CMCC_LedEnd", "r")))
 		{		
 			return 0;
 		}
@@ -297,7 +297,7 @@ int is_have_sta(void)
 
 	memset(long_buf, 0, BUFF_COUNTER);
 
-	if(!(fp = popen("nvram_get 2860 isHaveSta", "r")))
+	if(!(fp = popen("nvram_get 2860 CMCC_IsHaveSta", "r")))
 	{		
 		return 0;
 	}
@@ -407,11 +407,17 @@ int main()
 
 	while(1)
 	{
+		/* update link status when repeater is configued */
+		if(1 == is_repeater_configued())
+		{		
+			link_status();
+		}
+		
 		/* press wps button */
 		if(1 == is_wps_configuring())
 		{
 			curStatus= WPS_CONFIGURING;
-			system("nvram_set 2860 WpsConfiguring 0");
+			system("nvram_set 2860 CMCC_WpsConfiguring 0");
 			goto state_machine;
 		}
 				
@@ -430,7 +436,7 @@ int main()
 			printf("endTime = %d\n", endTime);
 			printf("curTime = %d\n", curTime);
 			
-			/* ÉèÖÃÊ±¼ä¶Î¿çÌì */
+			/* the time set not in the same day */
 			if(beginTime > endTime)
 			{
 				if((curTime >= beginTime) || (curTime <= endTime))
@@ -449,9 +455,9 @@ int main()
 			}
 		}
 
-		if(1 == is_reapeter_configued())
+		if(1 == is_repeater_configued())
 		{		
-			//æ²¡æœ‰æŸ¥æ‰¾åˆ°å­—ç¬¦ä¸²
+			/* repeater is configued */
 			if(1 == link_status())
 			{
 				router_signal(&signal);
@@ -478,12 +484,10 @@ int main()
 			else
 			{
 				curStatus= CONFIG_NOLINK;
-				//RED_LIGHT;
 			}
 		}
 		else
 		{
-			//RED_BLINKING;
 			curStatus= NO_CONFIG;
 		}
 

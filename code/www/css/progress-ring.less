@@ -1,0 +1,98 @@
+@rem: 45rem;
+
+@charset "UTF-8";
+@-webkit-keyframes toggle {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes toggle {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+#manage_update {
+  font-size: 32/@rem;//在父级写了text-align：center，那么子级标签的p元素的word-break: break-all;就不管用了
+  line-height: 44/@rem;
+  font-family: MicrosoftYaHei, Arial, Helvetica, STHeiTi, sans-serif;
+}
+
+//设置文字
+#manage_update > p {
+  text-align: center;
+  //margin-top: 306/@rem;
+  margin: 306/@rem 56/@rem 0 56/@rem;
+  color: #999;
+  //word-break: break-all;
+  //word-wrap:break-word;
+}
+
+.progress-ring {
+  position: relative;
+  top: 270/@rem;
+  left: 200/@rem;
+  //height: 130/@rem;
+  //width: 130@rem;
+  height: 320/@rem;
+  width: 320 @rem;
+}
+
+//更改圆圈的大小是更改这里
+.progress-ring div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 320/@rem;
+  width: 320/@rem;
+  //height: 130/@rem;
+  //width: 130/@rem;
+  /* 圆环宽高，可自定义 */
+  border: 10/@rem solid transparent;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.progress-ring .progress-left, .progress-ring .progress-right, .progress-ring .progress-cover {
+  clip: rect(0 160/@rem 320/@rem 0); //改变进度所处位置的百分比
+  /* rect( [0 | <width/2> | <height> | 0] ) */
+}
+
+.progress-ring .progress-right {
+  opacity: 0;
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.progress-ring .progress-text {
+  border: none;
+  font-family: "Arial", sans-serif;
+  text-align: center;
+  font-size: 32.5/@rem;
+  color: #438cff;
+  /* 进度文字颜色 */
+  line-height: 320/@rem; //调整文字的行高可以居中
+  /*2222*/
+}
+
+.progress-ring .progress-text .progress-num {
+  font-size: 50/@rem;
+}
+
+.progress-ring .progress-percent {
+  font-size: .55em;
+  font-style: italic;
+  font-family: "Microsoft Yahei", sans-serif;
+}

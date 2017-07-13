@@ -2,6 +2,7 @@
 #include "nvram.h"
 
 #include <string.h>
+#include <unistd.h>
 
 #define MESSAGESIZE 2048
 #define IFNAMSIZ 32
@@ -53,7 +54,8 @@ void apcli_scan(void)
 		ptr[space_start] = '\0';
 		strcpy(ssid, cmd+4);
 		convert_string_display(ssid);
-
+		if(strcmp(ssid, "") == 0)
+			continue;
 		printf("\t\t{\n");
 		printf("\t\t\"Channel\":\"%s\",\n", channel);
 		printf("\t\t\"ssid\":\"%s\",\n", ssid);
@@ -71,6 +73,7 @@ void apcli_scan(void)
 	printf("\t\t}\n");
 	printf("\t]\n");
 	printf("}");
+	fflush(NULL);
 
 	pclose(pp);
 }
@@ -92,9 +95,7 @@ void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char
 		strcpy(ap_msg->APSsid, web_get("ssid", input, 0));
 		security = web_get("security", input, 0);
 		strcpy(ap_msg->security, security);
-
 #if 1
-
 		if(strcmp(ap_msg->security, "WPA1PSKWPA2PSK/TKIPAES") == 0)
 		{
 			strcpy(ap_msg->APAuthMode, "WPA2PSK");
@@ -136,6 +137,7 @@ void get_value_from_web(ap_message_t *ap_msg, extend_message_t *extend_msg, char
 		}
 #endif 
 
+		strcpy(ap_msg->APMac, web_get("bssid", input, 0));
 		strcpy(ap_msg->APPasswd, web_get("wifiPassword", input, 0));
 	}
 	if(extend_msg != NULL)
@@ -152,22 +154,24 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 	if(ap_msg != NULL)
 	{
 		//使能主路由
-		//nvram_bufset(nvram, "ApCliEnable", "1");
+		//nvram_bufset(nvram, "CMCC_ApCliEnable", "1");
 
 		//主路由频道
 		nvram_bufset(nvram, "Channel", ap_msg->APChannel);
 
 		//主路由的加密方式，类型
-		nvram_bufset(nvram, "ApCliAuthMode", ap_msg->APAuthMode);
-		nvram_bufset(nvram, "ApCliEncrypType", ap_msg->APEncrypType);
+		nvram_bufset(nvram, "CMCC_ApCliAuthMode", ap_msg->APAuthMode);
+		nvram_bufset(nvram, "CMCC_ApCliEncrypType", ap_msg->APEncrypType);
 
 		//主路由的名字，频道和密码
-		nvram_bufset(nvram, "ApCliSsid", ap_msg->APSsid);
-		nvram_bufset(nvram, "ApCliWPAPSK", ap_msg->APPasswd);
+		nvram_bufset(nvram, "CMCC_ApCliSsid", ap_msg->APSsid);
+		nvram_bufset(nvram, "CMCC_ApCliWPAPSK", ap_msg->APPasswd);
 
 		//扩展路由的加密方式，频道和类型跟主路由一致
 		nvram_bufset(nvram, "AuthMode", ap_msg->APAuthMode);
 		nvram_bufset(nvram, "EncrypType", ap_msg->APEncrypType);
+		nvram_bufset(nvram, "CMCC_SelectApMac", ap_msg->APMac);
+		//nvram_bufset(nvram, "CMCC_SelectApSecurity", ap_msg->security);
 	}
 	if(ex_msg != NULL)
 	{
@@ -178,7 +182,7 @@ int set_nvram_buf(int nvram, ap_message_t *ap_msg, extend_message_t *ex_msg)
 		//扩展路由的名字，密码和管理密码
 		nvram_bufset(nvram, "SSID1", ex_msg->Extend_wifiName);
 		nvram_bufset(nvram, "WPAPSK1", ex_msg->Extend_wifiPasswd);
-		nvram_bufset(nvram, "ManagePasswd", ex_msg->ManagePasswd);
+		nvram_bufset(nvram, "CMCC_ManagePasswd", ex_msg->ManagePasswd);
 	}
 	nvram_commit(nvram);
 	return 0;
@@ -192,16 +196,14 @@ int is_connect_success(int nvram, ap_message_t *ap_msg)
 		return -1;
 	do_system("isconnect.sh %d %s %s %s %s", atoi(ap_msg->APChannel), 
 			ap_msg->APAuthMode, ap_msg->APEncrypType, ap_msg->APSsid, ap_msg->APPasswd);
-	sleep(8);
+	sleep(6);
 	do_system("iwpriv apcli0 show connStatus");
-	sleep(2);
-	DBG_MSG("LinkStatus=%s", nvram_bufget(nvram, "LinkStatus"));
+	sleep(4);
+	DBG_MSG("CMCC_LinkStatus=%s", nvram_bufget(nvram, "CMCC_LinkStatus"));
 
-	return atoi(nvram_bufget(nvram, "LinkStatus"));
+	return atoi(nvram_bufget(nvram, "CMCC_LinkStatus"));
 }
 
-
-int init_system = 0;
 
 int main(int argc, char *argv[])
 {
@@ -231,71 +233,124 @@ int main(int argc, char *argv[])
 	//web客户端提交的路由信息。然后后台进行接收
 	if(strcmp("commit", web_get("wifiCommit", input, 2)) == 0)
 	{
+			//web端要求立马返回一个数据
+			printf("wifiSettingSuccess");
+			fflush(NULL);
+			DBG_MSG("I send a string wifiSettingSuccess\n");
 
-		//web端要求立马返回一个数据
-		printf("wifiSettingSuccess");
-		DBG_MSG("I send a string wifiSettingSuccess\n");
+			ap_message_t ap_msg;
+			extend_message_t ex_msg;
 
-		ap_message_t ap_msg;
-		extend_message_t ex_msg;
+			DBG_MSG("wificommit message is %s\n", input);
+			//从web端获取数据，回填到结构体参数地址空间中
+			get_value_from_web(&ap_msg, &ex_msg, input);
 
-		DBG_MSG("wificommit message is %s\n", input);
-		//从web端获取数据，回填到结构体参数地址空间中
-		get_value_from_web(&ap_msg, &ex_msg, input);
-
-		//设置相应的参数到开发板的ram
-		set_nvram_buf(RT2860_NVRAM, &ap_msg, &ex_msg);
+			//设置相应的参数到开发板的ram
+			set_nvram_buf(RT2860_NVRAM, &ap_msg, &ex_msg);
 	}
 
+#if 0
+	//选中的wifi：选中连接的主路由信息,web端会需要用到
+	if(strcmp("data", web_get("data_commit", input, 2)) == 0)
+	{
+		DBG_MSG("get message from web %s", input);
+		char buffer[1024];
+		char mac[65];
+		char wifiname[65];
+		char wifipwd[65];
+		char newwifiname[65];
+		char newwifipwd[65];
+		char managepwd[65];
+
+		strcpy(mac, web_get("mac", input, 2));
+		strcpy(wifiname, web_get("wifiName", input, 2));
+		strcpy(wifipwd, web_get("wifiPwd", input, 2));
+		strcpy(newwifiname, web_get("newWifiName", input, 2));
+		strcpy(newwifipwd, web_get("newPassword", input, 2));
+		strcpy(managepwd, web_get("managePassword", input, 2));
+		if(strcmp(managepwd, "") == 0)
+			strcpy(managepwd, newwifipwd);
+		sprintf(buffer, "%s;%s;%s;%s;%s;%s", mac, wifiname, wifipwd, newwifiname, newwifipwd, managepwd);
+		nvram_bufset(RT2860_NVRAM, "select_info", buffer);
+		nvram_commit(RT2860_NVRAM);
+	}
+#endif 
+
 #if 1
+
+#if 0
 	//进入配置界面,web端请求，后台进行主路由密码检验。不成功返回false，成功，立即重启
 	if(strcmp("success", web_get("if_success", input, 2)) == 0)
 	{
 		ap_message_t ap_msg;
 		strcpy(ap_msg.APChannel, nvram_bufget(RT2860_NVRAM, "Channel"));
-		strcpy(ap_msg.APAuthMode, nvram_bufget(RT2860_NVRAM, "ApCliAuthMode"));
-		strcpy(ap_msg.APEncrypType, nvram_bufget(RT2860_NVRAM, "ApCliEncrypType"));
-		strcpy(ap_msg.APSsid, nvram_bufget(RT2860_NVRAM, "ApCliSsid"));
-		strcpy(ap_msg.APPasswd, nvram_bufget(RT2860_NVRAM, "ApCliWPAPSK"));
-		is_connect_success(RT2860_NVRAM, &ap_msg);
-		if(atoi(nvram_bufget(RT2860_NVRAM, "LinkStatus")) == 1)
+		strcpy(ap_msg.APAuthMode, nvram_bufget(RT2860_NVRAM, "CMCC_ApCliAuthMode"));
+		strcpy(ap_msg.APEncrypType, nvram_bufget(RT2860_NVRAM, "CMCC_ApCliEncrypType"));
+		strcpy(ap_msg.APSsid, nvram_bufget(RT2860_NVRAM, "CMCC_ApCliSsid"));
+		strcpy(ap_msg.APPasswd, nvram_bufget(RT2860_NVRAM, "CMCC_ApCliWPAPSK"));
+		if(is_connect_success(RT2860_NVRAM, &ap_msg) == 1)
 		{
 			printf("conntrue");
+			fflush(NULL);
+			web_redirect(getenv("HTTP_REFERER"));
 			DBG_MSG("I send a conntrue string to web client.");
-			init_system = 1;
 		}
 		else 
 		{
 			printf("connfalse");
+			fflush(NULL);
+			//web_redirect(getenv("HTTP_REFERER"));
 			DBG_MSG("I send a connfalse string to web client.");
 		}
-
 	}
-
-	if(init_system == 1)
+#endif 
+	//web端进入配置成功界面，请求启动配置参数
+	if(strcmp("restart", web_get("init_restart", input, 2)) == 0)
 	{
-		nvram_bufset(RT2860_NVRAM, "ApCliEnable", "1");
+		DBG_MSG("reboot.");
+		nvram_bufset(RT2860_NVRAM, "CMCC_ApCliEnable", "1");
+		//nvram_bufset(RT2860_NVRAM, "CMCC_LinkStatus", "0");
 		nvram_commit(RT2860_NVRAM);
-		do_system("reboot");
+		do_system("init_system restart");
+		do_system("killall dm_dhcp");
+		do_system("dm_dhcp");
 	}
-
 #endif
 
 	/*
 	   管理界面模块
 	 */
+	//web端进入管理界面，请求数据
+	if(strcmp("data", web_get("get_data", input, 2)) == 0)
+	{
+		printf("{\n");
+		printf("\"mac\":\"%s\",", nvram_bufget(RT2860_NVRAM, "CMCC_SelectApMac"));
+		printf("\"wifiName\":\"%s\",", nvram_bufget(RT2860_NVRAM, "CMCC_ApCliSsid"));
+		printf("\"wifiPwd\":\"%s\",", nvram_bufget(RT2860_NVRAM, "CMCC_ApCliWPAPSK"));
+		printf("\"newWifiName\":\"%s\",", nvram_bufget(RT2860_NVRAM, "SSID1"));
+		printf("\"newPassword\":\"%s\",", nvram_bufget(RT2860_NVRAM, "WPAPSK1"));
+		printf("\"managePassword\":\"%s\"", nvram_bufget(RT2860_NVRAM, "CMCC_ManagePasswd"));
+		printf("}\n");
+	}
+
+#if 0
 	//web端进入管理界面时请求后台：主路由是否链接成功，以便显示
 	if(strcmp("manage_request", web_get("connect", input, 2)) == 0)
 	{
-		int status = atoi(nvram_bufget(RT2860_NVRAM, "LinkStatus"));
+		int status = atoi(nvram_bufget(RT2860_NVRAM, "CMCC_LinkStatus"));
 		if( status == 1)
+		{
 			printf("success");
+			fflush(NULL);
+
+		}
 		else
 		{
 			printf("false");
+			fflush(NULL);
 		}
 	}
-
+#endif 
 
 	//路由设置：web客户端提交的信息
 	if(strcmp("commit", web_get("station_commit", input, 2)) == 0)
@@ -345,6 +400,7 @@ int main(int argc, char *argv[])
 
 		//返回给web客户端，这是客户端要求要返回的数据
 		printf("routeSuccess");
+		fflush(NULL);
 	}
 	//管理界面的扩展路由设置模块的提交
 	if(strcmp("station", web_get("ex_station", input, 2)) == 0)
@@ -388,6 +444,7 @@ int main(int argc, char *argv[])
 #endif 
 		//返回给web客户端，这是客户端要求要返回的数据
 		printf("wifiSuccess");
+		fflush(NULL);
 	}
 	return 0;
 }

@@ -173,7 +173,7 @@ rtuser_exit:
 int no_clientinfo_in_nvram(int nvram)
 {
 	char buf[MAX_CLIENT_INFO_LIST];
-	if(strcmp(nvram_bufget(nvram, "client_info_list"), "") == 0)
+	if(strcmp(nvram_bufget(nvram, "CMCC_ClientInfoList"), "") == 0)
 		return 0;
 	else
 		return -1;
@@ -205,12 +205,12 @@ void add_info_to_nvram(int nvram, char *hostname, char *mac)
 		return ;
 
 	char buf[MAX_CLIENT_INFO_LIST];
-	strcpy(buf, nvram_bufget(nvram, "client_info_list"));
+	strcpy(buf, nvram_bufget(nvram, "CMCC_ClientInfoList"));
 	int count = get_nums(buf, ';');
 	if(count < CLIENT_LIST_NUM)
 	{
 		sprintf(buf, "%s;%s&%s", buf, hostname, mac);
-		nvram_bufset(nvram, "client_info_list", buf);
+		nvram_bufset(nvram, "CMCC_ClientInfoList", buf);
 	}
 	//MAX_CLIENT 是存储信息最大设备个数，如果大于会删除第一个设备信息，然后在末尾添加新的信息。
 	else if(count > CLIENT_LIST_NUM)
@@ -219,7 +219,7 @@ void add_info_to_nvram(int nvram, char *hostname, char *mac)
 			int index = 0; 
 			delete_nth_value(&index, count, buf, ';');
 			sprintf(buf, "%s;%s&%s", buf, hostname, mac);
-			nvram_bufset(nvram, "client_info_list", buf);
+			nvram_bufset(nvram, "CMCC_ClientInfoList", buf);
 	}
 	nvram_commit(nvram);
 }
@@ -285,7 +285,7 @@ int get_os_host_from_file(char *mac, char *hostname,  char *msg_os)
 int get_hostname_in_nvram(int nvram, char *mac, char *hostname)
 {
 	char client_list[MAX_CLIENT_INFO_LIST];
-	strcpy(client_list, nvram_bufget(nvram, "client_info_list"));
+	strcpy(client_list, nvram_bufget(nvram, "CMCC_ClientInfoList"));
 	int client_num = get_nums(client_list, ';');
 	int i;
 	if(client_num > 0)
@@ -330,7 +330,7 @@ void add_clientinfo_to_nvram(int nvram)
 				{
 					char info[83];
 					sprintf(info, "%s&%s", hostname, mac_table.entry[i].Mac);
-					nvram_bufset(nvram, "client_info_list", info);
+					nvram_bufset(nvram, "CMCC_ClientInfoList", info);
 					nvram_commit(nvram);
 				}
 				else
@@ -368,10 +368,14 @@ void get_client_list(int nvram)
 				printf("\t\t\"ConnectedTime\":\"%d\",\n", mac_table.entry[i].ConnectedTime);
 				printf("\t\t\"Mac\":\"%s\",\n", mac_table.entry[i].Mac);
 				printf("\t\t\"Msg_os\":\"%s\"\n", msg_os);
-				printf("\t\t},\n");
+				//printf("\t\t},\n");
+				printf("\t\t}");
 			}
+			if(i < mac_table.Num - 1)
+				printf(",");
+			printf("\n");
 		}
-		printf("\t\t{\n\t\t}\n");
+		//printf("\t\t{\n\t\t}\n");
 		printf("\t]\n");
 		printf("}\n");
 	}
@@ -390,7 +394,7 @@ int change_hostname(int nvram, char *hostname, char *macaddr)
 		return -1;
 
 	char client_list[MAX_CLIENT_INFO_LIST];
-	strcpy(client_list, nvram_bufget(nvram, "client_info_list"));
+	strcpy(client_list, nvram_bufget(nvram, "CMCC_ClientInfoList"));
 
 	int client_num = get_nums(client_list, ';');
 	int index = find_index_mac_in_nvram(nvram, client_num, client_list, macaddr);
@@ -398,7 +402,7 @@ int change_hostname(int nvram, char *hostname, char *macaddr)
 	{
 		delete_nth_value(&index, client_num, client_list, ';');
 		sprintf(client_list, "%s;%s&%s", client_list, hostname, macaddr);
-		nvram_bufset(nvram, "client_info_list", client_list);
+		nvram_bufset(nvram, "CMCC_ClientInfoList", client_list);
 		nvram_commit(nvram);
 	}
 	return 0;
@@ -486,10 +490,14 @@ void show_blacklist(int nvram)
 				printf("\t\t\"HostName\":\"%s\",\n", hostname);
 				printf("\t\t\"Mac\":\"%s\",\n", blackmac);
 				printf("\t\t\"Msg_os\":\"%s\"\n", msg_os);
-				printf("\t\t},\n");
+				//printf("\t\t},\n");
+				printf("\t\t}");
 			}
+			if(i < count - 1)
+				printf(",");
+			printf("\n");
 		}
-		printf("\t\t{\n\t\t}\n");
+		//printf("\t\t{\n\t\t}\n");
 		printf("\t]\n");
 		printf("}\n");
 	}

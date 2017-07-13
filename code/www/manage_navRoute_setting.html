@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理_路由设置_首页</title>
+    <link rel="stylesheet" href="css/common.min.css">
+    <link rel="stylesheet" href="css/layer.min.css">
+    <link rel="stylesheet" href="css/manage_navRouteSetting.min.css">
+    <link rel="stylesheet" href="css/selectContainerManage.min.css">
+    <script>
+        var pixclPatio = 1 / window.devicePixelRatio;
+        document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
+        console.log(pixclPatio);
+
+        var html = document.getElementsByTagName('html')[0];
+        var pageWidth = html.getBoundingClientRect().width;
+        html.style.fontSize = pageWidth / 16 + 'px';
+
+        //        console.log(html.style.fontSize);  //等于@rem
+        //        console.log($(window).width() + "---" + window.screen.width);
+    </script>
+</head>
+<body>
+<header>
+    <div class="nav-back">
+        <img src="images/nav_back.png" alt="">
+    </div>
+    <h1>路由设置</h1>
+</header>
+<section id="main">
+    <form>
+        <!--选择你要连接的主路由器wifi名-->
+        <div class="online-info-wifi clearfix">
+            <!--<div class="online-signal">-->
+            <!--<div class="wrap clearfix">-->
+            <!--<label for="wifiName" class="wifips">Wi-Fi名称</label>-->
+            <!--<input id="wifiName" type="text" value="CMCC~Smart" name="wifiName" >-->
+            <!--<div class="line1"></div>-->
+            <!--<div class="wifi-btn">-->
+            <!--<img src="images/manage_06_icon01.png" alt="">-->
+            <!--</div>-->
+            <!--<div class="line2"></div>-->
+            <!--<div class="refresh">刷新</div>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <div class="wifi-name clearfix" id="wifiName">
+                <div class="wifi-title">Wi-Fi名称</div>
+                <div class="wifi-l"></div>
+                <div class="wifi-r clearfix">
+                    <div class="list-btn">
+                        <img src="images/manage_06_icon01.png" alt="">
+                    </div>
+                    <i></i>
+                    <div class="refresh-btn">
+                        <span class="title-right">刷新</span>
+                    </div>
+                </div>
+                <!--弹出的下拉列表-->
+                <!--<div class="selectContainer" id="selectCon">-->
+                <!--<ul class="selectMenu">-->
+                <!--<div class="mask"></div>-->
+                <!--<div class="loader-inner line-scale">-->
+                <!--<div style="background-color: #fff"></div>-->
+                <!--<div style="background-color: #fff"></div>-->
+                <!--<div style="background-color: #fff"></div>-->
+                <!--<div style="background-color: #fff"></div>-->
+                <!--<div style="background-color: #fff"></div>-->
+                <!--</div>-->
+                <!--<li>CMCC~Guest-->
+                <!--<img src="images/02_icon02.png" alt="">-->
+                <!--<img src="images/02_icon03.png" alt="">-->
+                <!--</li>-->
+                <!--<li>CMCC~Smart-->
+                <!--<img src="images/02_icon02.png" alt="">-->
+                <!--<img src="images/02_icon03.png" alt="">-->
+                <!--</li>-->
+                <!--<li>TP-LINK-67-F76-->
+                <!--<img src="images/02_icon02.png" alt="">-->
+                <!--<img src="images/02_icon03.png" alt="">-->
+                <!--</li>-->
+                <!--<li>其它...-->
+                <!--</li>-->
+                <!--</ul>-->
+                <!--</div>-->
+                <div class="selectContainer" id="selectCon"></div>
+            </div>
+        </div>
+
+        <!--选择你要连接的主路由器wifi名-->
+        <div class="online-info-pwd">
+            <div class="online-signal">
+                <div class="wrap clearfix">
+                    <label for="wifiPwd" class="wifips">Wi-Fi密码</label>
+                    <input id="wifiPwd" type="text" value="" name="wifiPwd">
+                </div>
+            </div>
+        </div>
+        <!--wifi信号强度-->
+        <div class="online-info-signal">
+            <div class="online-signal">
+                <div class="wrap clearfix">
+                    <label for="signalStrength" class="wifips">信号强度</label>
+                    <input id="signalStrength" type="text" value="" name="signalStrength" readonly="true">
+                </div>
+            </div>
+        </div>
+        <!--wifi加密方式-->
+        <div class="online-info-encrypt">
+            <div class="online-signal">
+                <div class="wrap clearfix">
+                    <label for="encrypt" class="wifips">加密方式</label>
+                    <input id="encrypt" type="text" value="" name="encrypt" readonly="true">
+                </div>
+            </div>
+        </div>
+        <!--wifi的MAC地址-->
+        <div class="online-info-mac">
+            <div class="online-signal">
+                <div class="wrap clearfix">
+                    <label for="mac" class="wifips">MAC地址</label>
+                    <input id="mac" type="text" value="" name="mac" readonly="true">
+                </div>
+            </div>
+        </div>
+        <button type="submit">
+            <a href="">确定</a>
+        </button>
+    </form>
+</section>
+
+<script type="text/html" id="listTmp">
+    <ul class="selectMenu">
+        {{each Scan as value i}}
+        <li>{{value.ssid}}
+            <img src="images/02_icon02.png" alt="">
+            <img src="images/02_icon03.png" alt="">
+        </li>
+        {{/each}}
+        <!--<li id="other">其它...-->
+        <!--<img src="images/02_icon02.png" alt="">-->
+        <!--<img src="images/02_icon03.png" alt="">-->
+        <!--</li>-->
+    </ul>
+    <div id="other">其它...</div>
+</script>
+
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/jquery.validate.js"></script>
+<script src="js/lib/messages_zh.js"></script>
+<script src="js/lib/additional-methods.js"></script>
+<script src="js/lib/layer.min.js"></script>
+<script src="js/lib/template.js"></script>
+<script src="js/js/selectContainer.js"></script>
+<script src="js/js/manage_navRoute_setting.js"></script>
+</body>
+</html>

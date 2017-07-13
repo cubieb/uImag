@@ -29,6 +29,7 @@ typedef struct ap_message_s
 	char APEncrypType[10];
 	char APPasswd[65];
 	char APSsid[33];
+	char APMac[65];
 }ap_message_t;
 
 

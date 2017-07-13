@@ -2,6 +2,7 @@
 config_wifi_repeater.old
 user/led/led
 user/dm_dhcp/dm_dhcp
+user/update/update
 !.gitignore
 *.o
 *.a

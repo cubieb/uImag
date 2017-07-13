@@ -25,6 +25,12 @@
 
 #include	"rt_config.h"
 
+#ifdef CONFIG_DUAL_IMAGE
+#define RT2860_NVRAM    1
+#else
+#define RT2860_NVRAM    0
+#endif
+
 extern int nvram_set(int index, char *name, char *value);
 
 #ifdef MT_MAC
@@ -5820,7 +5826,7 @@ static INT dump_mac_table(RTMP_ADAPTER *pAd, UINT32 ent_type, BOOLEAN bReptCli)
 	INT i;
 	ULONG DataRate=0;
 
-	nvram_set(0, "isHaveSta", "0");
+	nvram_set(RT2860_NVRAM, "CMCC_IsHaveSta", "0");
 	printk("\n");
 
 #ifdef DOT11_N_SUPPORT
@@ -5864,7 +5870,7 @@ static INT dump_mac_table(RTMP_ADAPTER *pAd, UINT32 ent_type, BOOLEAN bReptCli)
 #endif /* MAC_REPEATER_SUPPORT */
 		}
 
-		nvram_set(0, "isHaveSta", "1");
+		nvram_set(RT2860_NVRAM, "CMCC_IsHaveSta", "1");
 		DataRate=0;
 		getRate(pEntry->HTPhyMode, &DataRate);
 		printk("%02X:%02X:%02X:%02X:%02X:%02X  ", PRINT_MAC(pEntry->Addr));
@@ -7538,7 +7544,7 @@ INT	Show_ModuleTxpower_Proc(
 					bConnect=TRUE;
 
 					sprintf(macAddr, "%02X:%02X:%02X:%02X:%02X:%02X", PRINT_MAC(pEntry->Addr));
-				        nvram_set(0, "RouterMac", macAddr);
+				        nvram_set(RT2860_NVRAM, "CMCC_RouterMac", macAddr);
  				}
  		}
 
@@ -7551,9 +7557,9 @@ INT	Show_ModuleTxpower_Proc(
  	}
 
 	if(TRUE == bConnect)
-		nvram_set(0, "LinkStatus", "1");
+		nvram_set(RT2860_NVRAM, "CMCC_LinkStatus", "1");
 	else
-		nvram_set(0, "LinkStatus", "0");
+		nvram_set(RT2860_NVRAM, "CMCC_LinkStatus", "0");
 
  	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_OFF, ("=============================================================\n"));
      	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_TRACE, ("<==RTMPIoctlConnStatus\n"));

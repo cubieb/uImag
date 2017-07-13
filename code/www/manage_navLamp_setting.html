@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理_黑名单_详情页</title>
+    <link rel="stylesheet" href="css/common.min.css">
+    <link rel="stylesheet" href="css/manage_navLampSetting.min.css">
+    <link rel="stylesheet" href="css/lCalendar.css">
+    <script>
+        var pixclPatio = 1 / window.devicePixelRatio;
+        document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
+        console.log(pixclPatio);
+
+        var html = document.getElementsByTagName('html')[0];
+        var pageWidth = html.getBoundingClientRect().width;
+        html.style.fontSize = pageWidth / 16 + 'px';
+
+        //        console.log(html.style.fontSize);  //等于@rem
+        //        console.log($(window).width() + "---" + window.screen.width);
+    </script>
+</head>
+<body>
+<header>
+    <div class="nav-back">
+        <img src="images/nav_back.png" alt="">
+    </div>
+    <h1>指示灯设置</h1>
+</header>
+
+<section id="main">
+    <div class="online-info clearfix" >
+        <div class="fl">
+            <div class="tv-info">
+                <h3>关闭时间段</h3>
+                <input type="text" readonly="" id="demo3" name="input_date" placeholder="00:00 - 00:00" style="font-size: 28px"/>
+            </div>
+        </div>
+        <div class="fr">
+            <label class="cBox" for="closeTime">
+                <input id="closeTime" type="radio" name="time" checked="">
+            </label>
+        </div>
+    </div>
+
+    <div class="online-info clearfix">
+        <div class="fl">
+            <div class="tv-info">
+                <h3>指示灯关闭</h3>
+                <!--<p>22：00 - 06：00</p>-->
+            </div>
+        </div>
+        <div class="fr">
+            <label class="cBox" for="closeLong">
+                <input id="closeLong" type="radio" name="time">
+            </label>
+        </div>
+    </div>
+
+    <div class="online-info clearfix">
+        <div class="fl">
+            <div class="tv-info">
+                <h3>指示灯默认</h3>
+                <!--<p>22：00 - 06：00</p>-->
+            </div>
+        </div>
+        <div class="fr">
+            <label class="cBox" for="openLong">
+                <input id="openLong" type="radio" name="time">
+            </label>
+        </div>
+    </div>
+</section>
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/lCalendar.js"></script>
+<script src="js/js/manage_navLamp_setting.js"></script>
+<script>
+    var calendartime = new lCalendar();
+    calendartime.init({
+        'trigger': '#demo3',
+        'type': 'time'
+    });
+</script>
+</body>
+</html>

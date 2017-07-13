@@ -1,18 +1,18 @@
 #!/bin/sh
 
-ApCliEnable_Nvram=`nvram_get 2860 ApCliEnable`
-ApCliAuthMode_Nvram=`nvram_get 2860 ApCliAuthMode`
-ApCliEncrypType_Nvram=`nvram_get 2860 ApCliEncrypType`
-ApCliSsid_Nvram=`nvram_get 2860 ApCliSsid`
-ApCliWPAPSK_Nvram=`nvram_get 2860 ApCliWPAPSK`
+ApCliEnable_Nvram=`nvram_get 2860 CMCC_ApCliEnable`
+ApCliAuthMode_Nvram=`nvram_get 2860 CMCC_ApCliAuthMode`
+ApCliEncrypType_Nvram=`nvram_get 2860 CMCC_ApCliEncrypType`
+ApCliSsid_Nvram=`nvram_get 2860 CMCC_ApCliSsid`
+ApCliWPAPSK_Nvram=`nvram_get 2860 CMCC_ApCliWPAPSK`
 
 # debug
-echo "ApCliEnable=$ApCliEnable_Nvram"
-echo "ApCliAuthMode=$ApCliAuthMode_Nvram"
-echo "ApCliEncrypType=$ApCliEncrypType_Nvram"
-echo "ApCliSsid=$ApCliSsid_Nvram"
-echo "ApCliWPAPSK=$ApCliWPAPSK_Nvram"
-echo "ApCliSsid=$ApCliSsid_Nvram"
+echo "CMCC_ApCliEnable=$ApCliEnable_Nvram"
+echo "CMCC_ApCliAuthMode=$ApCliAuthMode_Nvram"
+echo "CMCC_ApCliEncrypType=$ApCliEncrypType_Nvram"
+echo "CMCC_ApCliSsid=$ApCliSsid_Nvram"
+echo "CMCC_ApCliWPAPSK=$ApCliWPAPSK_Nvram"
+echo "CMCC_ApCliSsid=$ApCliSsid_Nvram"
 
 if [ "$ApCliEnable_Nvram" = "1" ]; then
 	ifconfig apcli0 up

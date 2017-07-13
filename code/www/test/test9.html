@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test9</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.js"></script>
+</head>
+<body>
+<script>
+    //    var onlineEntity =  {
+    //        "Scan": [{
+    //            "Channel": "1",
+    //            "ssid": "CMCC-2ACK",
+    //            "bssid": "e0:1c:ee:08:2a:cc",
+    //            "security": "WPA1PSKWPA2PSK/AES",
+    //            "signal": "59",
+    //            "mode": "11b/g/n",
+    //            "ext_ch": "ABOVE",
+    //            "net_type": "In",
+    //            "wps": "NO"
+    //        }]
+    //    }
+    //    var isBooleanFromInfo = $.isEmptyObject(onlineEntity);//json对象为空时返回true
+    //    console.log(isBooleanFromInfo);
+
+    //    var onlineEntity = {
+    //                "Channel": "1",
+    //                "ssid": "CMCC-2ACK",
+    //                "bssid": "e0:1c:ee:08:2a:cc",
+    //                "security": "WPA1PSKWPA2PSK/AES",
+    //                "signal": "59",
+    //                "mode": "11b/g/n",
+    //                "ext_ch": "ABOVE",
+    //                "net_type": "In",
+    //                "wps": "NO"
+    //    }
+    //
+    //    onlineEntity['hobby'] = 'playFootball';
+    //
+    //    console.log(onlineEntity);
+
+    //    var OtherChosen = localStorage.getItem('OtherChosen');
+    //    console.log(OtherChosen);
+
+    //    var OtherChosen = undefined;
+    //    if(OtherChosen === null){
+    //        console.log("null判断");
+    //    }
+
+    //    var isBooleanFromInfo = $.isEmptyObject(OtherChosen);
+    //    console.log(isBooleanFromInfo);
+
+//
+//    var OtherChosen = null;
+//    if (OtherChosen) {
+//        console.log("null判断");
+//    }
+
+
+    //     var responseText = '{"Scan":[{"Channel":"1","ssid":"CMCC-2ACK","bssid":"e0:1c:ee:08:2a:cc","security":"WPA1PSKWPA2PSK/AES","signal":"59","mode":"11b/g/n","ext_ch":"ABOVE","net_type":"In","wps":"NO"},{"Channel":"1","ssid":"MT7628_SKY","bssid":"00:0c:43:e1:76:28","security":"NONE","signal":"79","mode":"11b/g/n","ext_ch":"ABOVE","net_type":"In","wps":"NO"},{"Channel":"1","ssid":"BLAZ4G","bssid":"b8:f8:83:c2:97:b3","security":"WPA1PSKWPA2PSK/TKIPAES","signal":"15","mode":"11b/g/n","ext_ch":"ABOVE","net_type":"In","wps":"NO"},{"Channel":"1","ssid":"CMCC~Guest","bssid":"70:3d:15:f1:3d:71","security":"OPEN","signal":"40","mode":"11b/g/n","ext_ch":"NONE","net_type":"In","wps":"NO"},{"Channel":"1","ssid":"CMCC~Smart","bssid":"70:3d:15:f1:54:10","security":"WPA2PSK/AES","signal":"89","mode":"11b/g/n","ext_ch":"NONE","net_type":"In","wps":"NO"},{"Channel":"1","ssid":"CMCC~Guest","bssid":"70:3d:15:f1:54:11","security":"WPA1PSKWPA2PSK/AES","signal":"89","mode":"11b/g/n","ext_ch":"NONE","net_type":"In","wps":"NO"},{"Channel":"1","ssid":"CMCC~Smart","bssid":"70:3d:15:f1:89:50","security":"WPA2PSK/AES","signal":"11","mode":"11b/g/n","ext_ch":"NONE","net_type":"In","wps":"NO"},{"Channel":"1","ssid":"CMCC~Guest","bssid":"70:3d:15:f1:89:51","security":"WPA1PSKWPA2PSK/AES","signal":"59","mode":"11b/g/n","ext_ch":"NONE","net_type":"In","wps":"NO"},{"Channel":"1","ssid":"","bssid":"70:3d:15:f1:89:8111111111","security":"WPA1PSKWPA2PSK/AES","signal":"23","mode":"11b/g/n","ext_ch":"NONE","net_type":"In","wps":"NO"},{}]}';
+    //    scanEntity = JSON.parse(responseText);//变量被放到了全局环境中(这样写安全不安全？)
+    //    var scan = scanEntity.Scan;
+    //
+    //    $.each(scan, function (index_, value_) {
+    //        $.each(scan[index_], function (name, value) {
+    //            if(name == "bssid" &&  value == "70:3d:15:f1:89:8111111111"){
+    //                console.log(scan[index_]);
+    //            }
+    //        })
+    //    })
+
+
+     var responseText = '{"Client_Info":[{"HostName":"3MIX2-xiaomishouj","Mac":"AC:F7:F3:1D:57:6E","Msg_os":"xiaomi Android","Signal":"-99","ConnectedTime":"800"},{"HostName":"hp-PC","Mac":"D1:F7:F3:B1:57:4A","Msg_os":"Microsoft Windows Vista/7 or Server 2008","Signal":"-87","ConnectedTime":"1300"},{"HostName":"飞奔的蜗牛-TV","Mac":"C5:F9:F3:B3:23:2C","Msg_os":"android TV","Signal":"-82","ConnectedTime":"4000"},{"HostName":"你猜我是谁","Mac":"A5:F2:C6:B9:23:1B","Msg_os":"android TV","Signal":"-30","ConnectedTime":"3000"}]}';
+     var scan = JSON.parse(responseText).Client_Info;
+
+    $.each(scan, function (index_, value_) {
+        $.each(scan[index_], function (name, value) {
+            if(name == "Signal"){
+                switch (true) {
+                    case value >= -80 :
+                        console.log(value);
+                        scan[index_][name] = "优";
+                        break;
+                    case value >= -85 :
+                        console.log(value);
+                        scan[index_][name] = "良";
+                        break;
+                    case value >= -90 :
+                        console.log(value);
+                        scan[index_][name] = "中";
+                        break;
+                    case value >= -110 :
+                        console.log(value);
+                        scan[index_][name] = "差";
+                        break;
+                    default:
+                        console.log("信号强度不在以上范围内");
+                }
+            }
+        })
+        console.log(scan);
+    })
+
+    console.log(scan);
+
+</script>
+</body>
+</html>

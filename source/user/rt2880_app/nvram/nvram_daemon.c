@@ -588,7 +588,7 @@ static void doWPSHandler(int signo)
 	//triggerWPS(SIGWINCH);
 #endif
 #endif
-	system("nvram_set 2860 WpsConfiguring 1");
+	system("nvram_set 2860 CMCC_WpsConfiguring 1");
 
 	/* wps配置 */  
         do_system("iwpriv apcli0 set ApCliEnable=0");
