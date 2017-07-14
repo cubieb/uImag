@@ -279,6 +279,7 @@ int main(int argc, char *argv[])
 #if 1
 
 #if 0
+	//这个验证还有点问题，目前不做验证过程
 	//进入配置界面,web端请求，后台进行主路由密码检验。不成功返回false，成功，立即重启
 	if(strcmp("success", web_get("if_success", input, 2)) == 0)
 	{
