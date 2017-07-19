@@ -73,7 +73,7 @@ int main()
 				system("ifconfig ra0 up");
 				usleep(300000);
 				config_duchpd("br0");
-				system("udhcpd /etc/repeater_udhcpd.conf");
+				system("udhcpd /etc/udhcpd.conf");
 				dhcpc_status = 1;
 				dhcpd_status = 0;
 			}
@@ -81,7 +81,7 @@ int main()
 			//nconneted
 			clear_time(RT2860_NVRAM);
 			system("killall udhcpd");
-			system("start_dhcpd.sh");
+			//system("start_dhcpd.sh");
 			system("udhcpd /etc/udhcpd.conf");
 			dhcpd_status = 1;
 			dhcpc_status = 0;
@@ -407,7 +407,7 @@ int config_duchpd(char *ifname)
 	{   
 		return -1;
 	}
-	sprintf(databuf, "start %s\nend %s\ninterface br0\noption subnet %s\noption dns %s 8.8.8.8\noption router %s\noption lease 86400\nlease_file /var/udhcpd.leases\n",startip, endip, netmask, mydns, gateway);  
+	sprintf(databuf, "start %s\nend %s\ninterface br0\noption subnet %s\noption dns 168.95.1.1 8.8.8.8\noption router %s\noption lease 86400\nlease_file /var/udhcpd.leases\n",startip, endip, netmask, gateway);  
 	fputs(databuf, fp);
 	fclose(fp);
 	return 0;

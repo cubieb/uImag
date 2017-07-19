@@ -19,8 +19,8 @@
 #define DM_IP_ROOT_ENTRY    "dm_ip"
 #define INTERCEPT_ENTRY     "intercept"
 #define DEFAULT_DM_BUFFER   "luyou.cmcc.cn"
-#define DEFAULT_IP_BUFFER   "10.10.10.254"
-#define DEFAULT_IP          0xfe0a0a0a
+#define DEFAULT_IP_BUFFER   "192.168.0.254"
+#define DEFAULT_IP          0xfe00a8c0
 
 
 struct dm_ip_data
@@ -394,7 +394,7 @@ int adddata(struct sk_buff * skb)
     
     skb_push(skb , ETH_HLEN); //重要，修改skb->data指针，使其指向MAC头部，并且增加skb->len
     //ok,剩下的就是校验了
-    printk("counterfeit DNS success!\n");
+    //printk("counterfeit DNS success!\n");
     return 1;
 }
 
@@ -434,7 +434,7 @@ static unsigned int domain_hook(unsigned int hooknum,struct sk_buff * skb, const
         if(dev_queue_xmit(skb) < 0)
             printk("dev_queue_xmit failed!!\n");
         else
-            printk("dev_queue_xmit succeed!!\n");
+            //printk("dev_queue_xmit succeed!!\n");
         return NF_STOLEN;//接管skb
     }
     return NF_ACCEPT;

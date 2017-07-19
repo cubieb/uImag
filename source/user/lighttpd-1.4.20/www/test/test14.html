@@ -3,30 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        .red{
-            width: 100px;
-            height: 100px;
-            background-color: red;
-        }
-        .disabled {
-            pointer-events: none;
-            cursor: default;
-            background-color: #d8d8d8;
-        }
-    </style>
+    <!--<style>-->
+        <!--.red{-->
+            <!--width: 100px;-->
+            <!--height: 100px;-->
+            <!--background-color: red;-->
+        <!--}-->
+        <!--.disabled {-->
+            <!--pointer-events: none;-->
+            <!--cursor: default;-->
+            <!--background-color: #d8d8d8;-->
+        <!--}-->
+    <!--</style>-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.js"></script>
 </head>
 <body>
-    <div class="red"></div>
     <script>
-        $(".red").on("click",function () {
-            $(".red").addClass("disabled");
-            console.log("哈哈哈哈");
-
-//            return false;
-//            $(".red").get(0).style.backgroundColor = "#d8d8d8";
-        })
+        var response = "recover";
+        console.log(typeof response);
+        if (response == "recover") {
+            window.location.href = "www.baidu.com";
+        }
     </script>
 </body>
 </html>

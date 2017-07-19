@@ -98,6 +98,7 @@ $(function () {
     //     return false;
     // });
 
+    //此处设置无效，采用失去焦点以后保存，点击多个黑明单按钮以后进行了多次提交，解决问题？？？
     //监听移动端软键盘的回车/完成/搜索按钮
     $("#hostname").keypress(function (e) {
         if (e.keyCode === 13) {
@@ -112,6 +113,18 @@ $(function () {
                 success: function (response) {
                     console.log(response);
                     console.log("修改hostname成功");
+                    var onelinePStr = localStorage.getItem('onlinePep');
+                    var onlineObj = JSON.parse(onelinePStr);
+                    var onlineP = onlineObj.Client_Info;
+
+                    $.each(onlineP, function (index_, value_) {
+                        $.each(onlineP[index_], function (name, value) {
+                            if(name == "Mac" && value == "mac"){
+                                onlineP[index_].HostName = $("#hostname").val();
+                            }
+                        });
+                    })
+                    
                 }
             });
             return false;
@@ -120,6 +133,7 @@ $(function () {
 
     //加入黑名单功能
     $a.on("click", function () {
+        $("#main>button[type='submit']").addClass("disabledBtn");
         layer.open({
             title: [
                 '加入黑名单',
@@ -132,6 +146,8 @@ $(function () {
                 '取消',
             ]
             , yes: function (index) { //点击确定按钮
+                $(".layui-m-layer").find("span:nth-of-type(2)").addClass("disabledBtn");
+                $(".layui-m-layer").get(0).style.display = "none";
                 $.ajax({
                     type: "POST",
                     url: "/cgi-bin/client_info.cgi",//需要服务端的请求的地址

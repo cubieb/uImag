@@ -132,7 +132,7 @@
                                         });
                                     }
                                 }, 100);
-                                window.location.href = "system_reboot_result.html";
+                                window.location.href = "system_update_reboot_result.html";
                             }
                         }
                     });

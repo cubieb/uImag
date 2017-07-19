@@ -4,45 +4,44 @@ $(function () {
         window.history.go(-1);
     });
 
-    var isChosenWifi = $.isEmptyObject(JSON.parse(localStorage.getItem('ChosenWifi')));
-    if (!isChosenWifi) {
-        //拿到配置界面保存的被选中的wifi信息列表
-        var objStr = localStorage.getItem("ChosenWifi");
-        obj = JSON.parse(objStr);//此处向服务端请求来的是被选中的wifi的所有信息，是一个对象格式的。
-        console.log(obj);
-        //初始化路由设置界面的路由名称(Chosen是wifi_setting页面提交过来的，包括配置界面的主路由的所有信息和用户输入的正确密码)
-        $("#newWifiName").val(obj.newWifiName);
-        //初始化路由设置界面的路由密码（wifiPwd是输入的主路由的密码）
-        $("#newPassword").val(obj.newPassword);
-        //管理密码
-        $("#managePassword").val(obj.newPassword);
+    //一直从服务端获取最新的主路由wifi数据和放大器的相关数据
+    $.ajax({
+        type: "POST",
+        url: "/cgi-bin/wifi_setting.cgi",
+        // wifiData是指被选中的wifi的相关信息
+        data: "get_data=data",
+        error: function (xhr, textStatus) {
+            console.log("从get_data=data数据接口获取数据---------失败");
+        },
+        success: function (response) {
+            console.log("从get_data=data数据接口获取数据------------成功");
+            obj = JSON.parse(response);
 
-        //初始化进入wifi设置界面的时候，wifi密码与主路由密码是否相同的判断
-        var OtherChosenStr = JSON.parse(localStorage.getItem('OtherChosen'));
-        var isChosen = $.isEmptyObject(OtherChosenStr);
-        console.log(isChosen);
-        //当路由设置界面没有做提交的时候，或者提交中的数据位空的时候，那么就和配置界面中提供
-        if (isChosen) {
-            if ($("#newPassword").val() == obj.wifiPwd) {
+            patternId = obj.patternId || "throughWall";
+            patternChecked = obj.patternChecked || "true";
+
+            //初始化wifi设置界面的路由名称(Chosen是wifi_setting页面提交过来的，包括配置界面的主路由的所有信息和用户输入的正确密码)
+            $("#newWifiName").val(obj.newWifiName);
+            //初始化wifi设置界面的路由密码（wifiPwd是输入的主路由的密码）
+            $("#newPassword").val(obj.newPassword);
+
+            //主路由密码和放大器wifi密码是否相同
+            if (obj.wifiPassword == obj.newPassword) {
                 $("#samePassword").prop("checked", true);
             } else {
                 $("#samePassword").prop("checked", false);
             }
-        } else {
-            if ($("#newPassword").val() == OtherChosenStr.wifiPwd) {
-                $("#samePassword").prop("checked", true);
+
+            //管理密码与放大器wifi密码是否相同
+            if (obj.managePassword == obj.newPassword) {
+                $("#managePwd").prop("checked", true);
             } else {
-                $("#samePassword").prop("checked", false);
+                $("#managePwd").prop("checked", false);
+                $(".online-info-managesamePWD").get(0).style.display = "block";
+                $("#managePassword").val(obj.managePassword);
             }
         }
-
-        //设置管理密码和wifi密码是否相同
-        // $("#managePassword").prop("checked", obj.wmcheckedVal);
-        //设置模式选择
-        var objId = $(obj.id);
-        console.log(objId);
-        objId.prop("checked", true);
-    }
+    });
 
     //监听wifi密码与主路由密码是否相同
     $("#samePassword").parent().on("click", function () {
@@ -50,9 +49,10 @@ $(function () {
         var isBoolean = $(this).find("input[type='checkbox']").prop("checked");
         console.log(isBoolean);
         if (isBoolean) {
-            $("#managePassword").val(obj.newPassword);
+            $("#newPassword").val(obj.wifiPassword);
         } else {
-            $("#newPassword").val(obj.newPassword);
+            $("#newPassword").val("");
+            $("#newPassword").focus();
         }
     });
 
@@ -62,18 +62,17 @@ $(function () {
         var isBoolean = $(this).find("input[type='checkbox']").prop("checked");
         console.log(isBoolean);
         if (isBoolean) {
-            $(".online-info-managesamePWD").get(0).style.display = "block";
-        } else {
             $(".online-info-managesamePWD").get(0).style.display = "none";
-            $("#newPassword").val(obj.newPassword);
+        } else {
+            $(".online-info-managesamePWD").get(0).style.display = "block";
+            $("#managePassword").val("");
+            $("#managePassword").focus();
         }
     });
 
-    var patternId = "throughWall";
-    var patternChecked = "true";
     //监听几种模式中的哪一种
     $("#pattern>.online-info-pattern").find("label").on("click", function () {
-        patternChecked = $(this).find("input[type='radio']").prop("checked") ;
+        patternChecked = $(this).find("input[type='radio']").prop("checked");
         console.log(patternChecked);
         patternId = $(this).find("input[type='radio']").attr("id");
         console.log(patternId);
@@ -140,7 +139,7 @@ $(function () {
             $.ajax({
                 type: "POST",
                 url: "/cgi-bin/wifi_setting.cgi",//需要服务端的请求的地址
-                data: "ex_station=station" + "&" + "samePasswordChecked=" + $("#samePassword").prop("checked") + "&" + "managePwd=" + $("#managePwd").prop("checked") + "&" + patternId + "=" + patternChecked + "&" + $("#main>form").serialize(),//需要哪些数据
+                data: "ex_station=station" + "&" + "patternId" + "=" + patternId + "&" + "patternChecked" + "=" + patternChecked + "&" + $("#main>form").serialize(),//需要哪些数据
                 error: function (response) {
                     console.log("提交当前路由设置信息失败");
                 },
@@ -148,11 +147,11 @@ $(function () {
                     console.log(response);//请返回wifiSuccess
                     console.log("提交当前wifi设置信息成功");
 
-                    var objCommit = {};
-                    objCommit["newWifiName"] = $("#newWifiName").val();
-                    objCommit["newPassword"] = $("#newPassword").val();
-                    objCommit["wzcheckedVal"] = $("#samePassword").prop("checked");
-                    objCommit["wmcheckedVal"] = $("#managePwd").prop("checked");
+                    // var objCommit = {};
+                    // objCommit["newWifiName"] = $("#newWifiName").val();
+                    // objCommit["newPassword"] = $("#newPassword").val();
+                    // objCommit["wzcheckedVal"] = $("#samePassword").prop("checked");
+                    // objCommit["wmcheckedVal"] = $("#managePwd").prop("checked");
 
                     // if ($("#newPassword").val() == obj.wifiPwd) {
                     //     objCommit["wzcheckedVal"] = true;
@@ -166,37 +165,40 @@ $(function () {
 
 
                     //获取被选中的radio的checked值
-                    var $label = $("#pattern .online-info-pattern label");
-                    $label.on("click", function () {
-                        var $checked = $(this).find("input[type='radio']").prop("checked");
-                        if ($checked == true) {
-                            var id = $(this).find("input[type='radio']").attr("id");
-                            objCommit["id"] = id;
-                        }
-                    });
-
-                    console.log(objCommit);
-                    var objStr = JSON.stringify(objCommit);
-                    localStorage.setItem("ChosenWifi", objStr);
+                    // var $label = $("#pattern .online-info-pattern label");
+                    // $label.on("click", function () {
+                    //     var $checked = $(this).find("input[type='radio']").prop("checked");
+                    //     if ($checked == true) {
+                    //         var id = $(this).find("input[type='radio']").attr("id");
+                    //         objCommit["id"] = id;
+                    //     }
+                    // });
+                    //
+                    // console.log(objCommit);
+                    // var objStr = JSON.stringify(objCommit);
+                    // localStorage.setItem("ChosenWifi", objStr);
 
                     //后端返回的是"wifiSuccess"
                     if (response == "wifiSuccess") {
+
+                        window.location.href = "manage_navRoute_paraReboot.html";
+
                         //执行取消操作，进去重启放大器的过程
-                        $.ajax({
-                            type: "POST",
-                            url: "/cgi-bin/sys_setting.cgi",//请求的接口数据，拿到上网的人的信息
-                            data: "reboot_sys=reboot",
-                            error: function () {
-                                console.log("开始重启系统......失败！");
-                            },
-                            success: function (response) {
-                                console.log("开始重启系统......成功！");
-                                console.log(response);
-                                if (response == "reboot") {
-                                    window.location.href = "syetem_reboot_progress.html";
-                                }
-                            }
-                        });
+                        // $.ajax({
+                        //     type: "POST",
+                        //     url: "/cgi-bin/sys_setting.cgi",//请求的接口数据，拿到上网的人的信息
+                        //     data: "reboot_sys=reboot",
+                        //     error: function () {
+                        //         console.log("开始重启系统......失败！");
+                        //     },
+                        //     success: function (response) {
+                        //         console.log("开始重启系统......成功！");
+                        //         console.log(response);
+                        //         if (response == "reboot") {
+                        //             window.location.href = "syetem_reboot_progress.html";
+                        //         }
+                        //     }
+                        // });
                     }
                 }
             })

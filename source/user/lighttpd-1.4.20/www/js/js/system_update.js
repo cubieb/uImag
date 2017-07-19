@@ -72,6 +72,13 @@ $(function () {
         });
     }
 
+    //在线升级
+    $("#main>.online-btn").on("click", function () {
+        // $("#main>.online-btn").addClass("disabledBtn");
+        //直接进入到下一个界面，进行倒计时升级
+        window.location.href = "system_update_progress.html";
+        // console.log("点击了升级按钮");
+    })
 
     //恢复出厂设置并重启放大器
     $("#footer>.factory-reset").on("click", function () {
@@ -92,15 +99,19 @@ $(function () {
                     type: "POST",
                     url: "/cgi-bin/sys_setting.cgi",//请求的接口数据，拿到上网的人的信息
                     data: "recover_sys=recover",
+                    async: false,
                     error: function () {
                         console.log("开始恢复出厂设置......失败！");
+                        // window.location.href = "system_factoryReset_progress.html";
                     },
                     success: function (response) {
                         console.log("开始恢复出厂设置......成功！");
-                        console.log(response);
-                        if (response == "recover") {
-                            window.location.href = "system_factoryReset_progress.html";
-                        }
+                        // console.log(typeof response);
+                        // console.log((response == "recover"));
+                        window.location.href = "system_factoryReset_progress.html";
+                        // if (response == "recover") {
+                        //
+                        // }
                     }
                 });
             }
@@ -120,12 +131,4 @@ $(function () {
             }
         });
     });
-
-    //在线升级
-    $("#main>.online-btn").on("click", function () {
-        // $("#main>.online-btn").addClass("disabledBtn");
-        //直接进入到下一个界面，进行倒计时升级
-        window.location.href = "system_update_progress.html";
-        // console.log("点击了升级按钮");
-    })
 });

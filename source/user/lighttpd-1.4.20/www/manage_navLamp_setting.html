@@ -5,7 +5,22 @@
     <title>管理_黑名单_详情页</title>
     <link rel="stylesheet" href="css/common.min.css">
     <link rel="stylesheet" href="css/manage_navLampSetting.min.css">
-    <!--<link rel="stylesheet" href="css/lCalendar.css">-->
+
+    <script src="js/lib/jquery.min.js"></script>
+
+    <script src="js/lib/mobiscroll-2.5.2/dev/js/mobiscroll.core-2.5.2.js" type="text/javascript"></script>
+    <script src="js/lib/mobiscroll-2.5.2/dev/js/mobiscroll.core-2.5.2-zh.js" type="text/javascript"></script>
+    <link href="js/lib/mobiscroll-2.5.2/dev/css/mobiscroll.core-2.5.2.min.css" rel="stylesheet" type="text/css" />
+
+
+    <link href="js/lib/mobiscroll-2.5.2/dev/css/mobiscroll.animation-2.5.2.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/lib/mobiscroll-2.5.2/dev/js/mobiscroll.datetime-2.5.1.js" type="text/javascript"></script>
+    <script src="js/lib/mobiscroll-2.5.2/dev/js/mobiscroll.datetime-2.5.1-zh.js" type="text/javascript"></script>
+
+    <!-- 可根据自己喜好引入样式风格文件 -->
+    <script src="js/lib/mobiscroll-2.5.2/dev/js/mobiscroll.android-ics-2.5.2.js" type="text/javascript"></script>
+    <link href="js/lib/mobiscroll-2.5.2/dev/css/mobiscroll.android-ics-2.5.2.min.css" rel="stylesheet" type="text/css" />
+
     <script>
         var pixclPatio = 1 / window.devicePixelRatio;
         document.write('<meta name="viewport" content="width=device-width,initial-scale=' + pixclPatio + ',minimum-scale=' + pixclPatio + ',maximum-scale=' + pixclPatio + ',user-scalable=no" />');
@@ -32,8 +47,13 @@
         <div class="online-info clearfix" >
             <div class="fl">
                 <div class="tv-info">
-                    <h3>关闭时间段</h3>
-                    <input type="text" readonly="" id="closeTimeDetail" name="input_date" placeholder="00:00 - 00:00" style="font-size: 28px"/>
+                    <!--<h3>关闭时间段</h3>-->
+                    <div class="content">
+                        <div class="demos">
+                            <label for="appTime">关闭时间</label>
+                            <input type="text" name="appTime" id="appTime" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="fr">
@@ -77,51 +97,6 @@
     </form>
 </section>
 
-<script src="js/lib/jquery.min.js"></script>
-<!--<script src="js/lib/lCalendar.js"></script>-->
-<script src="js/lib/datePicker.js"></script>
 <script src="js/js/manage_navLamp_setting.js"></script>
-
-<!--<script>-->
-    <!--var calendartime = new lCalendar();-->
-    <!--calendartime.init({-->
-        <!--'trigger': '#closeTimeDetail',-->
-        <!--'type': 'time',-->
-        <!--'onSubmit':function(){/*确认时触发事件*/-->
-<!--//            var theSelectData=calendar.value;-->
-            <!--console.log("点击了确认");-->
-        <!--},-->
-        <!--'closeMobileCalendar':function(){/*取消时触发事件*/-->
-            <!--console.log("点击了取消");-->
-        <!--}-->
-    <!--});-->
-<!--</script>-->
-
-
-<!--点击输入框触发-->
-<!--<input id="demo1">-->
-<!--<script>-->
-    <!--var calendar = new datePicker();-->
-    <!--calendar.init({-->
-        <!--'trigger': '#closeTimeDetail', /*按钮选择器，用于触发弹出插件*/-->
-        <!--'type': 'time',/*模式：date日期；datetime日期时间；time时间；ym年月；*/-->
-        <!--'minDate':'1900-1-1',/*最小日期*/-->
-        <!--'maxDate':'2100-12-31',/*最大日期*/-->
-        <!--'onSubmit':function(){/*确认时触发事件*/-->
-            <!--console.log("这是确认时触发事件");-->
-            <!--var theSelectData=calendar.value;-->
-            <!--console.log(theSelectData);-->
-<!--//            $("#main>form>.online-info").find("input[type='text']").val(theSelectData);-->
-        <!--},-->
-        <!--'onClose':function(){/*取消时触发事件*/-->
-            <!--console.log("这是取消时触发事件");-->
-            <!--var theSelectData1=calendar.value;-->
-            <!--console.log(theSelectData1);-->
-        <!--}-->
-    <!--});-->
-<!--</script>-->
-
-
-
 </body>
 </html>

@@ -77,7 +77,6 @@ html > body > section#main > .online-btn {
 html > body > section#main .disabledBtn {
   pointer-events: none;
   cursor: default;
-  background-color: #d8d8d8;
 }
 html > body > footer#footer > .factory-reset {
   position: absolute;

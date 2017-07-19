@@ -16,7 +16,7 @@
 //#include <net/if.h>
 #include <time.h>
 
-#define DHCPFILE	"/etc/repeater_udhcpd.conf"
+#define DHCPFILE	"/etc/udhcpd.conf"
 
 char *get_ipaddr(char *ifname);
 char *get_netmask(char *ifname);

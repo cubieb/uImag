@@ -1,10 +1,65 @@
 $(function () {
 
+    initialFun();
+    function initialFun() {
+        layer.open({
+            type: 2
+            ,content: '加载中'
+        });
+        $(".layui-m-layermain").find("p").get(0).style.color = "#fff";
+        $.ajax({
+            type: "POST",
+            url: "/cgi-bin/cmcc_manage.cgi",
+            // wifiData是指被选中的wifi的相关信息
+            data: "get_manage=manage",
+            error: function (xhr, textStatus) {
+                console.log("获取信息源信息---------失败");
+            },
+            success: function (response) {
+                console.log("获取信息源信息------------成功");
+                var infoSource = JSON.parse(response);
+                console.log("这是信息源的信息---"+infoSource);
+
+                var isBoolean = $.isEmptyObject(infoSource);
+                if(!isBoolean) {
+                    //取消加载动画
+                    // $("#main>.loader").get(0).style.display="none";
+                    $("#layui-m-layer0").get(0).style.display = "none";
+
+                    var ssid = infoSource.ssid;
+                    var connecttime = parseInt((infoSource.connecttime)/60);
+
+                    var signalValue = infoSource.signal;
+                    var signalRes;
+                    switch (true) {
+                        case signalValue >= -80 :
+                            signalRes = "优";
+                            break;
+                        case signalValue >= -85 :
+                            signalRes = "良";
+                            break;
+                        case signalValue >= -90 :
+                            signalRes = "中";
+                            break;
+                        case signalValue >= -110 :
+                            signalRes = "差";
+                            break;
+                        default:
+                            console.log("信号强度不在以上范围内");
+                    }
+                    $("#main>.source-wifi>.wifi-infor").find("span:nth-child(2)").text(ssid);
+                    $("#main>.source-wifi>.wifi-online-time").find("span:nth-child(2)").find("i").text(connecttime);
+                    $("#main>.signal").find(".strength-result").find("i").text(signalRes);
+                }
+            }
+        });
+    }
+
     //重新启动
     $("#nav>a:nth-child(6)").on("click", function () {
         layer.open({
             title: [
-                '恢复出厂设置',
+                '系统重启',
                 'background-color:#438cff; color:#fff;'
             ]
             , anim: 'up'
@@ -16,23 +71,24 @@ $(function () {
             , yes: function (index) {
                 //index为当前层的索引
                 // console.log(index);//0
-                // window.location.href = "syetem_reboot_progress.html";
 
-                $.ajax({
-                    type: "POST",
-                    url: "/cgi-bin/sys_setting.cgi",//请求的接口数据，拿到上网的人的信息
-                    data: "reboot_sys=reboot",
-                    error: function () {
-                        console.log("开始重启系统......失败！");
-                    },
-                    success: function (response) {
-                        console.log("开始重启系统......成功！");
-                        console.log(response);
-                        if (response == "reboot") {
-                            window.location.href = "syetem_reboot_progress.html";
-                        }
-                    }
-                });
+                window.location.href = "system_reboot_progress.html";
+
+                // $.ajax({
+                //     type: "POST",
+                //     url: "/cgi-bin/sys_setting.cgi",//请求的接口数据，拿到上网的人的信息
+                //     data: "reboot_sys=reboot",
+                //     error: function () {
+                //         console.log("开始重启系统......失败！");
+                //     },
+                //     success: function (response) {
+                //         console.log("开始重启系统......成功！");
+                //         console.log(response);
+                //         if (response == "reboot") {
+                //             window.location.href = "system_reboot_progress.html";
+                //         }
+                //     }
+                // });
             }
             , no: function (index) {
                 //index为当前层的索引
@@ -103,9 +159,7 @@ $(function () {
 
     //路由设置
     $("#nav>a:nth-child(2)").on("click", function () {
-
         window.location.href = "manage_navRoute_setting.html";
-
         return false;
     })
 

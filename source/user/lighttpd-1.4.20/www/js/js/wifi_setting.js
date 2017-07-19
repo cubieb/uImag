@@ -253,6 +253,8 @@ $(function () {
         e.stopPropagation();//不出现事件的原因是浏览器还有默认事件(跟select相关的)。
 
         $("#selectCon").select();//在selectContainer.js中的一个封装的方法
+        $wifiPassword.val("");
+        $newPassword.val("");
     });
 
     //刷新按钮
@@ -332,6 +334,8 @@ $(function () {
         });
         e.stopPropagation();//不出现事件的原因是浏览器还有默认事件。
         $(".selectContainer").select();
+        $wifiPassword.val("");
+        $newPassword.val("");
     });
 
     //冒泡比较
@@ -486,70 +490,70 @@ $(function () {
         var isBoolean = $("#wifi-form").valid();
         console.log(isBoolean);
         if (isBoolean) {
-            var obj = {};
-            obj["mac"] = wifiObj.bssid;
-            obj["wifiName"] = wifiObj.ssid;
-            obj["wifiPwd"] = $wifiPassword.val();
-            obj["newWifiName"] = $newWifiName.val();
-            obj["newPassword"] = $newPassword.val();
-
-            var isManaPwd = $("#samePassword").prop("checked");//wifi密码与管理密码是否相同
-            if (isManaPwd) {
-                obj["wmcheckedVal"] = true;
-                obj["managePassword"] = $newPassword.val();
-            } else {
-                obj["wmcheckedVal"] = false;
-                obj["managePassword"] = $("managePassword").val();
-            }
-
-            if ($wifiPassword.val() == $newPassword.val()) {//wifi密码与主路由密码是否相同
-                obj["wzcheckedVal"] = true;
-            } else {
-                obj["wzcheckedVal"] = false;
-            }
+            // var obj = {};
+            // obj["mac"] = wifiObj.bssid;
+            // obj["wifiName"] = wifiObj.ssid;
+            // obj["wifiPwd"] = $wifiPassword.val();
+            // obj["newWifiName"] = $newWifiName.val();
+            // obj["newPassword"] = $newPassword.val();
+            //
+            // var isManaPwd = $("#samePassword").prop("checked");//wifi密码与管理密码是否相同
+            // if (isManaPwd) {
+            //     obj["wmcheckedVal"] = true;
+            //     obj["managePassword"] = $newPassword.val();
+            // } else {
+            //     obj["wmcheckedVal"] = false;
+            //     obj["managePassword"] = $("managePassword").val();
+            // }
+            //
+            // if ($wifiPassword.val() == $newPassword.val()) {//wifi密码与主路由密码是否相同
+            //     obj["wzcheckedVal"] = true;
+            // } else {
+            //     obj["wzcheckedVal"] = false;
+            // }
 
             // var objStr = JSON.stringify(obj);
             // localStorage.setItem("ChosenWifi", objStr);
 
             //提交与管理界面相关关联的数据
-            $.ajax({
-                type: "POST",
-                url: "/cgi-bin/wifi_setting.cgi",
-                // wifiData是指被选中的wifi的相关信息
-                data: {
-                    data_commit: "data",
-                    mac: function () {
-                        return obj["mac"];
-                    },
-                    wifiName: function () {
-                        return obj["wifiName"];
-                    },
-                    wifiPwd: function () {
-                        return obj["wifiPwd"];
-                    },
-                    newWifiName: function () {
-                        return obj["newWifiName"];
-                    },
-                    newPassword: function () {
-                        return  obj["newPassword"];
-                    },
-                    wmcheckedVal: function () {
-                        return   obj["wmcheckedVal"];
-                    },
-                    wzcheckedVal: function () {
-                        return  obj["wzcheckedVal"];
-                    },
-                    managePassword: function () {
-                        return  obj["managePassword"];
-                    }
-                },
-                error: function (xhr, textStatus) {
-                    console.log("data_commit---------失败");
-                },
-                success: function (msg) {
-                    console.log("data_commit------------成功");
-                }
-            });
+            // $.ajax({
+            //     type: "POST",
+            //     url: "/cgi-bin/wifi_setting.cgi",
+            //     // wifiData是指被选中的wifi的相关信息
+            //     data: {
+            //         data_commit: "data",
+            //         mac: function () {
+            //             return obj["mac"];
+            //         },
+            //         wifiName: function () {
+            //             return obj["wifiName"];
+            //         },
+            //         wifiPwd: function () {
+            //             return obj["wifiPwd"];
+            //         },
+            //         newWifiName: function () {
+            //             return obj["newWifiName"];
+            //         },
+            //         newPassword: function () {
+            //             return  obj["newPassword"];
+            //         },
+            //         wmcheckedVal: function () {
+            //             return   obj["wmcheckedVal"];
+            //         },
+            //         wzcheckedVal: function () {
+            //             return  obj["wzcheckedVal"];
+            //         },
+            //         managePassword: function () {
+            //             return  obj["managePassword"];
+            //         }
+            //     },
+            //     error: function (xhr, textStatus) {
+            //         console.log("data_commit---------失败");
+            //     },
+            //     success: function (msg) {
+            //         console.log("data_commit------------成功");
+            //     }
+            // });
 
             // wifiData是指被选中的wifi的相关信息
             $.ajax({
@@ -613,8 +617,6 @@ $(function () {
                 //     }
                 // }
             });
-
-            // window.location.href = "configuration.html";
         }
     });
 });

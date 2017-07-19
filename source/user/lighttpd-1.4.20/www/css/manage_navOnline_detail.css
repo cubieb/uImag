@@ -179,3 +179,7 @@ html > body > #main > button[type="submit"] a {
   color: #fff;
   font-size: 0.71111111rem;
 }
+html > body .disabledBtn {
+  pointer-events: none;
+  cursor: default;
+}

@@ -54,14 +54,19 @@ html > body > #main > form > .online-info > .fl {
 html > body > #main > form > .online-info > .fl > .tv-info {
   margin-left: 0.62222222rem;
 }
-html > body > #main > form > .online-info > .fl > .tv-info > h3 {
+html > body > #main > form > .online-info > .fl > .tv-info > .content label {
+  display: block;
   font-size: 0.71111111rem;
   color: #333;
 }
-html > body > #main > form > .online-info > .fl > .tv-info > input {
+html > body > #main > form > .online-info > .fl > .tv-info > .content input {
   margin-top: 0.22222222rem;
-  font-size: 0.53333333rem;
+  font-size: 0.62222222rem;
   color: #999;
+}
+html > body > #main > form > .online-info > .fl > .tv-info > h3 {
+  font-size: 0.71111111rem;
+  color: #333;
 }
 html > body > #main > form > .online-info > .fr {
   float: right;
