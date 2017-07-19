@@ -1,22 +1,21 @@
 #include "itool.h"
 
-/**************可能會調用到的函數**********************/
+/**************可能會用到的函數**********************/
 /*
  * 在開發過程用可能會公用到的函數
- * 放到統一的模塊中
+ * 放到統一的模塊中製成庫
  */
 
 int G_ConnectStatus = 0;
 unsigned int m_nSigQua[3] = {0, 0, 0};
 unsigned long m_lChannelQuality = 0;
 
-//連接主路由的時長
-unsigned int get_conntime(int nvram)
+//獲取開機時間
+unsigned int get_uptime(void)
 {
 	FILE *fp;
-	char starttime[32];
-	char endtime[32];
-	unsigned int myconntime;
+	char gettime[32];
+	unsigned int uptime;
 	fp = fopen("/proc/uptime", "r");
 	if(fp == NULL)
 		return -1;
@@ -24,14 +23,25 @@ unsigned int get_conntime(int nvram)
 	char sec[64];
 	if(fgets(sec, sizeof(sec), fp) != NULL)
 	{
-		get_nth_value(0, sec, ' ', endtime, sizeof(endtime));
+		get_nth_value(0, sec, ' ', gettime, sizeof(gettime));
 	}
-	strcpy(starttime, nvram_bufget(nvram, "CMCC_ConnectTime"));
-	myconntime = atoi(endtime) - atoi(starttime);
+	uptime = atoi(gettime);
 	fclose(fp);
 
-	return myconntime;
+	return uptime;
 }
+
+#if 0
+//連接主路由的時長
+unsigned int get_conntime(int nvram)
+{
+	int start_time, end_time;
+	start_time = atoi(nvram_bufget(nvram, "CMCC_ConnectTime"));
+	end_time = get_uptime();
+
+	return start_time - end_time;
+}
+#endif
 
 //distconnect return 0  connect return 1
 int getStaLinkStatus(char *ifname)

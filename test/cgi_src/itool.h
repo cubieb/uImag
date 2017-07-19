@@ -22,7 +22,8 @@
 #include "oid.h"
 
 
-unsigned int get_conntime(int nvram)
+unsigned int get_uptime(void);
+//unsigned int get_conntime(int nvram);
 int getStaLinkStatus(char *ifname);
 unsigned int ConvertRssiToSignalQuality(long RSSI);
 int get_signal(char *ifname);
